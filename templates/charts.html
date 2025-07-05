@@ -1,0 +1,102 @@
+
+<div class="row mt-4">
+    <!-- Severity Distribution -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-chart-pie"></i> Severity Distribution
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="severityChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Finding Types -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-chart-bar"></i> Finding Types
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="typesChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Files with Most Issues -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-file-code"></i> Files with Most Issues
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="filesChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Technical Debt Timeline -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-chart-line"></i> Technical Debt Timeline
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="debtTimelineChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Statistics -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-list"></i> Summary Statistics
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="text-center">
+                            <div class="h4 text-danger">{{ data.summary.critical_issues_count }}</div>
+                            <small class="text-muted">Critical</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center">
+                            <div class="h4 text-warning">{{ data.summary.high_issues_count }}</div>
+                            <small class="text-muted">High</small>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="text-center">
+                            <div class="h4 text-info">{{ data.metrics.average_technical_debt }}</div>
+                            <small class="text-muted">Avg Debt</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center">
+                            <div class="h4 text-success">{{ data.metrics.overall_quality_score }}%</div>
+                            <small class="text-muted">Quality</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,543 @@
+{
+  "metadata": {
+    "generated_at": "2025-07-05T16:14:35.926322",
+    "tool": "wtf-codebot unified reporter",
+    "version": "1.0.0",
+    "total_findings": 12,
+    "collection_metadata": {
+      "deduplication_stats": {
+        "total_groups": 12,
+        "merged_count": 0,
+        "kept_count": 12
+      },
+      "original_count": 12,
+      "deduplicated_count": 12
+    }
+  },
+  "summary": {
+    "total": 12,
+    "severity_counts": {
+      "info": 1,
+      "low": 1,
+      "medium": 8,
+      "high": 1,
+      "critical": 1
+    },
+    "type_counts": {
+      "code_smell": 2,
+      "design_pattern": 1,
+      "anti_pattern": 1,
+      "security_vulnerability": 1,
+      "outdated_dependency": 1,
+      "style_violation": 6
+    },
+    "source_counts": {
+      "static_analyzer": 1,
+      "linter": 7,
+      "ai_analysis": 2,
+      "dependency_analysis": 2
+    },
+    "affected_files_count": 6,
+    "affected_files": [
+      "/requirements.txt",
+      "/src/api.py",
+      "/src/auth.py",
+      "/src/config.py",
+      "/src/user_service.py",
+      "/src/utils.py"
+    ]
+  },
+  "findings": [
+    {
+      "id": "e07688a10b824cb7",
+      "title": "Long method detected",
+      "description": "Method has 150 lines, consider breaking it down into smaller methods",
+      "finding_type": "code_smell",
+      "severity": "medium",
+      "confidence": 1.0,
+      "source": "static_analyzer",
+      "tool_name": "pylint",
+      "rule_id": "too-many-lines",
+      "location": {
+        "file_path": "/src/user_service.py",
+        "line_start": 45,
+        "line_end": 195,
+        "column_start": null,
+        "column_end": null,
+        "function_name": "process_user_data",
+        "class_name": null
+      },
+      "affected_code": null,
+      "message": "Method 'process_user_data' has too many lines (150/50)",
+      "suggestion": "Break down into smaller, focused methods",
+      "fix_recommendation": "",
+      "metadata": {},
+      "tags": [
+        "maintainability",
+        "complexity"
+      ],
+      "detected_at": "2025-07-05T16:14:35.925982",
+      "impact": "medium",
+      "effort_to_fix": "medium",
+      "related_findings": [],
+      "duplicate_of": null
+    },
+    {
+      "id": "d37c285352d5367f",
+      "title": "Method too long",
+      "description": "Function exceeds recommended length",
+      "finding_type": "code_smell",
+      "severity": "medium",
+      "confidence": 1.0,
+      "source": "linter",
+      "tool_name": "flake8",
+      "rule_id": "C901",
+      "location": {
+        "file_path": "/src/user_service.py",
+        "line_start": 47,
+        "line_end": null,
+        "column_start": null,
+        "column_end": null,
+        "function_name": "process_user_data",
+        "class_name": null
+      },
+      "affected_code": null,
+      "message": "Function is too complex (C901)",
+      "suggestion": "Refactor into smaller functions",
+      "fix_recommendation": "",
+      "metadata": {},
+      "tags": [
+        "complexity",
+        "linter"
+      ],
+      "detected_at": "2025-07-05T16:14:35.926009",
+      "impact": "medium",
+      "effort_to_fix": "medium",
+      "related_findings": [],
+      "duplicate_of": null
+    },
+    {
+      "id": "ac0962db743075c0",
+      "title": "Anti-Pattern: God Object",
+      "description": "Class has too many responsibilities and should be split",
+      "finding_type": "anti_pattern",
+      "severity": "high",
+      "confidence": 0.85,
+      "source": "ai_analysis",
+      "tool_name": "claude_pattern_analyzer",
+      "rule_id": "god_object",
+      "location": {
+        "file_path": "/src/user_service.py",
+        "line_start": 1,
+        "line_end": 300,
+        "column_start": null,
+        "column_end": null,
+        "function_name": null,
+        "class_name": "UserService"
+      },
+      "affected_code": null,
+      "message": "Class has multiple unrelated responsibilities",
+      "suggestion": "Split into focused service classes; Apply Single Responsibility Principle",
+      "fix_recommendation": "",
+      "metadata": {
+        "problems": [
+          "Poor maintainability",
+          "High coupling",
+          "Testing difficulties"
+        ],
+        "solutions": [
+          "Split into focused classes",
+          "Use composition",
+          "Apply SOLID principles"
+        ],
+        "evidence": [
+          "50+ methods",
+          "Multiple unrelated concerns",
+          "Large class size"
+        ]
+      },
+      "tags": [
+        "code-smell",
+        "anti-pattern",
+        "refactoring",
+        "ai-detected"
+      ],
+      "detected_at": "2025-07-05T16:14:35.926016",
+      "impact": "high",
+      "effort_to_fix": "high",
+      "related_findings": [],
+      "duplicate_of": null
+    },
+    {
+      "id": "6967c7eb18cb9bb5",
+      "title": "Design Pattern: Singleton",
+      "description": "Well-implemented Singleton pattern for configuration management",
+      "finding_type": "design_pattern",
+      "severity": "info",
+      "confidence": 0.92,
+      "source": "ai_analysis",
+      "tool_name": "claude_pattern_analyzer",
+      "rule_id": "singleton",
+      "location": {
+        "file_path": "/src/config.py",
+        "line_start": 10,
+        "line_end": 35,
+        "column_start": null,
+        "column_end": null,
+        "function_name": null,
+        "class_name": "ConfigManager"
+      },
+      "affected_code": null,
+      "message": "Singleton pattern detected with proper implementation",
+      "suggestion": "",
+      "fix_recommendation": "",
+      "metadata": {
+        "benefits": [
+          "Global access",
+          "Single instance guarantee"
+        ],
+        "use_cases": [
+          "Configuration management",
+          "Logging services"
+        ],
+        "evidence": [
+          "Private constructor",
+          "Static instance method",
+          "Thread-safe implementation"
+        ]
+      },
+      "tags": [
+        "design-pattern",
+        "ai-detected",
+        "architecture"
+      ],
+      "detected_at": "2025-07-05T16:14:35.926000",
+      "impact": "low",
+      "effort_to_fix": "low",
+      "related_findings": [],
+      "duplicate_of": null
+    },
+    {
+      "id": "6cb63e3e579400d7",
+      "title": "Security Vulnerability: SQL Injection",
+      "description": "Potential SQL injection vulnerability in user authentication",
+      "finding_type": "security_vulnerability",
+      "severity": "critical",
+      "confidence": 1.0,
+      "source": "dependency_analysis",
+      "tool_name": "bandit",
+      "rule_id": "B608",
+      "location": {
+        "file_path": "/src/auth.py",
+        "line_start": 78,
+        "line_end": 82,
+        "column_start": null,
+        "column_end": null,
+        "function_name": "authenticate_user",
+        "class_name": null
+      },
+      "affected_code": "cursor.execute(f\"SELECT * FROM users WHERE username = '{username}'\")",
+      "message": "Possible SQL injection vector through string formatting",
+      "suggestion": "Use parameterized queries or ORM methods",
+      "fix_recommendation": "Replace string formatting with parameterized query: cursor.execute('SELECT * FROM users WHERE username = %s', (username,))",
+      "metadata": {
+        "cve_id": "CVE-2023-12345",
+        "affected_versions": [
+          "1.0.0",
+          "1.1.0"
+        ],
+        "fixed_versions": [
+          "1.2.0"
+        ]
+      },
+      "tags": [
+        "security",
+        "critical",
+        "sql-injection"
+      ],
+      "detected_at": "2025-07-05T16:14:35.926006",
+      "impact": "critical",
+      "effort_to_fix": "medium",
+      "related_findings": [],
+      "duplicate_of": null
+    },
+    {
+      "id": "8038d6277190a945",
+      "title": "Outdated Package: requests",
+      "description": "Package requests is outdated and should be updated",
+      "finding_type": "outdated_dependency",
+      "severity": "low",
+      "confidence": 1.0,
+      "source": "dependency_analysis",
+      "tool_name": "dependency_analyzer",
+      "rule_id": null,
+      "location": {
+        "file_path": "/requirements.txt",
+        "line_start": null,
+        "line_end": null,
+        "column_start": null,
+        "column_end": null,
+        "function_name": null,
+        "class_name": null
+      },
+      "affected_code": null,
+      "message": "Package requests is outdated",
+      "suggestion": "Update to the latest stable version",
+      "fix_recommendation": "",
+      "metadata": {
+        "current_version": "2.25.1",
+        "latest_version": "2.31.0"
+      },
+      "tags": [
+        "outdated",
+        "dependency",
+        "maintenance"
+      ],
+      "detected_at": "2025-07-05T16:14:35.926012",
+      "impact": "medium",
+      "effort_to_fix": "medium",
+      "related_findings": [],
+      "duplicate_of": null
+    },
+    {
+      "id": "e60639fc369c714e",
+      "title": "Linter Issue: C0103",
+      "description": "Constant name \"api_key\" doesn't conform to UPPER_CASE naming style (invalid-name)",
+      "finding_type": "style_violation",
+      "severity": "medium",
+      "confidence": 1.0,
+      "source": "linter",
+      "tool_name": "pylint",
+      "rule_id": "C0103",
+      "location": {
+        "file_path": "/src/utils.py",
+        "line_start": 10,
+        "line_end": null,
+        "column_start": 0,
+        "column_end": null,
+        "function_name": null,
+        "class_name": null
+      },
+      "affected_code": null,
+      "message": "Constant name \"api_key\" doesn't conform to UPPER_CASE naming style (invalid-name)",
+      "suggestion": "",
+      "fix_recommendation": "",
+      "metadata": {
+        "line": 10,
+        "column": 0,
+        "type": "C0103",
+        "message": "Constant name \"api_key\" doesn't conform to UPPER_CASE naming style (invalid-name)",
+        "rule_id": "C0103"
+      },
+      "tags": [
+        "pylint",
+        "linter"
+      ],
+      "detected_at": "2025-07-05T16:14:35.926036",
+      "impact": "medium",
+      "effort_to_fix": "medium",
+      "related_findings": [],
+      "duplicate_of": null
+    },
+    {
+      "id": "f9de7841ea4bd415",
+      "title": "Linter Issue: W0613",
+      "description": "Unused argument 'request' (unused-argument)",
+      "finding_type": "style_violation",
+      "severity": "medium",
+      "confidence": 1.0,
+      "source": "linter",
+      "tool_name": "pylint",
+      "rule_id": "W0613",
+      "location": {
+        "file_path": "/src/utils.py",
+        "line_start": 25,
+        "line_end": null,
+        "column_start": 4,
+        "column_end": null,
+        "function_name": null,
+        "class_name": null
+      },
+      "affected_code": null,
+      "message": "Unused argument 'request' (unused-argument)",
+      "suggestion": "",
+      "fix_recommendation": "",
+      "metadata": {
+        "line": 25,
+        "column": 4,
+        "type": "W0613",
+        "message": "Unused argument 'request' (unused-argument)",
+        "rule_id": "W0613"
+      },
+      "tags": [
+        "pylint",
+        "linter"
+      ],
+      "detected_at": "2025-07-05T16:14:35.926042",
+      "impact": "medium",
+      "effort_to_fix": "medium",
+      "related_findings": [],
+      "duplicate_of": null
+    },
+    {
+      "id": "45b041b9c4bdddd3",
+      "title": "Linter Issue: R0903",
+      "description": "Too few public methods (1/2) (too-few-public-methods)",
+      "finding_type": "style_violation",
+      "severity": "medium",
+      "confidence": 1.0,
+      "source": "linter",
+      "tool_name": "pylint",
+      "rule_id": "R0903",
+      "location": {
+        "file_path": "/src/utils.py",
+        "line_start": 45,
+        "line_end": null,
+        "column_start": 0,
+        "column_end": null,
+        "function_name": null,
+        "class_name": null
+      },
+      "affected_code": null,
+      "message": "Too few public methods (1/2) (too-few-public-methods)",
+      "suggestion": "",
+      "fix_recommendation": "",
+      "metadata": {
+        "line": 45,
+        "column": 0,
+        "type": "R0903",
+        "message": "Too few public methods (1/2) (too-few-public-methods)",
+        "rule_id": "R0903"
+      },
+      "tags": [
+        "pylint",
+        "linter"
+      ],
+      "detected_at": "2025-07-05T16:14:35.926047",
+      "impact": "medium",
+      "effort_to_fix": "medium",
+      "related_findings": [],
+      "duplicate_of": null
+    },
+    {
+      "id": "c2266bc8088930d5",
+      "title": "Linter Issue: E501",
+      "description": "line too long (82 > 79 characters)",
+      "finding_type": "style_violation",
+      "severity": "medium",
+      "confidence": 1.0,
+      "source": "linter",
+      "tool_name": "flake8",
+      "rule_id": "E501",
+      "location": {
+        "file_path": "/src/api.py",
+        "line_start": 15,
+        "line_end": null,
+        "column_start": 80,
+        "column_end": null,
+        "function_name": null,
+        "class_name": null
+      },
+      "affected_code": null,
+      "message": "line too long (82 > 79 characters)",
+      "suggestion": "",
+      "fix_recommendation": "",
+      "metadata": {
+        "line": 15,
+        "column": 80,
+        "severity": "warning",
+        "message": "line too long (82 > 79 characters)",
+        "rule_id": "E501"
+      },
+      "tags": [
+        "linter",
+        "flake8"
+      ],
+      "detected_at": "2025-07-05T16:14:35.926097",
+      "impact": "medium",
+      "effort_to_fix": "medium",
+      "related_findings": [],
+      "duplicate_of": null
+    },
+    {
+      "id": "8d673ddbb794c1dd",
+      "title": "Linter Issue: F401",
+      "description": "'os' imported but unused",
+      "finding_type": "style_violation",
+      "severity": "medium",
+      "confidence": 1.0,
+      "source": "linter",
+      "tool_name": "flake8",
+      "rule_id": "F401",
+      "location": {
+        "file_path": "/src/api.py",
+        "line_start": 23,
+        "line_end": null,
+        "column_start": 1,
+        "column_end": null,
+        "function_name": null,
+        "class_name": null
+      },
+      "affected_code": null,
+      "message": "'os' imported but unused",
+      "suggestion": "",
+      "fix_recommendation": "",
+      "metadata": {
+        "line": 23,
+        "column": 1,
+        "severity": "warning",
+        "message": "'os' imported but unused",
+        "rule_id": "F401"
+      },
+      "tags": [
+        "linter",
+        "flake8"
+      ],
+      "detected_at": "2025-07-05T16:14:35.926103",
+      "impact": "medium",
+      "effort_to_fix": "medium",
+      "related_findings": [],
+      "duplicate_of": null
+    },
+    {
+      "id": "563659a868da7587",
+      "title": "Linter Issue: E203",
+      "description": "whitespace before ':'",
+      "finding_type": "style_violation",
+      "severity": "medium",
+      "confidence": 1.0,
+      "source": "linter",
+      "tool_name": "flake8",
+      "rule_id": "E203",
+      "location": {
+        "file_path": "/src/api.py",
+        "line_start": 34,
+        "line_end": null,
+        "column_start": 25,
+        "column_end": null,
+        "function_name": null,
+        "class_name": null
+      },
+      "affected_code": null,
+      "message": "whitespace before ':'",
+      "suggestion": "",
+      "fix_recommendation": "",
+      "metadata": {
+        "line": 34,
+        "column": 25,
+        "severity": "warning",
+        "message": "whitespace before ':'",
+        "rule_id": "E203"
+      },
+      "tags": [
+        "linter",
+        "flake8"
+      ],
+      "detected_at": "2025-07-05T16:14:35.926106",
+      "impact": "medium",
+      "effort_to_fix": "medium",
+      "related_findings": [],
+      "duplicate_of": null
+    }
+  ]
+}

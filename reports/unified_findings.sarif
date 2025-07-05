@@ -1,0 +1,625 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "pylint",
+          "version": "1.0.0",
+          "informationUri": "https://github.com/your-org/wtf-codebot",
+          "rules": [
+            {
+              "id": "too-many-lines",
+              "name": "Long method detected",
+              "shortDescription": {
+                "text": "Method 'process_user_data' has too many lines (150/50)"
+              },
+              "fullDescription": {
+                "text": "Method has 150 lines, consider breaking it down into smaller methods"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "category": "code_smell",
+                "tags": [
+                  "maintainability",
+                  "complexity"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "too-many-lines",
+          "level": "warning",
+          "message": {
+            "text": "Method 'process_user_data' has too many lines (150/50)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/src/user_service.py"
+                },
+                "region": {
+                  "startLine": 45,
+                  "endLine": 195
+                }
+              }
+            }
+          ],
+          "properties": {
+            "confidence": 1.0,
+            "impact": "medium",
+            "effort": "medium",
+            "source": "static_analyzer",
+            "findingType": "code_smell"
+          }
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "flake8",
+          "version": "1.0.0",
+          "informationUri": "https://github.com/your-org/wtf-codebot",
+          "rules": [
+            {
+              "id": "C901",
+              "name": "Method too long",
+              "shortDescription": {
+                "text": "Function is too complex (C901)"
+              },
+              "fullDescription": {
+                "text": "Function exceeds recommended length"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "category": "code_smell",
+                "tags": [
+                  "complexity",
+                  "linter"
+                ]
+              }
+            },
+            {
+              "id": "E501",
+              "name": "Linter Issue: E501",
+              "shortDescription": {
+                "text": "line too long (82 > 79 characters)"
+              },
+              "fullDescription": {
+                "text": "line too long (82 > 79 characters)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "category": "style_violation",
+                "tags": [
+                  "linter",
+                  "flake8"
+                ]
+              }
+            },
+            {
+              "id": "F401",
+              "name": "Linter Issue: F401",
+              "shortDescription": {
+                "text": "'os' imported but unused"
+              },
+              "fullDescription": {
+                "text": "'os' imported but unused"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "category": "style_violation",
+                "tags": [
+                  "linter",
+                  "flake8"
+                ]
+              }
+            },
+            {
+              "id": "E203",
+              "name": "Linter Issue: E203",
+              "shortDescription": {
+                "text": "whitespace before ':'"
+              },
+              "fullDescription": {
+                "text": "whitespace before ':'"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "category": "style_violation",
+                "tags": [
+                  "linter",
+                  "flake8"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "C901",
+          "level": "warning",
+          "message": {
+            "text": "Function is too complex (C901)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/src/user_service.py"
+                },
+                "region": {
+                  "startLine": 47
+                }
+              }
+            }
+          ],
+          "properties": {
+            "confidence": 1.0,
+            "impact": "medium",
+            "effort": "medium",
+            "source": "linter",
+            "findingType": "code_smell"
+          }
+        },
+        {
+          "ruleId": "E501",
+          "level": "warning",
+          "message": {
+            "text": "line too long (82 > 79 characters)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/src/api.py"
+                },
+                "region": {
+                  "startLine": 15,
+                  "startColumn": 80
+                }
+              }
+            }
+          ],
+          "properties": {
+            "confidence": 1.0,
+            "impact": "medium",
+            "effort": "medium",
+            "source": "linter",
+            "findingType": "style_violation"
+          }
+        },
+        {
+          "ruleId": "F401",
+          "level": "warning",
+          "message": {
+            "text": "'os' imported but unused"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/src/api.py"
+                },
+                "region": {
+                  "startLine": 23,
+                  "startColumn": 1
+                }
+              }
+            }
+          ],
+          "properties": {
+            "confidence": 1.0,
+            "impact": "medium",
+            "effort": "medium",
+            "source": "linter",
+            "findingType": "style_violation"
+          }
+        },
+        {
+          "ruleId": "E203",
+          "level": "warning",
+          "message": {
+            "text": "whitespace before ':'"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/src/api.py"
+                },
+                "region": {
+                  "startLine": 34,
+                  "startColumn": 25
+                }
+              }
+            }
+          ],
+          "properties": {
+            "confidence": 1.0,
+            "impact": "medium",
+            "effort": "medium",
+            "source": "linter",
+            "findingType": "style_violation"
+          }
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "claude_pattern_analyzer",
+          "version": "1.0.0",
+          "informationUri": "https://github.com/your-org/wtf-codebot",
+          "rules": [
+            {
+              "id": "god_object",
+              "name": "Anti-Pattern: God Object",
+              "shortDescription": {
+                "text": "Class has multiple unrelated responsibilities"
+              },
+              "fullDescription": {
+                "text": "Class has too many responsibilities and should be split"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "category": "anti_pattern",
+                "tags": [
+                  "code-smell",
+                  "anti-pattern",
+                  "refactoring",
+                  "ai-detected"
+                ]
+              }
+            },
+            {
+              "id": "singleton",
+              "name": "Design Pattern: Singleton",
+              "shortDescription": {
+                "text": "Singleton pattern detected with proper implementation"
+              },
+              "fullDescription": {
+                "text": "Well-implemented Singleton pattern for configuration management"
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "properties": {
+                "category": "design_pattern",
+                "tags": [
+                  "design-pattern",
+                  "ai-detected",
+                  "architecture"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "god_object",
+          "level": "error",
+          "message": {
+            "text": "Class has multiple unrelated responsibilities"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/src/user_service.py"
+                },
+                "region": {
+                  "startLine": 1,
+                  "endLine": 300
+                }
+              }
+            }
+          ],
+          "properties": {
+            "confidence": 0.85,
+            "impact": "high",
+            "effort": "high",
+            "source": "ai_analysis",
+            "findingType": "anti_pattern"
+          }
+        },
+        {
+          "ruleId": "singleton",
+          "level": "note",
+          "message": {
+            "text": "Singleton pattern detected with proper implementation"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/src/config.py"
+                },
+                "region": {
+                  "startLine": 10,
+                  "endLine": 35
+                }
+              }
+            }
+          ],
+          "properties": {
+            "confidence": 0.92,
+            "impact": "low",
+            "effort": "low",
+            "source": "ai_analysis",
+            "findingType": "design_pattern"
+          }
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "bandit",
+          "version": "1.0.0",
+          "informationUri": "https://github.com/your-org/wtf-codebot",
+          "rules": [
+            {
+              "id": "B608",
+              "name": "Security Vulnerability: SQL Injection",
+              "shortDescription": {
+                "text": "Possible SQL injection vector through string formatting"
+              },
+              "fullDescription": {
+                "text": "Potential SQL injection vulnerability in user authentication"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "properties": {
+                "category": "security_vulnerability",
+                "tags": [
+                  "security",
+                  "critical",
+                  "sql-injection"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "B608",
+          "level": "error",
+          "message": {
+            "text": "Possible SQL injection vector through string formatting"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/src/auth.py"
+                },
+                "region": {
+                  "startLine": 78,
+                  "endLine": 82
+                }
+              }
+            }
+          ],
+          "properties": {
+            "confidence": 1.0,
+            "impact": "critical",
+            "effort": "medium",
+            "source": "dependency_analysis",
+            "findingType": "security_vulnerability"
+          }
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "dependency_analyzer",
+          "version": "1.0.0",
+          "informationUri": "https://github.com/your-org/wtf-codebot",
+          "rules": []
+        }
+      },
+      "results": [
+        {
+          "ruleId": null,
+          "level": "note",
+          "message": {
+            "text": "Package requests is outdated"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/requirements.txt"
+                },
+                "region": {}
+              }
+            }
+          ],
+          "properties": {
+            "confidence": 1.0,
+            "impact": "medium",
+            "effort": "medium",
+            "source": "dependency_analysis",
+            "findingType": "outdated_dependency"
+          }
+        }
+      ]
+    },
+    {
+      "tool": {
+        "driver": {
+          "name": "pylint",
+          "version": "1.0.0",
+          "informationUri": "https://github.com/your-org/wtf-codebot",
+          "rules": [
+            {
+              "id": "C0103",
+              "name": "Linter Issue: C0103",
+              "shortDescription": {
+                "text": "Constant name \"api_key\" doesn't conform to UPPER_CASE naming style (invalid-name)"
+              },
+              "fullDescription": {
+                "text": "Constant name \"api_key\" doesn't conform to UPPER_CASE naming style (invalid-name)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "category": "style_violation",
+                "tags": [
+                  "pylint",
+                  "linter"
+                ]
+              }
+            },
+            {
+              "id": "W0613",
+              "name": "Linter Issue: W0613",
+              "shortDescription": {
+                "text": "Unused argument 'request' (unused-argument)"
+              },
+              "fullDescription": {
+                "text": "Unused argument 'request' (unused-argument)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "category": "style_violation",
+                "tags": [
+                  "pylint",
+                  "linter"
+                ]
+              }
+            },
+            {
+              "id": "R0903",
+              "name": "Linter Issue: R0903",
+              "shortDescription": {
+                "text": "Too few public methods (1/2) (too-few-public-methods)"
+              },
+              "fullDescription": {
+                "text": "Too few public methods (1/2) (too-few-public-methods)"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "properties": {
+                "category": "style_violation",
+                "tags": [
+                  "pylint",
+                  "linter"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "C0103",
+          "level": "warning",
+          "message": {
+            "text": "Constant name \"api_key\" doesn't conform to UPPER_CASE naming style (invalid-name)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/src/utils.py"
+                },
+                "region": {
+                  "startLine": 10
+                }
+              }
+            }
+          ],
+          "properties": {
+            "confidence": 1.0,
+            "impact": "medium",
+            "effort": "medium",
+            "source": "linter",
+            "findingType": "style_violation"
+          }
+        },
+        {
+          "ruleId": "W0613",
+          "level": "warning",
+          "message": {
+            "text": "Unused argument 'request' (unused-argument)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/src/utils.py"
+                },
+                "region": {
+                  "startLine": 25,
+                  "startColumn": 4
+                }
+              }
+            }
+          ],
+          "properties": {
+            "confidence": 1.0,
+            "impact": "medium",
+            "effort": "medium",
+            "source": "linter",
+            "findingType": "style_violation"
+          }
+        },
+        {
+          "ruleId": "R0903",
+          "level": "warning",
+          "message": {
+            "text": "Too few public methods (1/2) (too-few-public-methods)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "/src/utils.py"
+                },
+                "region": {
+                  "startLine": 45
+                }
+              }
+            }
+          ],
+          "properties": {
+            "confidence": 1.0,
+            "impact": "medium",
+            "effort": "medium",
+            "source": "linter",
+            "findingType": "style_violation"
+          }
+        }
+      ]
+    }
+  ]
+}

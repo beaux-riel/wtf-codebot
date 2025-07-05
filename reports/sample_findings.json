@@ -1,0 +1,184 @@
+{
+  "schema": {
+    "version": "2.0.0"
+  },
+  "metadata": {
+    "generated_at": "2025-07-05T16:29:16.298850",
+    "tool": {
+      "name": "wtf-codebot",
+      "version": "1.0.0"
+    }
+  },
+  "statistics": {
+    "total_findings": 5,
+    "severity_distribution": {
+      "critical": 1,
+      "high": 1,
+      "medium": 2,
+      "low": 1
+    }
+  },
+  "findings": [
+    {
+      "id": "demo-001",
+      "title": "SQL Injection Vulnerability",
+      "severity": "critical",
+      "finding_type": "security_vulnerability",
+      "description": "Potential SQL injection in user input handling",
+      "location": {
+        "file_path": "/src/database.py",
+        "line_start": 45,
+        "line_end": 47,
+        "function_name": "execute_query"
+      },
+      "confidence": 0.95,
+      "technical_debt_score": 9.5,
+      "business_impact": "high",
+      "effort_to_fix": "medium",
+      "source": "static_analyzer",
+      "tool_name": "bandit",
+      "detected_at": "2025-07-05T16:29:16.298866",
+      "tags": [
+        "security",
+        "database"
+      ],
+      "security_info": {
+        "cwe_ids": [
+          "CWE-89"
+        ],
+        "owasp_categories": [
+          "A03:2021 \u2013 Injection"
+        ]
+      },
+      "remediation": {
+        "priority": "immediate",
+        "description": "Use parameterized queries to prevent SQL injection",
+        "category": "fix"
+      }
+    },
+    {
+      "id": "demo-002",
+      "title": "Long Method Detected",
+      "severity": "high",
+      "finding_type": "code_smell",
+      "description": "Method exceeds recommended length of 50 lines",
+      "location": {
+        "file_path": "/src/user_service.py",
+        "line_start": 120,
+        "line_end": 190,
+        "function_name": "process_user_data",
+        "class_name": "UserService"
+      },
+      "confidence": 1.0,
+      "technical_debt_score": 6.5,
+      "business_impact": "medium",
+      "effort_to_fix": "high",
+      "source": "linter",
+      "tool_name": "pylint",
+      "detected_at": "2025-07-05T16:29:16.298868",
+      "tags": [
+        "maintainability",
+        "complexity"
+      ]
+    },
+    {
+      "id": "demo-003",
+      "title": "Unused Import",
+      "severity": "medium",
+      "finding_type": "style_violation",
+      "description": "Import statement is not used",
+      "location": {
+        "file_path": "/src/utils.py",
+        "line_start": 5,
+        "line_end": 5
+      },
+      "confidence": 1.0,
+      "technical_debt_score": 1.0,
+      "business_impact": "low",
+      "effort_to_fix": "low",
+      "source": "linter",
+      "tool_name": "flake8",
+      "detected_at": "2025-07-05T16:29:16.298869",
+      "tags": [
+        "style",
+        "imports"
+      ]
+    },
+    {
+      "id": "demo-004",
+      "title": "Performance Issue",
+      "severity": "medium",
+      "finding_type": "performance_issue",
+      "description": "Inefficient loop implementation",
+      "location": {
+        "file_path": "/src/analyzer.py",
+        "line_start": 78,
+        "line_end": 85,
+        "function_name": "analyze_data"
+      },
+      "confidence": 0.8,
+      "technical_debt_score": 4.5,
+      "business_impact": "medium",
+      "effort_to_fix": "medium",
+      "source": "profiler",
+      "tool_name": "py-spy",
+      "detected_at": "2025-07-05T16:29:16.298870",
+      "tags": [
+        "performance",
+        "optimization"
+      ]
+    },
+    {
+      "id": "demo-005",
+      "title": "Missing Documentation",
+      "severity": "low",
+      "finding_type": "missing_documentation",
+      "description": "Public method lacks docstring",
+      "location": {
+        "file_path": "/src/api.py",
+        "line_start": 25,
+        "line_end": 30,
+        "function_name": "get_user",
+        "class_name": "UserAPI"
+      },
+      "confidence": 1.0,
+      "technical_debt_score": 2.0,
+      "business_impact": "low",
+      "effort_to_fix": "low",
+      "source": "documentation_checker",
+      "tool_name": "pydocstyle",
+      "detected_at": "2025-07-05T16:29:16.298871",
+      "tags": [
+        "documentation",
+        "maintainability"
+      ]
+    }
+  ],
+  "quality_metrics": {
+    "overall_score": 75.0,
+    "grade": "B",
+    "total_issues": 5
+  },
+  "risk_assessment": {
+    "overall_risk_level": "medium",
+    "security_risk_factors": 1,
+    "critical_issues": 1,
+    "high_priority_issues": 1
+  },
+  "recommendations": [
+    {
+      "priority": "immediate",
+      "category": "security",
+      "title": "Fix SQL Injection Vulnerability",
+      "description": "Address the critical SQL injection vulnerability immediately",
+      "action": "Use parameterized queries"
+    },
+    {
+      "priority": "high",
+      "category": "maintainability",
+      "title": "Refactor Long Methods",
+      "description": "Break down large methods to improve maintainability",
+      "action": "Extract smaller, focused methods"
+    }
+  ]
+}

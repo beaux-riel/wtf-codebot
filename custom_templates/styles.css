@@ -1,0 +1,182 @@
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .metric-grade {
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            opacity: 0.8;
+        }
+
+        .risk-critical {
+            color: #dc3545;
+        }
+
+        .risk-high {
+            color: #fd7e14;
+        }
+
+        .risk-medium {
+            color: #ffc107;
+        }
+
+        .risk-low {
+            color: #28a745;
+        }
+
+        .risk-minimal {
+            color: #6c757d;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            border: none;
+        }
+
+        .nav-tabs .nav-link {
+            border-radius: 10px 10px 0 0;
+            border: none;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            border-top: none;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.5em 0.75em;
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .text-monospace {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        #dependencyGraph {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+
+        .form-select-sm {
+            border-radius: 6px;
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px 10px 0 0;
+            border: none;
+        }
+
+        .list-group-item {
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 0.5rem;
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* DataTables custom styling */
+        .dataTables_wrapper .dataTables_filter input {
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+        }
+
+        .dataTables_wrapper .dataTables_length select {
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+        }
+
+        .page-link {
+            border-radius: 6px;
+            margin: 0 2px;
+        }
+
+        /* Chart containers */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1rem 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .metric-value {
+                font-size: 2rem;
+            }
+            
+            .metric-card {
+                padding: 1rem;
+            }
+            
+            .container-fluid {
+                padding: 1rem;
+            }
+        }
+        

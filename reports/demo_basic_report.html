@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Basic Interactive Report</title>
+    
+    <!-- External Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    
+    <style>
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .metric-grade {
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            opacity: 0.8;
+        }
+
+        .risk-critical {
+            color: #dc3545;
+        }
+
+        .risk-high {
+            color: #fd7e14;
+        }
+
+        .risk-medium {
+            color: #ffc107;
+        }
+
+        .risk-low {
+            color: #28a745;
+        }
+
+        .risk-minimal {
+            color: #6c757d;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            border: none;
+        }
+
+        .nav-tabs .nav-link {
+            border-radius: 10px 10px 0 0;
+            border: none;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            border-top: none;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.5em 0.75em;
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .text-monospace {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        #dependencyGraph {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+
+        .form-select-sm {
+            border-radius: 6px;
+        }
+
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .modal-content {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px 10px 0 0;
+            border: none;
+        }
+
+        .list-group-item {
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 0.5rem;
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* DataTables custom styling */
+        .dataTables_wrapper .dataTables_filter input {
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+        }
+
+        .dataTables_wrapper .dataTables_length select {
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+        }
+
+        .page-link {
+            border-radius: 6px;
+            margin: 0 2px;
+        }
+
+        /* Chart containers */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1rem 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .metric-value {
+                font-size: 2rem;
+            }
+            
+            .metric-card {
+                padding: 1rem;
+            }
+            
+            .container-fluid {
+                padding: 1rem;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-code"></i> Demo - Basic Interactive Report
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text">
+                    <i class="fas fa-clock"></i> Generated: 2025-07-05 16:29
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid py-4">
+        <!-- Dashboard Overview -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard Overview
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="metric-card text-center">
+                                    <div class="metric-value">5</div>
+                                    <div class="metric-label">Total Findings</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="metric-card text-center">
+                                    <div class="metric-value">5</div>
+                                    <div class="metric-label">Affected Files</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="metric-card text-center">
+                                    <div class="metric-value">75.0%</div>
+                                    <div class="metric-label">Quality Score</div>
+                                    <div class="metric-grade">Grade: B</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="metric-card text-center">
+                                    <div class="metric-value risk-medium">
+                                        Medium
+                                    </div>
+                                    <div class="metric-label">Risk Level</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs" id="reportTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab">
+                    <i class="fas fa-chart-pie"></i> Overview
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="findings-tab" data-bs-toggle="tab" data-bs-target="#findings" type="button" role="tab">
+                    <i class="fas fa-exclamation-triangle"></i> Findings (5)
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="dependencies-tab" data-bs-toggle="tab" data-bs-target="#dependencies" type="button" role="tab">
+                    <i class="fas fa-sitemap"></i> Dependencies (5)
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab">
+                    <i class="fas fa-shield-alt"></i> Security (1)
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="reportTabsContent">
+            <!-- Overview Tab -->
+            <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                
+<div class="row mt-4">
+    <!-- Severity Distribution -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-chart-pie"></i> Severity Distribution
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="severityChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Finding Types -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-chart-bar"></i> Finding Types
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="typesChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Files with Most Issues -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-file-code"></i> Files with Most Issues
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="filesChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Technical Debt Timeline -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-chart-line"></i> Technical Debt Timeline
+                </h6>
+            </div>
+            <div class="card-body">
+                <canvas id="debtTimelineChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Statistics -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-list"></i> Summary Statistics
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="text-center">
+                            <div class="h4 text-danger">1</div>
+                            <small class="text-muted">Critical</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center">
+                            <div class="h4 text-warning">1</div>
+                            <small class="text-muted">High</small>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="text-center">
+                            <div class="h4 text-info">4.7</div>
+                            <small class="text-muted">Avg Debt</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="text-center">
+                            <div class="h4 text-success">75.0%</div>
+                            <small class="text-muted">Quality</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+
+            <!-- Findings Tab -->
+            <div class="tab-pane fade" id="findings" role="tabpanel">
+                
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list"></i> Findings Details
+                        </h5>
+                    </div>
+                    <div class="col-auto">
+                        <div class="row g-2">
+                            <div class="col-auto">
+                                <select class="form-select form-select-sm" id="severityFilter">
+                                    <option value="">All Severities</option>
+                                    <option value="critical">Critical</option>
+                                    <option value="high">High</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="low">Low</option>
+                                    <option value="info">Info</option>
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <select class="form-select form-select-sm" id="typeFilter">
+                                    <option value="">All Types</option>
+                                    
+                                    <option value="security_vulnerability">Security_vulnerability</option>
+                                    
+                                    <option value="code_smell">Code_smell</option>
+                                    
+                                    <option value="style_violation">Style_violation</option>
+                                    
+                                    <option value="performance_issue">Performance_issue</option>
+                                    
+                                    <option value="missing_documentation">Missing_documentation</option>
+                                    
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-sm btn-outline-secondary" id="clearFilters">
+                                    <i class="fas fa-times"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="findingsTable" class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>File</th>
+                                <th>Severity</th>
+                                <th>Type</th>
+                                <th>Line</th>
+                                <th>Debt Score</th>
+                                <th>Effort</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">SQL Injection Vulnerability</div>
+                                    <small class="text-muted">Potential SQL injection in user input handling</small>
+                                </td>
+                                <td>
+                                    <div class="text-monospace">/src/database.py</div>
+                                    
+                                    <small class="text-muted">in execute_query</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-danger">
+                                        Critical
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">Security_vulnerability</span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="text-monospace">45</span>
+                                    
+                                    <span class="text-muted">-47</span>
+                                    
+                                    
+                                </td>
+                                <td>
+                                    
+                                    <span class="badge bg-danger">
+                                        9.5
+                                    </span>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">Medium</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showFindingDetails('demo-001')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">Long Method Detected</div>
+                                    <small class="text-muted">Method exceeds recommended length of 50 lines</small>
+                                </td>
+                                <td>
+                                    <div class="text-monospace">/src/user_service.py</div>
+                                    
+                                    <small class="text-muted">in process_user_data</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-warning">
+                                        High
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">Code_smell</span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="text-monospace">120</span>
+                                    
+                                    <span class="text-muted">-190</span>
+                                    
+                                    
+                                </td>
+                                <td>
+                                    
+                                    <span class="badge bg-warning">
+                                        6.5
+                                    </span>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">High</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showFindingDetails('demo-002')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">Unused Import</div>
+                                    <small class="text-muted">Import statement is not used</small>
+                                </td>
+                                <td>
+                                    <div class="text-monospace">/src/utils.py</div>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">
+                                        Medium
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">Style_violation</span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="text-monospace">5</span>
+                                    
+                                    
+                                </td>
+                                <td>
+                                    
+                                    <span class="badge bg-success">
+                                        1.0
+                                    </span>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">Low</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showFindingDetails('demo-003')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">Performance Issue</div>
+                                    <small class="text-muted">Inefficient loop implementation</small>
+                                </td>
+                                <td>
+                                    <div class="text-monospace">/src/analyzer.py</div>
+                                    
+                                    <small class="text-muted">in analyze_data</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">
+                                        Medium
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">Performance_issue</span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="text-monospace">78</span>
+                                    
+                                    <span class="text-muted">-85</span>
+                                    
+                                    
+                                </td>
+                                <td>
+                                    
+                                    <span class="badge bg-info">
+                                        4.5
+                                    </span>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">Medium</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showFindingDetails('demo-004')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">Missing Documentation</div>
+                                    <small class="text-muted">Public method lacks docstring</small>
+                                </td>
+                                <td>
+                                    <div class="text-monospace">/src/api.py</div>
+                                    
+                                    <small class="text-muted">in get_user</small>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">
+                                        Low
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">Missing_documentation</span>
+                                </td>
+                                <td>
+                                    
+                                    <span class="text-monospace">25</span>
+                                    
+                                    <span class="text-muted">-30</span>
+                                    
+                                    
+                                </td>
+                                <td>
+                                    
+                                    <span class="badge bg-info">
+                                        2.0
+                                    </span>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">Low</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showFindingDetails('demo-005')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Finding Details Modal -->
+<div class="modal fade" id="findingDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Finding Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="findingDetailsBody">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showFindingDetails(findingId) {
+    const finding = reportData.tables.findings.find(f => f.id === findingId);
+    if (finding) {
+        const modalBody = document.getElementById('findingDetailsBody');
+        modalBody.innerHTML = `
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Basic Information</h6>
+                    <p><strong>Title:</strong> ${finding.title}</p>
+                    <p><strong>Severity:</strong> <span class="badge bg-${getSeverityColor(finding.severity)}">${finding.severity}</span></p>
+                    <p><strong>Type:</strong> ${finding.type}</p>
+                    <p><strong>Source:</strong> ${finding.source} (${finding.tool_name})</p>
+                    <p><strong>Confidence:</strong> ${(finding.confidence * 100).toFixed(1)}%</p>
+                </div>
+                <div class="col-md-6">
+                    <h6>Location</h6>
+                    <p><strong>File:</strong> <code>${finding.file_path}</code></p>
+                    ${finding.line_start ? `<p><strong>Line:</strong> ${finding.line_start}${finding.line_end ? '-' + finding.line_end : ''}</p>` : ''}
+                    ${finding.function_name ? `<p><strong>Function:</strong> ${finding.function_name}</p>` : ''}
+                    ${finding.class_name ? `<p><strong>Class:</strong> ${finding.class_name}</p>` : ''}
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h6>Description</h6>
+                    <p>${finding.description}</p>
+                </div>
+            </div>
+            ${finding.remediation_description ? `
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h6>Remediation</h6>
+                    <p>${finding.remediation_description}</p>
+                    <p><strong>Priority:</strong> <span class="badge bg-info">${finding.remediation_priority}</span></p>
+                    <p><strong>Effort:</strong> <span class="badge bg-secondary">${finding.effort_to_fix}</span></p>
+                </div>
+            </div>
+            ` : ''}
+            ${finding.cwe_ids && finding.cwe_ids.length > 0 ? `
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h6>Security Information</h6>
+                    <p><strong>CWE IDs:</strong> ${finding.cwe_ids.join(', ')}</p>
+                    ${finding.owasp_categories && finding.owasp_categories.length > 0 ? `<p><strong>OWASP Categories:</strong> ${finding.owasp_categories.join(', ')}</p>` : ''}
+                </div>
+            </div>
+            ` : ''}
+            ${finding.tags && finding.tags.length > 0 ? `
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h6>Tags</h6>
+                    <p>${finding.tags.map(tag => `<span class="badge bg-light text-dark">${tag}</span>`).join(' ')}</p>
+                </div>
+            </div>
+            ` : ''}
+        `;
+        
+        const modal = new bootstrap.Modal(document.getElementById('findingDetailsModal'));
+        modal.show();
+    }
+}
+</script>
+            </div>
+
+            <!-- Dependencies Tab -->
+            <div class="tab-pane fade" id="dependencies" role="tabpanel">
+                
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-sitemap"></i> Dependency Network Graph
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="dependencyGraph" style="height: 400px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-table"></i> Dependencies Details
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="dependenciesTable" class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Version</th>
+                                <th>License</th>
+                                <th>Dev Dependency</th>
+                                <th>Package Manager</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">flask</div>
+                                    <small class="text-muted">/requirements.txt</small>
+                                </td>
+                                <td>
+                                    <code>2.3.2</code>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        MIT
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <i class="fas fa-times text-muted"></i>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">pip</span>
+                                </td>
+                                <td>
+                                    <span class="text-muted">A simple framework for building complex web applications</span>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">requests</div>
+                                    <small class="text-muted">/requirements.txt</small>
+                                </td>
+                                <td>
+                                    <code>2.31.0</code>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        Apache-2.0
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <i class="fas fa-times text-muted"></i>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">pip</span>
+                                </td>
+                                <td>
+                                    <span class="text-muted">Python HTTP for Humans</span>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">jinja2</div>
+                                    <small class="text-muted">/requirements.txt</small>
+                                </td>
+                                <td>
+                                    <code>3.1.2</code>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        BSD-3-Clause
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <i class="fas fa-times text-muted"></i>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">pip</span>
+                                </td>
+                                <td>
+                                    <span class="text-muted">A very fast and expressive template engine</span>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">pytest</div>
+                                    <small class="text-muted">/requirements.txt</small>
+                                </td>
+                                <td>
+                                    <code>7.4.0</code>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        MIT
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <i class="fas fa-check text-success"></i>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">pip</span>
+                                </td>
+                                <td>
+                                    <span class="text-muted">pytest: simple powerful testing with Python</span>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">black</div>
+                                    <small class="text-muted">/requirements.txt</small>
+                                </td>
+                                <td>
+                                    <code>23.7.0</code>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        MIT
+                                    </span>
+                                </td>
+                                <td>
+                                    
+                                    <i class="fas fa-check text-success"></i>
+                                    
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">pip</span>
+                                </td>
+                                <td>
+                                    <span class="text-muted">The uncompromising code formatter</span>
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Node Details Modal -->
+<div class="modal fade" id="nodeDetailsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Node Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="nodeDetailsBody">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+
+            <!-- Security Tab -->
+            <div class="tab-pane fade" id="security" role="tabpanel">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-shield-alt"></i> Security Analysis
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Risk Assessment</h6>
+                                        <div class="alert alert-medium">
+                                            <strong>Risk Level:</strong> Medium
+                                            <br>
+                                            <strong>Security Findings:</strong> 1
+                                            <br>
+                                            <strong>Unique CWEs:</strong> 1
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Security Recommendations</h6>
+                                        <div class="list-group">
+                                            
+                                            
+                                            <div class="list-group-item">
+                                                <strong>Fix SQL Injection Vulnerability</strong>
+                                                <p class="mb-1">Address the critical SQL injection vulnerability immediately</p>
+                                                <small class="text-muted">Use parameterized queries</small>
+                                            </div>
+                                            
+                                            
+                                            
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global data for JavaScript
+        const reportData = {"charts": {"files_with_issues": {"data": [1, 1, 1, 1, 1], "full_paths": ["/src/database.py", "/src/user_service.py", "/src/utils.py", "/src/analyzer.py", "/src/api.py"], "labels": ["database.py", "user_service.py", "utils.py", "analyzer.py", "api.py"]}, "impact_analysis": {}, "license_distribution": {"data": [3, 1, 1], "labels": ["MIT", "Apache-2.0", "BSD-3-Clause"]}, "severity_distribution": {"backgroundColor": ["danger", "warning", "info", "secondary"], "data": [1, 1, 2, 1], "labels": ["critical", "high", "medium", "low"]}, "technical_debt_timeline": [{"date": "2025-07-05T16:29:16.298866", "score": 9.5}, {"date": "2025-07-05T16:29:16.298868", "score": 6.5}, {"date": "2025-07-05T16:29:16.298869", "score": 1.0}, {"date": "2025-07-05T16:29:16.298870", "score": 4.5}, {"date": "2025-07-05T16:29:16.298871", "score": 2.0}], "type_distribution": {"data": [1, 1, 1, 1, 1], "labels": ["security_vulnerability", "code_smell", "style_violation", "performance_issue", "missing_documentation"]}}, "dependencies": {"edges": [{"color": "#999", "from": "/requirements.txt", "label": "depends on", "to": "flask"}, {"color": "#999", "from": "/requirements.txt", "label": "depends on", "to": "requests"}, {"color": "#999", "from": "/requirements.txt", "label": "depends on", "to": "jinja2"}, {"color": "#999", "from": "/requirements.txt", "label": "depends on", "to": "pytest"}, {"color": "#999", "from": "/requirements.txt", "label": "depends on", "to": "black"}], "nodes": [{"color": "#ff6b6b", "id": "/requirements.txt", "label": "requirements.txt", "size": 20, "type": "file"}, {"color": "#4ecdc4", "dev_dependency": false, "id": "flask", "label": "flask", "license": "MIT", "size": 15, "type": "dependency", "version": "2.3.2"}, {"color": "#4ecdc4", "dev_dependency": false, "id": "requests", "label": "requests", "license": "Apache-2.0", "size": 15, "type": "dependency", "version": "2.31.0"}, {"color": "#4ecdc4", "dev_dependency": false, "id": "jinja2", "label": "jinja2", "license": "BSD-3-Clause", "size": 15, "type": "dependency", "version": "3.1.2"}, {"color": "#45b7d1", "dev_dependency": true, "id": "pytest", "label": "pytest", "license": "MIT", "size": 15, "type": "dependency", "version": "7.4.0"}, {"color": "#45b7d1", "dev_dependency": true, "id": "black", "label": "black", "license": "MIT", "size": 15, "type": "dependency", "version": "23.7.0"}]}, "metrics": {"affected_files_count": 5, "average_technical_debt": 4.7, "dependency_vulnerabilities": 0, "overall_quality_score": 75.0, "quality_grade": "B", "risk_level": "medium", "security_findings_count": 1, "severity_counts": {"critical": 1, "high": 1, "low": 1, "medium": 2}, "total_dependencies": 5, "total_findings": 5, "type_counts": {"code_smell": 1, "missing_documentation": 1, "performance_issue": 1, "security_vulnerability": 1, "style_violation": 1}}, "summary": {"critical_issues_count": 1, "high_issues_count": 1, "quality_metrics": {"grade": "B", "overall_score": 75.0, "total_issues": 5}, "risk_assessment": {"critical_issues": 1, "high_priority_issues": 1, "overall_risk_level": "medium", "security_risk_factors": 1}, "security_findings_count": 1, "top_recommendations": [{"action": "Use parameterized queries", "category": "security", "description": "Address the critical SQL injection vulnerability immediately", "priority": "immediate", "title": "Fix SQL Injection Vulnerability"}, {"action": "Extract smaller, focused methods", "category": "maintainability", "description": "Break down large methods to improve maintainability", "priority": "high", "title": "Refactor Long Methods"}], "unique_cwe_count": 1}, "tables": {"dependencies": [{"description": "A simple framework for building complex web applications", "dev_dependency": false, "file_path": "/requirements.txt", "license": "MIT", "name": "flask", "optional": false, "package_manager": "pip", "version": "2.3.2"}, {"description": "Python HTTP for Humans", "dev_dependency": false, "file_path": "/requirements.txt", "license": "Apache-2.0", "name": "requests", "optional": false, "package_manager": "pip", "version": "2.31.0"}, {"description": "A very fast and expressive template engine", "dev_dependency": false, "file_path": "/requirements.txt", "license": "BSD-3-Clause", "name": "jinja2", "optional": false, "package_manager": "pip", "version": "3.1.2"}, {"description": "pytest: simple powerful testing with Python", "dev_dependency": true, "file_path": "/requirements.txt", "license": "MIT", "name": "pytest", "optional": false, "package_manager": "pip", "version": "7.4.0"}, {"description": "The uncompromising code formatter", "dev_dependency": true, "file_path": "/requirements.txt", "license": "MIT", "name": "black", "optional": false, "package_manager": "pip", "version": "23.7.0"}], "findings": [{"business_impact": "high", "class_name": "", "confidence": 0.95, "cwe_ids": ["CWE-89"], "description": "Potential SQL injection in user input handling", "detected_at": "2025-07-05T16:29:16.298866", "effort_to_fix": "medium", "file_path": "/src/database.py", "function_name": "execute_query", "id": "demo-001", "line_end": 47, "line_start": 45, "owasp_categories": ["A03:2021 \u2013 Injection"], "pattern_confidence": 0, "pattern_name": "", "remediation_description": "Use parameterized queries to prevent SQL injection", "remediation_priority": "immediate", "severity": "critical", "source": "static_analyzer", "tags": ["security", "database"], "technical_debt_score": 9.5, "title": "SQL Injection Vulnerability", "tool_name": "bandit", "type": "security_vulnerability"}, {"business_impact": "medium", "class_name": "UserService", "confidence": 1.0, "cwe_ids": [], "description": "Method exceeds recommended length of 50 lines", "detected_at": "2025-07-05T16:29:16.298868", "effort_to_fix": "high", "file_path": "/src/user_service.py", "function_name": "process_user_data", "id": "demo-002", "line_end": 190, "line_start": 120, "owasp_categories": [], "pattern_confidence": 0, "pattern_name": "", "remediation_description": "", "remediation_priority": "", "severity": "high", "source": "linter", "tags": ["maintainability", "complexity"], "technical_debt_score": 6.5, "title": "Long Method Detected", "tool_name": "pylint", "type": "code_smell"}, {"business_impact": "low", "class_name": "", "confidence": 1.0, "cwe_ids": [], "description": "Import statement is not used", "detected_at": "2025-07-05T16:29:16.298869", "effort_to_fix": "low", "file_path": "/src/utils.py", "function_name": "", "id": "demo-003", "line_end": 5, "line_start": 5, "owasp_categories": [], "pattern_confidence": 0, "pattern_name": "", "remediation_description": "", "remediation_priority": "", "severity": "medium", "source": "linter", "tags": ["style", "imports"], "technical_debt_score": 1.0, "title": "Unused Import", "tool_name": "flake8", "type": "style_violation"}, {"business_impact": "medium", "class_name": "", "confidence": 0.8, "cwe_ids": [], "description": "Inefficient loop implementation", "detected_at": "2025-07-05T16:29:16.298870", "effort_to_fix": "medium", "file_path": "/src/analyzer.py", "function_name": "analyze_data", "id": "demo-004", "line_end": 85, "line_start": 78, "owasp_categories": [], "pattern_confidence": 0, "pattern_name": "", "remediation_description": "", "remediation_priority": "", "severity": "medium", "source": "profiler", "tags": ["performance", "optimization"], "technical_debt_score": 4.5, "title": "Performance Issue", "tool_name": "py-spy", "type": "performance_issue"}, {"business_impact": "low", "class_name": "UserAPI", "confidence": 1.0, "cwe_ids": [], "description": "Public method lacks docstring", "detected_at": "2025-07-05T16:29:16.298871", "effort_to_fix": "low", "file_path": "/src/api.py", "function_name": "get_user", "id": "demo-005", "line_end": 30, "line_start": 25, "owasp_categories": [], "pattern_confidence": 0, "pattern_name": "", "remediation_description": "", "remediation_priority": "", "severity": "low", "source": "documentation_checker", "tags": ["documentation", "maintainability"], "technical_debt_score": 2.0, "title": "Missing Documentation", "tool_name": "pydocstyle", "type": "missing_documentation"}]}};
+        const findingsData = {"findings": [{"business_impact": "high", "confidence": 0.95, "description": "Potential SQL injection in user input handling", "detected_at": "2025-07-05T16:29:16.298866", "effort_to_fix": "medium", "finding_type": "security_vulnerability", "id": "demo-001", "location": {"file_path": "/src/database.py", "function_name": "execute_query", "line_end": 47, "line_start": 45}, "remediation": {"category": "fix", "description": "Use parameterized queries to prevent SQL injection", "priority": "immediate"}, "security_info": {"cwe_ids": ["CWE-89"], "owasp_categories": ["A03:2021 \u2013 Injection"]}, "severity": "critical", "source": "static_analyzer", "tags": ["security", "database"], "technical_debt_score": 9.5, "title": "SQL Injection Vulnerability", "tool_name": "bandit"}, {"business_impact": "medium", "confidence": 1.0, "description": "Method exceeds recommended length of 50 lines", "detected_at": "2025-07-05T16:29:16.298868", "effort_to_fix": "high", "finding_type": "code_smell", "id": "demo-002", "location": {"class_name": "UserService", "file_path": "/src/user_service.py", "function_name": "process_user_data", "line_end": 190, "line_start": 120}, "severity": "high", "source": "linter", "tags": ["maintainability", "complexity"], "technical_debt_score": 6.5, "title": "Long Method Detected", "tool_name": "pylint"}, {"business_impact": "low", "confidence": 1.0, "description": "Import statement is not used", "detected_at": "2025-07-05T16:29:16.298869", "effort_to_fix": "low", "finding_type": "style_violation", "id": "demo-003", "location": {"file_path": "/src/utils.py", "line_end": 5, "line_start": 5}, "severity": "medium", "source": "linter", "tags": ["style", "imports"], "technical_debt_score": 1.0, "title": "Unused Import", "tool_name": "flake8"}, {"business_impact": "medium", "confidence": 0.8, "description": "Inefficient loop implementation", "detected_at": "2025-07-05T16:29:16.298870", "effort_to_fix": "medium", "finding_type": "performance_issue", "id": "demo-004", "location": {"file_path": "/src/analyzer.py", "function_name": "analyze_data", "line_end": 85, "line_start": 78}, "severity": "medium", "source": "profiler", "tags": ["performance", "optimization"], "technical_debt_score": 4.5, "title": "Performance Issue", "tool_name": "py-spy"}, {"business_impact": "low", "confidence": 1.0, "description": "Public method lacks docstring", "detected_at": "2025-07-05T16:29:16.298871", "effort_to_fix": "low", "finding_type": "missing_documentation", "id": "demo-005", "location": {"class_name": "UserAPI", "file_path": "/src/api.py", "function_name": "get_user", "line_end": 30, "line_start": 25}, "severity": "low", "source": "documentation_checker", "tags": ["documentation", "maintainability"], "technical_debt_score": 2.0, "title": "Missing Documentation", "tool_name": "pydocstyle"}], "metadata": {"generated_at": "2025-07-05T16:29:16.298850", "tool": {"name": "wtf-codebot", "version": "1.0.0"}}, "quality_metrics": {"grade": "B", "overall_score": 75.0, "total_issues": 5}, "recommendations": [{"action": "Use parameterized queries", "category": "security", "description": "Address the critical SQL injection vulnerability immediately", "priority": "immediate", "title": "Fix SQL Injection Vulnerability"}, {"action": "Extract smaller, focused methods", "category": "maintainability", "description": "Break down large methods to improve maintainability", "priority": "high", "title": "Refactor Long Methods"}], "risk_assessment": {"critical_issues": 1, "high_priority_issues": 1, "overall_risk_level": "medium", "security_risk_factors": 1}, "schema": {"version": "2.0.0"}, "statistics": {"severity_distribution": {"critical": 1, "high": 1, "low": 1, "medium": 2}, "total_findings": 5}};
+        const dependenciesData = {"metadata": {"generated_at": "2025-07-05T16:29:16.298872", "tool": "dependency-analyzer", "total_dependencies": 5, "total_files": 1, "version": "1.0.0"}, "results": [{"dependencies": {"black": {"description": "The uncompromising code formatter", "dev_dependency": true, "license": "MIT", "name": "black", "version": "23.7.0"}, "flask": {"description": "A simple framework for building complex web applications", "dev_dependency": false, "license": "MIT", "name": "flask", "version": "2.3.2"}, "jinja2": {"description": "A very fast and expressive template engine", "dev_dependency": false, "license": "BSD-3-Clause", "name": "jinja2", "version": "3.1.2"}, "pytest": {"description": "pytest: simple powerful testing with Python", "dev_dependency": true, "license": "MIT", "name": "pytest", "version": "7.4.0"}, "requests": {"description": "Python HTTP for Humans", "dev_dependency": false, "license": "Apache-2.0", "name": "requests", "version": "2.31.0"}}, "file_path": "/requirements.txt", "package_manager": "pip"}], "summary": {"license_distribution": {"Apache-2.0": 1, "BSD-3-Clause": 1, "MIT": 3}, "total_dependencies": 5, "total_vulnerabilities": 0}};
+    </script>
+    
+    <script>
+        // Initialize charts and tables when document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            initializeTables();
+            initializeDependencyGraph();
+            setupEventHandlers();
+        });
+
+        function initializeCharts() {
+            // Severity Distribution Chart
+            const severityCtx = document.getElementById('severityChart');
+            if (severityCtx) {
+                new Chart(severityCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: reportData.charts.severity_distribution.labels,
+                        datasets: [{
+                            data: reportData.charts.severity_distribution.data,
+                            backgroundColor: reportData.charts.severity_distribution.backgroundColor
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Finding Types Chart
+            const typesCtx = document.getElementById('typesChart');
+            if (typesCtx) {
+                new Chart(typesCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: reportData.charts.type_distribution.labels,
+                        datasets: [{
+                            label: 'Number of Findings',
+                            data: reportData.charts.type_distribution.data,
+                            backgroundColor: 'rgba(54, 162, 235, 0.7)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Files with Issues Chart
+            const filesCtx = document.getElementById('filesChart');
+            if (filesCtx) {
+                new Chart(filesCtx, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: reportData.charts.files_with_issues.labels,
+                        datasets: [{
+                            label: 'Number of Issues',
+                            data: reportData.charts.files_with_issues.data,
+                            backgroundColor: 'rgba(255, 99, 132, 0.7)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Technical Debt Timeline
+            if (reportData.charts.technical_debt_timeline.length > 0) {
+                const debtData = reportData.charts.technical_debt_timeline.map(item => ({
+                    x: new Date(item.date),
+                    y: item.score
+                }));
+
+                const timelineCtx = document.getElementById('debtTimelineChart');
+                if (timelineCtx) {
+                    new Chart(timelineCtx, {
+                        type: 'line',
+                        data: {
+                            datasets: [{
+                                label: 'Technical Debt Score',
+                                data: debtData,
+                                borderColor: 'rgb(75, 192, 192)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                tension: 0.1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    type: 'time',
+                                    time: {
+                                        unit: 'day'
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        function initializeTables() {
+            // Initialize DataTables for findings
+            $('#findingsTable').DataTable({
+                responsive: true,
+                pageLength: 25,
+                order: [[2, 'desc']], // Sort by severity
+                columnDefs: [
+                    {
+                        targets: [2], // Severity column
+                        render: function(data, type, row) {
+                            return `<span class="badge bg-${getSeverityColor(data)}">${data}</span>`;
+                        }
+                    },
+                    {
+                        targets: [5], // Technical debt score
+                        render: function(data, type, row) {
+                            return data ? parseFloat(data).toFixed(1) : '0.0';
+                        }
+                    }
+                ]
+            });
+
+            // Initialize DataTables for dependencies
+            $('#dependenciesTable').DataTable({
+                responsive: true,
+                pageLength: 25,
+                order: [[0, 'asc']], // Sort by name
+                columnDefs: [
+                    {
+                        targets: [3], // Dev dependency column
+                        render: function(data, type, row) {
+                            return data ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-muted"></i>';
+                        }
+                    }
+                ]
+            });
+        }
+
+        function initializeDependencyGraph() {
+            const container = document.getElementById('dependencyGraph');
+            if (container && reportData.dependencies.nodes.length > 0) {
+                const data = {
+                    nodes: new vis.DataSet(reportData.dependencies.nodes),
+                    edges: new vis.DataSet(reportData.dependencies.edges)
+                };
+
+                const options = {
+                    nodes: {
+                        shape: 'dot',
+                        scaling: {
+                            min: 10,
+                            max: 30
+                        },
+                        font: {
+                            size: 12,
+                            face: 'Tahoma'
+                        }
+                    },
+                    edges: {
+                        width: 2,
+                        color: {inherit: 'from'},
+                        smooth: {
+                            type: 'continuous'
+                        }
+                    },
+                    physics: {
+                        stabilization: {iterations: 200}
+                    }
+                };
+
+                const network = new vis.Network(container, data, options);
+                
+                // Add click event for node details
+                network.on('click', function(params) {
+                    if (params.nodes.length > 0) {
+                        const nodeId = params.nodes[0];
+                        const node = reportData.dependencies.nodes.find(n => n.id === nodeId);
+                        if (node) {
+                            showNodeDetails(node);
+                        }
+                    }
+                });
+            }
+        }
+
+        function setupEventHandlers() {
+            // Filter by severity
+            document.getElementById('severityFilter')?.addEventListener('change', function() {
+                const table = $('#findingsTable').DataTable();
+                table.column(2).search(this.value).draw();
+            });
+
+            // Filter by type
+            document.getElementById('typeFilter')?.addEventListener('change', function() {
+                const table = $('#findingsTable').DataTable();
+                table.column(3).search(this.value).draw();
+            });
+
+            // Clear filters
+            document.getElementById('clearFilters')?.addEventListener('click', function() {
+                const table = $('#findingsTable').DataTable();
+                table.search('').columns().search('').draw();
+                document.getElementById('severityFilter').value = '';
+                document.getElementById('typeFilter').value = '';
+            });
+        }
+
+        function getSeverityColor(severity) {
+            const colors = {
+                'critical': 'danger',
+                'high': 'warning',
+                'medium': 'info',
+                'low': 'secondary',
+                'info': 'light'
+            };
+            return colors[severity] || 'secondary';
+        }
+
+        function showNodeDetails(node) {
+            const modalBody = document.getElementById('nodeDetailsBody');
+            if (modalBody) {
+                modalBody.innerHTML = `
+                    <h6>${node.label}</h6>
+                    <p><strong>Type:</strong> ${node.type}</p>
+                    ${node.license ? `<p><strong>License:</strong> ${node.license}</p>` : ''}
+                    ${node.version ? `<p><strong>Version:</strong> ${node.version}</p>` : ''}
+                    ${node.dev_dependency !== undefined ? `<p><strong>Dev Dependency:</strong> ${node.dev_dependency ? 'Yes' : 'No'}</p>` : ''}
+                `;
+                
+                const modal = new bootstrap.Modal(document.getElementById('nodeDetailsModal'));
+                modal.show();
+            }
+        }
+    </script>
+</body>
+</html>

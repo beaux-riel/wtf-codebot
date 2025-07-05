@@ -1,0 +1,913 @@
+{
+  "findings": [
+    {
+      "affected_code": null,
+      "business_impact": "low",
+      "confidence": 1.0,
+      "description": "Method has 150 lines, consider breaking it down into smaller methods",
+      "detected_at": "2025-07-05T16:14:35.925982",
+      "duplicate_of": null,
+      "effort_to_fix": "medium",
+      "finding_type": "code_smell",
+      "fix_recommendation": "",
+      "id": "e07688a10b824cb7",
+      "impact": "medium",
+      "impact_analysis": {
+        "maintainability_impact": "medium",
+        "performance_impact": "minimal",
+        "reliability_impact": "minimal",
+        "security_impact": "minimal"
+      },
+      "location": {
+        "class_name": null,
+        "column_end": null,
+        "column_start": null,
+        "file_path": "/src/user_service.py",
+        "function_name": "process_user_data",
+        "line_end": 195,
+        "line_start": 45
+      },
+      "message": "Method 'process_user_data' has too many lines (150/50)",
+      "metadata": {},
+      "related_findings": [],
+      "remediation": {
+        "category": "refactor",
+        "code_example": null,
+        "description": "Break down into smaller, focused methods",
+        "estimated_effort": "medium",
+        "prerequisites": [],
+        "priority": "medium",
+        "references": [],
+        "risk_level": "low",
+        "steps": [
+          "Identify the root cause of the code smell",
+          "Extract methods or classes as needed",
+          "Improve naming and structure",
+          "Add or update documentation",
+          "Write unit tests for refactored code"
+        ]
+      },
+      "rule_id": "too-many-lines",
+      "security_info": {
+        "compliance_violations": [],
+        "cwe_ids": [],
+        "owasp_categories": []
+      },
+      "severity": "medium",
+      "source": "static_analyzer",
+      "suggestion": "Break down into smaller, focused methods",
+      "tags": [
+        "maintainability",
+        "complexity"
+      ],
+      "technical_debt_score": 5.5,
+      "title": "Long method detected",
+      "tool_name": "pylint"
+    },
+    {
+      "affected_code": null,
+      "business_impact": "low",
+      "confidence": 1.0,
+      "description": "Function exceeds recommended length",
+      "detected_at": "2025-07-05T16:14:35.926009",
+      "duplicate_of": null,
+      "effort_to_fix": "medium",
+      "finding_type": "code_smell",
+      "fix_recommendation": "",
+      "id": "d37c285352d5367f",
+      "impact": "medium",
+      "impact_analysis": {
+        "maintainability_impact": "medium",
+        "performance_impact": "minimal",
+        "reliability_impact": "minimal",
+        "security_impact": "minimal"
+      },
+      "location": {
+        "class_name": null,
+        "column_end": null,
+        "column_start": null,
+        "file_path": "/src/user_service.py",
+        "function_name": "process_user_data",
+        "line_end": null,
+        "line_start": 47
+      },
+      "message": "Function is too complex (C901)",
+      "metadata": {},
+      "related_findings": [],
+      "remediation": {
+        "category": "refactor",
+        "code_example": null,
+        "description": "Refactor into smaller functions",
+        "estimated_effort": "medium",
+        "prerequisites": [],
+        "priority": "medium",
+        "references": [],
+        "risk_level": "low",
+        "steps": [
+          "Identify the root cause of the code smell",
+          "Extract methods or classes as needed",
+          "Improve naming and structure",
+          "Add or update documentation",
+          "Write unit tests for refactored code"
+        ]
+      },
+      "rule_id": "C901",
+      "security_info": {
+        "compliance_violations": [],
+        "cwe_ids": [],
+        "owasp_categories": []
+      },
+      "severity": "medium",
+      "source": "linter",
+      "suggestion": "Refactor into smaller functions",
+      "tags": [
+        "complexity",
+        "linter"
+      ],
+      "technical_debt_score": 5.5,
+      "title": "Method too long",
+      "tool_name": "flake8"
+    },
+    {
+      "affected_code": null,
+      "business_impact": "low",
+      "confidence": 0.85,
+      "description": "Class has too many responsibilities and should be split",
+      "detected_at": "2025-07-05T16:14:35.926016",
+      "duplicate_of": null,
+      "effort_to_fix": "high",
+      "finding_type": "anti_pattern",
+      "fix_recommendation": "",
+      "id": "ac0962db743075c0",
+      "impact": "high",
+      "impact_analysis": {
+        "maintainability_impact": "high",
+        "performance_impact": "minimal",
+        "reliability_impact": "minimal",
+        "security_impact": "minimal"
+      },
+      "location": {
+        "class_name": "UserService",
+        "column_end": null,
+        "column_start": null,
+        "file_path": "/src/user_service.py",
+        "function_name": null,
+        "line_end": 300,
+        "line_start": 1
+      },
+      "message": "Class has multiple unrelated responsibilities",
+      "metadata": {
+        "evidence": [
+          "50+ methods",
+          "Multiple unrelated concerns",
+          "Large class size"
+        ],
+        "problems": [
+          "Poor maintainability",
+          "High coupling",
+          "Testing difficulties"
+        ],
+        "solutions": [
+          "Split into focused classes",
+          "Use composition",
+          "Apply SOLID principles"
+        ]
+      },
+      "pattern_info": {
+        "category": "anti_pattern",
+        "confidence_score": 0.85,
+        "description": "A class that knows too much or does too much",
+        "evidence": [
+          "Large class size",
+          "Multiple responsibilities",
+          "High coupling"
+        ],
+        "name": "God Object",
+        "pattern_id": "god_object",
+        "related_patterns": [
+          "single_responsibility_violation",
+          "high_coupling"
+        ]
+      },
+      "related_findings": [],
+      "remediation": {
+        "category": "refactor",
+        "code_example": null,
+        "description": "Split into focused service classes; Apply Single Responsibility Principle",
+        "estimated_effort": "high",
+        "prerequisites": [],
+        "priority": "high",
+        "references": [],
+        "risk_level": "medium",
+        "steps": [
+          "Analyze the current structure",
+          "Design a better architecture",
+          "Break down large components",
+          "Apply SOLID principles",
+          "Incrementally refactor"
+        ]
+      },
+      "rule_id": "god_object",
+      "security_info": {
+        "compliance_violations": [],
+        "cwe_ids": [],
+        "owasp_categories": []
+      },
+      "severity": "high",
+      "source": "ai_analysis",
+      "suggestion": "Split into focused service classes; Apply Single Responsibility Principle",
+      "tags": [
+        "code-smell",
+        "anti-pattern",
+        "refactoring",
+        "ai-detected"
+      ],
+      "technical_debt_score": 8.84,
+      "title": "Anti-Pattern: God Object",
+      "tool_name": "claude_pattern_analyzer"
+    },
+    {
+      "affected_code": null,
+      "business_impact": "low",
+      "confidence": 0.92,
+      "description": "Well-implemented Singleton pattern for configuration management",
+      "detected_at": "2025-07-05T16:14:35.926000",
+      "duplicate_of": null,
+      "effort_to_fix": "low",
+      "finding_type": "design_pattern",
+      "fix_recommendation": "",
+      "id": "6967c7eb18cb9bb5",
+      "impact": "low",
+      "impact_analysis": {
+        "maintainability_impact": "minimal",
+        "performance_impact": "minimal",
+        "reliability_impact": "minimal",
+        "security_impact": "minimal"
+      },
+      "location": {
+        "class_name": "ConfigManager",
+        "column_end": null,
+        "column_start": null,
+        "file_path": "/src/config.py",
+        "function_name": null,
+        "line_end": 35,
+        "line_start": 10
+      },
+      "message": "Singleton pattern detected with proper implementation",
+      "metadata": {
+        "benefits": [
+          "Global access",
+          "Single instance guarantee"
+        ],
+        "evidence": [
+          "Private constructor",
+          "Static instance method",
+          "Thread-safe implementation"
+        ],
+        "use_cases": [
+          "Configuration management",
+          "Logging services"
+        ]
+      },
+      "pattern_info": {
+        "category": "creational_pattern",
+        "confidence_score": 0.92,
+        "description": "Ensures a class has only one instance",
+        "evidence": [
+          "Private constructor",
+          "Static instance method",
+          "Single instance guarantee"
+        ],
+        "name": "Singleton Pattern",
+        "pattern_id": "singleton",
+        "related_patterns": []
+      },
+      "related_findings": [],
+      "rule_id": "singleton",
+      "security_info": {
+        "compliance_violations": [],
+        "cwe_ids": [],
+        "owasp_categories": []
+      },
+      "severity": "info",
+      "source": "ai_analysis",
+      "suggestion": "",
+      "tags": [
+        "design-pattern",
+        "architecture",
+        "ai-detected"
+      ],
+      "technical_debt_score": 0.46,
+      "title": "Design Pattern: Singleton",
+      "tool_name": "claude_pattern_analyzer"
+    },
+    {
+      "affected_code": "cursor.execute(f\"SELECT * FROM users WHERE username = '{username}'\")",
+      "business_impact": "high",
+      "confidence": 1.0,
+      "description": "Potential SQL injection vulnerability in user authentication",
+      "detected_at": "2025-07-05T16:14:35.926006",
+      "duplicate_of": null,
+      "effort_to_fix": "medium",
+      "finding_type": "security_vulnerability",
+      "fix_recommendation": "Replace string formatting with parameterized query: cursor.execute('SELECT * FROM users WHERE username = %s', (username,))",
+      "id": "6cb63e3e579400d7",
+      "impact": "critical",
+      "impact_analysis": {
+        "maintainability_impact": "minimal",
+        "performance_impact": "minimal",
+        "reliability_impact": "minimal",
+        "security_impact": "critical"
+      },
+      "location": {
+        "class_name": null,
+        "column_end": null,
+        "column_start": null,
+        "file_path": "/src/auth.py",
+        "function_name": "authenticate_user",
+        "line_end": 82,
+        "line_start": 78
+      },
+      "message": "Possible SQL injection vector through string formatting",
+      "metadata": {
+        "affected_versions": [
+          "1.0.0",
+          "1.1.0"
+        ],
+        "cve_id": "CVE-2023-12345",
+        "fixed_versions": [
+          "1.2.0"
+        ]
+      },
+      "related_findings": [],
+      "remediation": {
+        "category": "fix",
+        "code_example": "Replace string formatting with parameterized query: cursor.execute('SELECT * FROM users WHERE username = %s', (username,))",
+        "description": "Use parameterized queries or ORM methods",
+        "estimated_effort": "medium",
+        "prerequisites": [],
+        "priority": "immediate",
+        "references": [
+          {
+            "type": "owasp",
+            "url": "https://owasp.org/www-project-top-ten/"
+          },
+          {
+            "type": "cwe",
+            "url": "https://cwe.mitre.org/"
+          }
+        ],
+        "risk_level": "high",
+        "steps": [
+          "Review the vulnerable code section",
+          "Apply security patches or updates",
+          "Implement input validation if applicable",
+          "Add security tests",
+          "Conduct security review"
+        ]
+      },
+      "rule_id": "B608",
+      "security_info": {
+        "compliance_violations": [
+          "PCI-DSS",
+          "SOX"
+        ],
+        "cwe_ids": [
+          "CWE-89"
+        ],
+        "owasp_categories": [
+          "A03:2021 – Injection"
+        ]
+      },
+      "severity": "critical",
+      "source": "dependency_analysis",
+      "suggestion": "Use parameterized queries or ORM methods",
+      "tags": [
+        "security",
+        "sql-injection",
+        "critical"
+      ],
+      "technical_debt_score": 15.0,
+      "title": "Security Vulnerability: SQL Injection",
+      "tool_name": "bandit"
+    },
+    {
+      "affected_code": null,
+      "business_impact": "low",
+      "confidence": 1.0,
+      "description": "Package requests is outdated and should be updated",
+      "detected_at": "2025-07-05T16:14:35.926012",
+      "duplicate_of": null,
+      "effort_to_fix": "medium",
+      "finding_type": "outdated_dependency",
+      "fix_recommendation": "",
+      "id": "8038d6277190a945",
+      "impact": "medium",
+      "impact_analysis": {
+        "maintainability_impact": "minimal",
+        "performance_impact": "minimal",
+        "reliability_impact": "minimal",
+        "security_impact": "minimal"
+      },
+      "location": {
+        "class_name": null,
+        "column_end": null,
+        "column_start": null,
+        "file_path": "/requirements.txt",
+        "function_name": null,
+        "line_end": null,
+        "line_start": null
+      },
+      "message": "Package requests is outdated",
+      "metadata": {
+        "current_version": "2.25.1",
+        "latest_version": "2.31.0"
+      },
+      "related_findings": [],
+      "remediation": {
+        "category": "modernize",
+        "code_example": null,
+        "description": "Update to the latest stable version",
+        "estimated_effort": "low",
+        "prerequisites": [],
+        "priority": "medium",
+        "references": [],
+        "risk_level": "medium",
+        "steps": [
+          "Check for breaking changes in newer versions",
+          "Update dependencies incrementally",
+          "Run comprehensive tests",
+          "Update documentation if needed"
+        ]
+      },
+      "rule_id": null,
+      "security_info": {
+        "compliance_violations": [],
+        "cwe_ids": [],
+        "owasp_categories": []
+      },
+      "severity": "low",
+      "source": "dependency_analysis",
+      "suggestion": "Update to the latest stable version",
+      "tags": [
+        "maintenance",
+        "outdated",
+        "dependency"
+      ],
+      "technical_debt_score": 2.0,
+      "title": "Outdated Package: requests",
+      "tool_name": "dependency_analyzer"
+    },
+    {
+      "affected_code": null,
+      "business_impact": "low",
+      "confidence": 1.0,
+      "description": "Constant name \"api_key\" doesn't conform to UPPER_CASE naming style (invalid-name)",
+      "detected_at": "2025-07-05T16:14:35.926036",
+      "duplicate_of": null,
+      "effort_to_fix": "medium",
+      "finding_type": "style_violation",
+      "fix_recommendation": "",
+      "id": "e60639fc369c714e",
+      "impact": "medium",
+      "impact_analysis": {
+        "maintainability_impact": "medium",
+        "performance_impact": "minimal",
+        "reliability_impact": "minimal",
+        "security_impact": "minimal"
+      },
+      "location": {
+        "class_name": null,
+        "column_end": null,
+        "column_start": 0,
+        "file_path": "/src/utils.py",
+        "function_name": null,
+        "line_end": null,
+        "line_start": 10
+      },
+      "message": "Constant name \"api_key\" doesn't conform to UPPER_CASE naming style (invalid-name)",
+      "metadata": {
+        "column": 0,
+        "line": 10,
+        "message": "Constant name \"api_key\" doesn't conform to UPPER_CASE naming style (invalid-name)",
+        "rule_id": "C0103",
+        "type": "C0103"
+      },
+      "related_findings": [],
+      "rule_id": "C0103",
+      "security_info": {
+        "compliance_violations": [],
+        "cwe_ids": [],
+        "owasp_categories": []
+      },
+      "severity": "medium",
+      "source": "linter",
+      "suggestion": "",
+      "tags": [
+        "pylint",
+        "linter"
+      ],
+      "technical_debt_score": 4.0,
+      "title": "Linter Issue: C0103",
+      "tool_name": "pylint"
+    },
+    {
+      "affected_code": null,
+      "business_impact": "low",
+      "confidence": 1.0,
+      "description": "Unused argument 'request' (unused-argument)",
+      "detected_at": "2025-07-05T16:14:35.926042",
+      "duplicate_of": null,
+      "effort_to_fix": "medium",
+      "finding_type": "style_violation",
+      "fix_recommendation": "",
+      "id": "f9de7841ea4bd415",
+      "impact": "medium",
+      "impact_analysis": {
+        "maintainability_impact": "medium",
+        "performance_impact": "minimal",
+        "reliability_impact": "minimal",
+        "security_impact": "minimal"
+      },
+      "location": {
+        "class_name": null,
+        "column_end": null,
+        "column_start": 4,
+        "file_path": "/src/utils.py",
+        "function_name": null,
+        "line_end": null,
+        "line_start": 25
+      },
+      "message": "Unused argument 'request' (unused-argument)",
+      "metadata": {
+        "column": 4,
+        "line": 25,
+        "message": "Unused argument 'request' (unused-argument)",
+        "rule_id": "W0613",
+        "type": "W0613"
+      },
+      "related_findings": [],
+      "rule_id": "W0613",
+      "security_info": {
+        "compliance_violations": [],
+        "cwe_ids": [],
+        "owasp_categories": []
+      },
+      "severity": "medium",
+      "source": "linter",
+      "suggestion": "",
+      "tags": [
+        "pylint",
+        "linter"
+      ],
+      "technical_debt_score": 4.0,
+      "title": "Linter Issue: W0613",
+      "tool_name": "pylint"
+    },
+    {
+      "affected_code": null,
+      "business_impact": "low",
+      "confidence": 1.0,
+      "description": "Too few public methods (1/2) (too-few-public-methods)",
+      "detected_at": "2025-07-05T16:14:35.926047",
+      "duplicate_of": null,
+      "effort_to_fix": "medium",
+      "finding_type": "style_violation",
+      "fix_recommendation": "",
+      "id": "45b041b9c4bdddd3",
+      "impact": "medium",
+      "impact_analysis": {
+        "maintainability_impact": "medium",
+        "performance_impact": "minimal",
+        "reliability_impact": "minimal",
+        "security_impact": "minimal"
+      },
+      "location": {
+        "class_name": null,
+        "column_end": null,
+        "column_start": 0,
+        "file_path": "/src/utils.py",
+        "function_name": null,
+        "line_end": null,
+        "line_start": 45
+      },
+      "message": "Too few public methods (1/2) (too-few-public-methods)",
+      "metadata": {
+        "column": 0,
+        "line": 45,
+        "message": "Too few public methods (1/2) (too-few-public-methods)",
+        "rule_id": "R0903",
+        "type": "R0903"
+      },
+      "related_findings": [],
+      "rule_id": "R0903",
+      "security_info": {
+        "compliance_violations": [],
+        "cwe_ids": [],
+        "owasp_categories": []
+      },
+      "severity": "medium",
+      "source": "linter",
+      "suggestion": "",
+      "tags": [
+        "pylint",
+        "linter"
+      ],
+      "technical_debt_score": 4.0,
+      "title": "Linter Issue: R0903",
+      "tool_name": "pylint"
+    },
+    {
+      "affected_code": null,
+      "business_impact": "low",
+      "confidence": 1.0,
+      "description": "line too long (82 > 79 characters)",
+      "detected_at": "2025-07-05T16:14:35.926097",
+      "duplicate_of": null,
+      "effort_to_fix": "medium",
+      "finding_type": "style_violation",
+      "fix_recommendation": "",
+      "id": "c2266bc8088930d5",
+      "impact": "medium",
+      "impact_analysis": {
+        "maintainability_impact": "medium",
+        "performance_impact": "minimal",
+        "reliability_impact": "minimal",
+        "security_impact": "minimal"
+      },
+      "location": {
+        "class_name": null,
+        "column_end": null,
+        "column_start": 80,
+        "file_path": "/src/api.py",
+        "function_name": null,
+        "line_end": null,
+        "line_start": 15
+      },
+      "message": "line too long (82 > 79 characters)",
+      "metadata": {
+        "column": 80,
+        "line": 15,
+        "message": "line too long (82 > 79 characters)",
+        "rule_id": "E501",
+        "severity": "warning"
+      },
+      "related_findings": [],
+      "rule_id": "E501",
+      "security_info": {
+        "compliance_violations": [],
+        "cwe_ids": [],
+        "owasp_categories": []
+      },
+      "severity": "medium",
+      "source": "linter",
+      "suggestion": "",
+      "tags": [
+        "linter",
+        "flake8"
+      ],
+      "technical_debt_score": 4.0,
+      "title": "Linter Issue: E501",
+      "tool_name": "flake8"
+    },
+    {
+      "affected_code": null,
+      "business_impact": "low",
+      "confidence": 1.0,
+      "description": "'os' imported but unused",
+      "detected_at": "2025-07-05T16:14:35.926103",
+      "duplicate_of": null,
+      "effort_to_fix": "medium",
+      "finding_type": "style_violation",
+      "fix_recommendation": "",
+      "id": "8d673ddbb794c1dd",
+      "impact": "medium",
+      "impact_analysis": {
+        "maintainability_impact": "medium",
+        "performance_impact": "minimal",
+        "reliability_impact": "minimal",
+        "security_impact": "minimal"
+      },
+      "location": {
+        "class_name": null,
+        "column_end": null,
+        "column_start": 1,
+        "file_path": "/src/api.py",
+        "function_name": null,
+        "line_end": null,
+        "line_start": 23
+      },
+      "message": "'os' imported but unused",
+      "metadata": {
+        "column": 1,
+        "line": 23,
+        "message": "'os' imported but unused",
+        "rule_id": "F401",
+        "severity": "warning"
+      },
+      "related_findings": [],
+      "rule_id": "F401",
+      "security_info": {
+        "compliance_violations": [],
+        "cwe_ids": [],
+        "owasp_categories": []
+      },
+      "severity": "medium",
+      "source": "linter",
+      "suggestion": "",
+      "tags": [
+        "linter",
+        "flake8"
+      ],
+      "technical_debt_score": 4.0,
+      "title": "Linter Issue: F401",
+      "tool_name": "flake8"
+    },
+    {
+      "affected_code": null,
+      "business_impact": "low",
+      "confidence": 1.0,
+      "description": "whitespace before ':'",
+      "detected_at": "2025-07-05T16:14:35.926106",
+      "duplicate_of": null,
+      "effort_to_fix": "medium",
+      "finding_type": "style_violation",
+      "fix_recommendation": "",
+      "id": "563659a868da7587",
+      "impact": "medium",
+      "impact_analysis": {
+        "maintainability_impact": "medium",
+        "performance_impact": "minimal",
+        "reliability_impact": "minimal",
+        "security_impact": "minimal"
+      },
+      "location": {
+        "class_name": null,
+        "column_end": null,
+        "column_start": 25,
+        "file_path": "/src/api.py",
+        "function_name": null,
+        "line_end": null,
+        "line_start": 34
+      },
+      "message": "whitespace before ':'",
+      "metadata": {
+        "column": 25,
+        "line": 34,
+        "message": "whitespace before ':'",
+        "rule_id": "E203",
+        "severity": "warning"
+      },
+      "related_findings": [],
+      "rule_id": "E203",
+      "security_info": {
+        "compliance_violations": [],
+        "cwe_ids": [],
+        "owasp_categories": []
+      },
+      "severity": "medium",
+      "source": "linter",
+      "suggestion": "",
+      "tags": [
+        "linter",
+        "flake8"
+      ],
+      "technical_debt_score": 4.0,
+      "title": "Linter Issue: E203",
+      "tool_name": "flake8"
+    }
+  ],
+  "metadata": {
+    "analysis": {
+      "duration_seconds": null,
+      "end_time": null,
+      "start_time": null,
+      "total_files_analyzed": 6,
+      "total_lines_analyzed": 0
+    },
+    "collection_metadata": {
+      "collection_metadata": {
+        "deduplicated_count": 12,
+        "deduplication_stats": {
+          "kept_count": 12,
+          "merged_count": 0,
+          "total_groups": 12
+        },
+        "original_count": 12
+      },
+      "generated_at": "2025-07-05T16:14:35.926322",
+      "tool": "wtf-codebot unified reporter",
+      "total_findings": 12,
+      "version": "1.0.0"
+    },
+    "configuration": {
+      "analysis_types": [
+        "static_analysis",
+        "pattern_recognition",
+        "security_scan"
+      ],
+      "enabled_rules": [
+        "all"
+      ],
+      "severity_threshold": "info"
+    },
+    "environment": {
+      "cwd": "/Users/beauxwalton/wtf-codebot",
+      "platform": "darwin",
+      "python_version": "3.10.13 | packaged by conda-forge | (main, Dec 23 2023, 15:35:25) [Clang 16.0.6 ]"
+    },
+    "generated_at": "2025-07-05T16:18:31.466488",
+    "tool": {
+      "name": "wtf-codebot-enhanced",
+      "report_id": "wtf-codebot-20250705-161831",
+      "schema_version": "2.0.0",
+      "version": "1.0.0"
+    }
+  },
+  "quality_metrics": {
+    "grade": "F",
+    "overall_score": 0,
+    "total_issues": 12,
+    "weighted_severity_score": 32.1
+  },
+  "recommendations": [
+    {
+      "action": "Review and fix all critical security vulnerabilities before deployment",
+      "category": "security",
+      "description": "Found 1 critical issues that require immediate attention",
+      "priority": "immediate",
+      "title": "Address Critical Security Issues"
+    },
+    {
+      "action": "Regularly update dependencies to maintain security and performance",
+      "category": "maintenance",
+      "description": "Found 1 outdated dependencies",
+      "priority": "medium",
+      "title": "Dependency Updates"
+    }
+  ],
+  "risk_assessment": {
+    "critical_issues": 1,
+    "high_priority_issues": 1,
+    "overall_risk_level": "high",
+    "risk_score": 50,
+    "security_risk_factors": 1
+  },
+  "schema": {
+    "documentation": "https://github.com/your-org/wtf-codebot/docs/json-schema.md",
+    "specification": "wtf-codebot-enhanced-findings",
+    "version": "2.0.0"
+  },
+  "statistics": {
+    "affected_files": [
+      "/requirements.txt",
+      "/src/api.py",
+      "/src/auth.py",
+      "/src/config.py",
+      "/src/user_service.py",
+      "/src/utils.py"
+    ],
+    "affected_files_count": 6,
+    "patterns": {
+      "anti_pattern": 1,
+      "creational_pattern": 1
+    },
+    "security": {
+      "total_security_findings": 1,
+      "unique_cwe_ids": [
+        "CWE-89"
+      ],
+      "unique_owasp_categories": [
+        "A03:2021 – Injection"
+      ]
+    },
+    "severity_counts": {
+      "critical": 1,
+      "high": 1,
+      "info": 1,
+      "low": 1,
+      "medium": 8
+    },
+    "source_counts": {
+      "ai_analysis": 2,
+      "dependency_analysis": 2,
+      "linter": 7,
+      "static_analyzer": 1
+    },
+    "technical_debt": {
+      "average_score": 5.11,
+      "max_score": 15.0,
+      "min_score": 0.46,
+      "total_score": 61.3
+    },
+    "total": 12,
+    "type_counts": {
+      "anti_pattern": 1,
+      "code_smell": 2,
+      "design_pattern": 1,
+      "outdated_dependency": 1,
+      "security_vulnerability": 1,
+      "style_violation": 6
+    }
+  }
+}

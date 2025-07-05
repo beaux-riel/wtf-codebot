@@ -1,0 +1,96 @@
+File,Package Manager,Package Name,Version,Version Constraint,License,Type,Optional,Description,Has Vulnerabilities
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,click,^8.1.7,^8.1.7,,production,False,Composable command line interface toolkit,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,typer,^0.9.0,^0.9.0,,production,False,"Typer, build great CLIs. Easy to code. Based on Python type hints.",False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,pydantic,^2.5.0,^2.5.0,,production,False,Data validation using Python type hints,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,python-dotenv,^1.0.0,^1.0.0,BSD-3-Clause,production,False,Read key-value pairs from a .env file and set them as environment variables,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,anthropic,^0.8.0,^0.8.0,MIT,production,False,The official Python library for the anthropic API,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,rich,^13.7.0,^13.7.0,MIT,production,False,"Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal",False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,pyyaml,^6.0.1,^6.0.1,MIT,production,False,YAML parser and emitter for Python,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,structlog,^23.2.0,^23.2.0,,production,False,Structured Logging for Python,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,beautifulsoup4,^4.12.0,^4.12.0,MIT License,production,False,Screen-scraping library,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,cssutils,^2.9.0,^2.9.0,,production,False,A CSS Cascading Style Sheets library for Python,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,tree-sitter,^0.20.0,^0.20.0,,production,False,Python bindings to the Tree-sitter parsing library,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,tree-sitter-python,^0.20.0,^0.20.0,MIT,production,False,Python grammar for tree-sitter,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,tree-sitter-javascript,^0.20.0,^0.20.0,MIT,production,False,JavaScript grammar for tree-sitter,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,tree-sitter-typescript,^0.20.0,^0.20.0,MIT,production,False,TypeScript and TSX grammars for tree-sitter,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,toml,^0.10.2,^0.10.2,MIT,production,False,"Python Library for Tom's Obvious, Minimal Language",False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,pytest,^7.4.3,^7.4.3,MIT,dev,False,pytest: simple powerful testing with Python,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,black,^23.11.0,^23.11.0,,dev,False,The uncompromising code formatter.,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,isort,^5.12.0,^5.12.0,,dev,False,A Python utility / library to sort Python imports.,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,flake8,^6.1.0,^6.1.0,MIT,dev,False,the modular source code checker: pep8 pyflakes and co,False
+/Users/beauxwalton/wtf-codebot/pyproject.toml,poetry/setuptools,mypy,^1.7.0,^1.7.0,MIT,dev,False,Optional static typing for Python,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,annotated-types,0.7.0,,,production,False,Reusable constraint types to use with typing.Annotated,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,anthropic,0.8.1,,MIT,production,False,The official Python library for the anthropic API,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,anyio,4.5.2,,MIT,production,False,High level compatibility layer for multiple asynchronous event loop implementations,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,black,23.12.1,,,production,False,The uncompromising code formatter.,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,certifi,2025.6.15,,MPL-2.0,production,False,Python package for providing Mozilla's CA Bundle.,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,charset-normalizer,3.4.2,,MIT,production,False,"The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet.",False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,click,8.1.8,,,production,False,Composable command line interface toolkit,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,colorama,0.4.6,,,production,False,Cross-platform colored terminal text.,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,distro,1.9.0,,"Apache License, Version 2.0",production,False,Distro - an OS platform information API,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,exceptiongroup,1.3.0,,,production,False,Backport of PEP 654 (exception groups),False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,filelock,3.16.1,,,production,False,A platform independent file lock.,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,flake8,6.1.0,,MIT,production,False,the modular source code checker: pep8 pyflakes and co,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,fsspec,2025.3.0,,"BSD 3-Clause License
+        
+        Copyright (c) 2018, Martin Durant
+        All rights reserved.
+        
+        Redistribution and use in source and binary forms, with or without
+        modification, are permitted provided that the following conditions are met:
+        
+        * Redistributions of source code must retain the above copyright notice, this
+          list of conditions and the following disclaimer.
+        
+        * Redistributions in binary form must reproduce the above copyright notice,
+          this list of conditions and the following disclaimer in the documentation
+          and/or other materials provided with the distribution.
+        
+        * Neither the name of the copyright holder nor the names of its
+          contributors may be used to endorse or promote products derived from
+          this software without specific prior written permission.
+        
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ""AS IS""
+        AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+        IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+        DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+        FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+        DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+        SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+        CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+        OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+        OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.",production,False,File-system specification,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,h11,0.16.0,,MIT,production,False,"A pure-Python, bring-your-own-I/O implementation of HTTP/1.1",False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,hf-xet,1.1.5,,Apache-2.0,production,False,Fast transfer of large files with the Hugging Face Hub.,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,httpcore,1.0.9,,,production,False,A minimal low-level HTTP client.,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,httpx,0.28.1,,BSD-3-Clause,production,False,The next generation HTTP client.,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,huggingface-hub,0.33.2,,Apache,production,False,"Client library to download and publish models, datasets and other repos on the huggingface.co hub",False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,idna,3.10,,,production,False,Internationalized Domain Names in Applications (IDNA),False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,iniconfig,2.1.0,,,production,False,brain-dead simple config-ini parsing,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,isort,5.13.2,,,production,False,A Python utility / library to sort Python imports.,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,markdown-it-py,3.0.0,,,production,False,"Python port of markdown-it. Markdown parsing, done right!",False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,mccabe,0.7.0,,Expat license,production,False,"McCabe checker, plugin for flake8",False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,mdurl,0.1.2,,,production,False,Markdown URL utilities,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,mypy,1.14.1,,MIT,production,False,Optional static typing for Python,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,mypy-extensions,1.1.0,,,production,False,Type system extensions for programs checked with the mypy type checker.,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,packaging,25.0,,,production,False,Core utilities for Python packages,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,pathspec,0.12.1,,,production,False,Utility library for gitignore style pattern matching of file paths.,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,platformdirs,4.3.6,,,production,False,"A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`.",False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,pluggy,1.5.0,,MIT,production,False,plugin and hook calling mechanisms for python,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,pycodestyle,2.11.1,,MIT,production,False,Python style guide checker,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,pydantic,2.10.6,,,production,False,Data validation using Python type hints,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,pydantic-core,2.27.2,,MIT,production,False,Core functionality for Pydantic validation and serialization,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,pyflakes,3.1.0,,MIT,production,False,passive checker of Python programs,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,pygments,2.19.2,,BSD-2-Clause,production,False,Pygments is a syntax highlighting package written in Python.,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,pytest,7.4.4,,MIT,production,False,pytest: simple powerful testing with Python,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,python-dotenv,1.0.1,,BSD-3-Clause,production,False,Read key-value pairs from a .env file and set them as environment variables,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,pyyaml,6.0.2,,MIT,production,False,YAML parser and emitter for Python,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,requests,2.32.4,,Apache-2.0,production,False,Python HTTP for Humans.,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,rich,13.9.4,,MIT,production,False,"Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal",False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,sniffio,1.3.1,,MIT OR Apache-2.0,production,False,Sniff out which async library your code is running under,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,structlog,23.3.0,,,production,False,Structured Logging for Python,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,tokenizers,0.21.0,,,production,False,,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,tomli,2.2.1,,"MIT License  Copyright (c) 2021 Taneli Hukkinen  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the ""Software""), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.  THE SOFTWARE IS PROVIDED ""AS IS"", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. ",production,False,A lil' TOML parser,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,tqdm,4.67.1,,MPL-2.0 AND MIT,production,False,"Fast, Extensible Progress Meter",False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,typing-extensions,4.13.2,,,production,False,Backported and Experimental Type Hints for Python 3.9+,False
+/Users/beauxwalton/wtf-codebot/poetry.lock,poetry,urllib3,2.2.3,,,production,False,"HTTP library with thread-safe connection pooling, file post, and more.",False

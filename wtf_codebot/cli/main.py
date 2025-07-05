@@ -1,0 +1,225 @@
+"""Main CLI entry point for WTF CodeBot."""
+
+import sys
+from pathlib import Path
+from typing import Optional
+
+import click
+from rich.console import Console
+
+from ..core.config import get_config, Config
+from ..core.logging import setup_logging, get_logger
+from ..core.exceptions import WTFCodeBotError, ConfigurationError
+
+
+console = Console()
+
+
+def handle_exceptions(func):
+    """Decorator to handle exceptions gracefully."""
+    import functools
+    
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except ConfigurationError as e:
+            console.print(f"[red]Configuration Error:[/red] {e}", style="red")
+            sys.exit(1)
+        except WTFCodeBotError as e:
+            console.print(f"[red]Error:[/red] {e}", style="red")
+            sys.exit(1)
+        except Exception as e:
+            console.print(f"[red]Unexpected Error:[/red] {e}", style="red")
+            sys.exit(1)
+    return wrapper
+
+
+@click.group()
+@click.option(
+    '--config',
+    '-c',
+    type=click.Path(exists=True, path_type=Path),
+    help='Path to configuration file'
+)
+@click.option(
+    '--verbose',
+    '-v',
+    is_flag=True,
+    help='Enable verbose output'
+)
+@click.option(
+    '--dry-run',
+    is_flag=True,
+    help='Perform dry run without making changes'
+)
+@click.pass_context
+def cli(ctx: click.Context, config: Optional[Path], verbose: bool, dry_run: bool):
+    """WTF CodeBot - AI-powered code analysis and review tool."""
+    ctx.ensure_object(dict)
+    
+    # Load configuration
+    try:
+        config_obj = get_config(str(config) if config else None)
+        
+        # Override with CLI options
+        if verbose:
+            config_obj.verbose = True
+        if dry_run:
+            config_obj.dry_run = True
+        
+        # Setup logging
+        setup_logging(config_obj)
+        
+        # Store config in context
+        ctx.obj['config'] = config_obj
+        
+    except Exception as e:
+        console.print(f"[red]Failed to load configuration:[/red] {e}", style="red")
+        sys.exit(1)
+
+
+@cli.command()
+@click.argument('path', type=click.Path(exists=True, path_type=Path))
+@click.option(
+    '--output',
+    '-o',
+    type=click.Path(path_type=Path),
+    help='Output file path'
+)
+@click.option(
+    '--format',
+    '-f',
+    'output_format',
+    type=click.Choice(['console', 'json', 'markdown']),
+    help='Output format'
+)
+@click.option(
+    '--include-tests',
+    is_flag=True,
+    help='Include test files in analysis'
+)
+@click.option(
+    '--exclude',
+    multiple=True,
+    help='Exclude patterns (can be specified multiple times)'
+)
+@click.pass_context
+@handle_exceptions
+def analyze(ctx: click.Context, path: Path, output: Optional[Path], 
+           output_format: Optional[str], include_tests: bool, exclude: tuple):
+    """Analyze code in the specified path."""
+    config: Config = ctx.obj['config']
+    logger = get_logger("cli.analyze")
+    
+    logger.info("Starting code analysis", path=str(path))
+    
+    # Override config with CLI options
+    if output:
+        config.output_file = str(output)
+    if output_format:
+        config.output_format = output_format
+    if include_tests:
+        config.analysis.include_tests = True
+    if exclude:
+        config.analysis.exclude_patterns.extend(exclude)
+    
+    console.print(f"[green]Analyzing code in:[/green] {path}")
+    console.print(f"[blue]Configuration:[/blue]")
+    console.print(f"  - Output format: {config.output_format}")
+    console.print(f"  - Include tests: {config.analysis.include_tests}")
+    console.print(f"  - Max file size: {config.analysis.max_file_size} bytes")
+    console.print(f"  - Analysis depth: {config.analysis.analysis_depth}")
+    
+    if config.dry_run:
+        console.print("[yellow]Dry run mode - no changes will be made[/yellow]")
+    
+    # TODO: Implement actual analysis logic
+    console.print("[yellow]Analysis functionality not yet implemented[/yellow]")
+
+
+@cli.command()
+@click.pass_context
+@handle_exceptions
+def config_info(ctx: click.Context):
+    """Display current configuration."""
+    config: Config = ctx.obj['config']
+    
+    console.print("[green]Current Configuration:[/green]")
+    console.print(f"  [blue]Anthropic Model:[/blue] {config.anthropic_model}")
+    console.print(f"  [blue]Output Format:[/blue] {config.output_format}")
+    console.print(f"  [blue]Verbose Mode:[/blue] {config.verbose}")
+    console.print(f"  [blue]Dry Run Mode:[/blue] {config.dry_run}")
+    
+    console.print("\n[green]Analysis Configuration:[/green]")
+    console.print(f"  [blue]Max File Size:[/blue] {config.analysis.max_file_size} bytes")
+    console.print(f"  [blue]Include Tests:[/blue] {config.analysis.include_tests}")
+    console.print(f"  [blue]Analysis Depth:[/blue] {config.analysis.analysis_depth}")
+    console.print(f"  [blue]Supported Extensions:[/blue] {', '.join(config.analysis.supported_extensions)}")
+    
+    console.print("\n[green]Logging Configuration:[/green]")
+    console.print(f"  [blue]Log Level:[/blue] {config.logging.level}")
+    console.print(f"  [blue]Log File:[/blue] {config.logging.file_path or 'None'}")
+
+
+@cli.command()
+@click.option(
+    '--output',
+    '-o',
+    type=click.Path(path_type=Path),
+    default="wtf-codebot.yaml",
+    help='Output configuration file path'
+)
+@click.pass_context
+@handle_exceptions
+def init_config(ctx: click.Context, output: Path):
+    """Initialize a new configuration file."""
+    if output.exists():
+        if not click.confirm(f"Configuration file {output} already exists. Overwrite?"):
+            console.print("[yellow]Configuration initialization cancelled[/yellow]")
+            return
+    
+    # Create a sample configuration
+    sample_config = {
+        "anthropic_api_key": "your-api-key-here",
+        "anthropic_model": "claude-3-sonnet-20240229",
+        "output_format": "console",
+        "verbose": False,
+        "dry_run": False,
+        "analysis": {
+            "max_file_size": 1048576,
+            "include_tests": True,
+            "analysis_depth": "standard",
+            "supported_extensions": [".py", ".js", ".ts", ".java", ".cpp", ".c", ".h", ".hpp", ".go", ".rs", ".rb"],
+            "exclude_patterns": ["**/node_modules/**", "**/.git/**", "**/__pycache__/**", "**/venv/**", "**/.env"]
+        },
+        "logging": {
+            "level": "INFO",
+            "file_path": None
+        }
+    }
+    
+    import yaml
+    with open(output, 'w') as f:
+        yaml.dump(sample_config, f, default_flow_style=False, indent=2)
+    
+    console.print(f"[green]Configuration file created:[/green] {output}")
+    console.print("[yellow]Please edit the configuration file to set your Anthropic API key and other preferences.[/yellow]")
+
+
+@cli.command()
+@click.pass_context
+@handle_exceptions
+def version(ctx: click.Context):
+    """Show version information."""
+    from .. import __version__
+    console.print(f"[green]WTF CodeBot version:[/green] {__version__}")
+
+
+def main():
+    """Main entry point."""
+    cli(obj={})
+
+
+if __name__ == '__main__':
+    main()

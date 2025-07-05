@@ -1,0 +1,191 @@
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h5 class="mb-0">
+                            <i class="fas fa-list"></i> Findings Details
+                        </h5>
+                    </div>
+                    <div class="col-auto">
+                        <div class="row g-2">
+                            <div class="col-auto">
+                                <select class="form-select form-select-sm" id="severityFilter">
+                                    <option value="">All Severities</option>
+                                    <option value="critical">Critical</option>
+                                    <option value="high">High</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="low">Low</option>
+                                    <option value="info">Info</option>
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <select class="form-select form-select-sm" id="typeFilter">
+                                    <option value="">All Types</option>
+                                    {% for type in data.metrics.type_counts.keys() %}
+                                    <option value="{{ type }}">{{ type|title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-sm btn-outline-secondary" id="clearFilters">
+                                    <i class="fas fa-times"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="findingsTable" class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>File</th>
+                                <th>Severity</th>
+                                <th>Type</th>
+                                <th>Line</th>
+                                <th>Debt Score</th>
+                                <th>Effort</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for finding in data.tables.findings %}
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">{{ finding.title }}</div>
+                                    <small class="text-muted">{{ finding.description|truncate_text(100) }}</small>
+                                </td>
+                                <td>
+                                    <div class="text-monospace">{{ finding.file_path|default('N/A') }}</div>
+                                    {% if finding.function_name %}
+                                    <small class="text-muted">in {{ finding.function_name }}</small>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-{{ finding.severity|severity_color }}">
+                                        {{ finding.severity|title }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">{{ finding.type|title }}</span>
+                                </td>
+                                <td>
+                                    {% if finding.line_start %}
+                                    <span class="text-monospace">{{ finding.line_start }}</span>
+                                    {% if finding.line_end and finding.line_end != finding.line_start %}
+                                    <span class="text-muted">-{{ finding.line_end }}</span>
+                                    {% endif %}
+                                    {% else %}
+                                    <span class="text-muted">N/A</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if finding.technical_debt_score %}
+                                    <span class="badge bg-{{ finding.technical_debt_score|float|round|string|impact_color }}">
+                                        {{ finding.technical_debt_score }}
+                                    </span>
+                                    {% else %}
+                                    <span class="text-muted">N/A</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ finding.effort_to_fix|title }}</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showFindingDetails('{{ finding.id }}')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Finding Details Modal -->
+<div class="modal fade" id="findingDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Finding Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="findingDetailsBody">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showFindingDetails(findingId) {
+    const finding = reportData.tables.findings.find(f => f.id === findingId);
+    if (finding) {
+        const modalBody = document.getElementById('findingDetailsBody');
+        modalBody.innerHTML = `
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>Basic Information</h6>
+                    <p><strong>Title:</strong> ${finding.title}</p>
+                    <p><strong>Severity:</strong> <span class="badge bg-${getSeverityColor(finding.severity)}">${finding.severity}</span></p>
+                    <p><strong>Type:</strong> ${finding.type}</p>
+                    <p><strong>Source:</strong> ${finding.source} (${finding.tool_name})</p>
+                    <p><strong>Confidence:</strong> ${(finding.confidence * 100).toFixed(1)}%</p>
+                </div>
+                <div class="col-md-6">
+                    <h6>Location</h6>
+                    <p><strong>File:</strong> <code>${finding.file_path}</code></p>
+                    ${finding.line_start ? `<p><strong>Line:</strong> ${finding.line_start}${finding.line_end ? '-' + finding.line_end : ''}</p>` : ''}
+                    ${finding.function_name ? `<p><strong>Function:</strong> ${finding.function_name}</p>` : ''}
+                    ${finding.class_name ? `<p><strong>Class:</strong> ${finding.class_name}</p>` : ''}
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h6>Description</h6>
+                    <p>${finding.description}</p>
+                </div>
+            </div>
+            ${finding.remediation_description ? `
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h6>Remediation</h6>
+                    <p>${finding.remediation_description}</p>
+                    <p><strong>Priority:</strong> <span class="badge bg-info">${finding.remediation_priority}</span></p>
+                    <p><strong>Effort:</strong> <span class="badge bg-secondary">${finding.effort_to_fix}</span></p>
+                </div>
+            </div>
+            ` : ''}
+            ${finding.cwe_ids && finding.cwe_ids.length > 0 ? `
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h6>Security Information</h6>
+                    <p><strong>CWE IDs:</strong> ${finding.cwe_ids.join(', ')}</p>
+                    ${finding.owasp_categories && finding.owasp_categories.length > 0 ? `<p><strong>OWASP Categories:</strong> ${finding.owasp_categories.join(', ')}</p>` : ''}
+                </div>
+            </div>
+            ` : ''}
+            ${finding.tags && finding.tags.length > 0 ? `
+            <div class="row mt-3">
+                <div class="col-12">
+                    <h6>Tags</h6>
+                    <p>${finding.tags.map(tag => `<span class="badge bg-light text-dark">${tag}</span>`).join(' ')}</p>
+                </div>
+            </div>
+            ` : ''}
+        `;
+        
+        const modal = new bootstrap.Modal(document.getElementById('findingDetailsModal'));
+        modal.show();
+    }
+}
+</script>

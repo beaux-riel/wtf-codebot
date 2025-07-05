@@ -1,0 +1,51 @@
+# WTF CodeBot Configuration File
+# Copy this to wtf-codebot.yaml and edit as needed
+
+# Anthropic API Configuration
+anthropic_api_key: "your-anthropic-api-key-here"
+anthropic_model: "claude-3-sonnet-20240229"
+
+# Output Configuration
+output_format: "console"  # Options: console, json, markdown
+output_file: null  # Optional: path to output file
+
+# General Configuration
+verbose: false
+dry_run: false
+
+# Analysis Configuration
+analysis:
+  max_file_size: 1048576  # 1MB in bytes
+  include_tests: true
+  analysis_depth: "standard"  # Options: basic, standard, deep
+  
+  # Supported file extensions
+  supported_extensions:
+    - ".py"
+    - ".js"
+    - ".ts"
+    - ".java"
+    - ".cpp"
+    - ".c"
+    - ".h"
+    - ".hpp"
+    - ".go"
+    - ".rs"
+    - ".rb"
+  
+  # Patterns to exclude from analysis
+  exclude_patterns:
+    - "**/node_modules/**"
+    - "**/.git/**"
+    - "**/__pycache__/**"
+    - "**/venv/**"
+    - "**/.env"
+    - "**/build/**"
+    - "**/dist/**"
+    - "**/*.min.js"
+    - "**/*.min.css"
+
+# Logging Configuration
+logging:
+  level: "INFO"  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  file_path: null  # Optional: path to log file
