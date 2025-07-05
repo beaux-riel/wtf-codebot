@@ -1,0 +1,50 @@
+{
+  "project_name": "",
+  "project_path": ".",
+  "timestamp": "2025-07-05 16:48:51",
+  "results": [
+    {
+      "name": "_sequential",
+      "duration": 2.1274402141571045,
+      "peak_memory_mb": 176.609375,
+      "avg_memory_mb": 113.14609375,
+      "cpu_avg_percent": 93.715,
+      "files_processed": 119,
+      "lines_of_code": 47354,
+      "throughput_files_per_sec": 55.935766940998626,
+      "throughput_loc_per_sec": 22258.67485482394,
+      "error_count": 0,
+      "mode": "sequential"
+    },
+    {
+      "name": "_parallel_2p",
+      "duration": 0.7722291946411133,
+      "peak_memory_mb": 289.875,
+      "avg_memory_mb": 264.5,
+      "cpu_avg_percent": 40.25,
+      "files_processed": 119,
+      "lines_of_code": 47354,
+      "throughput_files_per_sec": 154.09932805674902,
+      "throughput_loc_per_sec": 61321.17294789322,
+      "error_count": 0,
+      "mode": "parallel",
+      "num_processes": 2
+    },
+    {
+      "name": "_cached",
+      "duration": 0.0027408599853515625,
+      "peak_memory_mb": 323.0,
+      "avg_memory_mb": 323.0,
+      "cpu_avg_percent": 0.0,
+      "files_processed": 120,
+      "lines_of_code": 47371,
+      "throughput_files_per_sec": 43781.87891440501,
+      "cache_hit_rate": 1.0,
+      "mode": "cached",
+      "cache_hits": 120,
+      "cache_misses": 0,
+      "first_run_duration": 1.0947999954223633,
+      "speedup": 399.43667362560893
+    }
+  ]
+}
