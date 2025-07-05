@@ -1,0 +1,170 @@
+# WTF CodeBot Configuration with Integrations
+# This is an example configuration file showing how to set up various integrations
+
+# Core configuration
+anthropic_api_key: "your-anthropic-api-key-here"
+anthropic_model: "claude-3-sonnet-20240229"
+verbose: false
+dry_run: false
+
+# Analysis settings
+analysis:
+  max_file_size: 1048576
+  include_tests: true
+  analysis_depth: "standard"
+  supported_extensions: [".py", ".js", ".ts", ".java", ".cpp", ".c", ".h", ".hpp", ".go", ".rs", ".rb"]
+  exclude_patterns: 
+    - "**/node_modules/**"
+    - "**/.git/**"
+    - "**/__pycache__/**"
+    - "**/venv/**"
+    - "**/.env"
+
+# Logging configuration
+logging:
+  level: "INFO"
+  file_path: null
+
+# Output settings
+output_format: "console"
+output_file: null
+
+# Integrations configuration
+integrations:
+  enabled: true
+  dry_run: false  # Set to true for testing
+  
+  # Export formats
+  export_sarif: true
+  sarif_output_path: "results/analysis.sarif"
+  export_json: true
+  json_output_path: "results/analysis.json"
+  export_html: true
+  html_output_path: "results/analysis.html"
+  export_csv: false
+  csv_output_path: "results/analysis.csv"
+  
+  # GitHub Issues Integration
+  github_issues_enabled: true
+  github_token: "${GITHUB_TOKEN}"  # Use environment variable
+  github_repository: "your-org/your-repo"
+  github_labels: ["code-analysis", "wtf-codebot", "security"]
+  github_assignees: ["dev-team-lead", "security-team"]
+  github_create_summary: true
+  github_max_issues: 20
+  
+  # Webhook Integration
+  webhook_enabled: true
+  webhook_url: "https://your-api.example.com/webhooks/code-analysis"
+  webhook_method: "POST"
+  webhook_auth_token: "${WEBHOOK_TOKEN}"  # Use environment variable
+  webhook_include_full_findings: true
+  
+  # Slack Integration
+  slack_enabled: true
+  slack_webhook_url: "${SLACK_WEBHOOK_URL}"  # Use environment variable
+  slack_bot_token: ""  # Alternative to webhook
+  slack_channel: "#code-analysis"
+  slack_username: "WTF CodeBot"
+  slack_summary_only: false
+  slack_mention_users: ["@dev-team", "@security-team"]
+  
+  # JIRA Integration
+  jira_enabled: false  # Disabled by default
+  jira_base_url: "https://your-company.atlassian.net"
+  jira_username: "${JIRA_USERNAME}"  # Use environment variable
+  jira_api_token: "${JIRA_API_TOKEN}"  # Use environment variable
+  jira_project_key: "DEV"
+  jira_issue_type: "Bug"
+  jira_component: "Security"
+  jira_assignee: "john.doe"
+  jira_create_epic: true
+  jira_max_issues: 50
+
+# Environment Variables to Set:
+# 
+# Required for core functionality:
+# - ANTHROPIC_API_KEY: Your Anthropic API key
+#
+# For GitHub Issues integration:
+# - GITHUB_TOKEN: GitHub personal access token with repo access
+#
+# For Webhook integration:
+# - WEBHOOK_TOKEN: Authentication token for your webhook endpoint
+#
+# For Slack integration:
+# - SLACK_WEBHOOK_URL: Slack incoming webhook URL
+#
+# For JIRA integration:
+# - JIRA_USERNAME: Your JIRA username/email
+# - JIRA_API_TOKEN: JIRA API token (not password)
+#
+# Example .env file:
+# ANTHROPIC_API_KEY=sk-ant-api03-...
+# GITHUB_TOKEN=ghp_...
+# WEBHOOK_TOKEN=your-webhook-secret
+# SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
+# JIRA_USERNAME=your-email@company.com
+# JIRA_API_TOKEN=ATATT3xFfGF0...
+
+# Usage Examples:
+#
+# 1. Basic analysis with exports:
+#    wtf-codebot analyze /path/to/code --export-sarif results.sarif --export-html report.html
+#
+# 2. Analysis with GitHub issues:
+#    wtf-codebot analyze /path/to/code --github-issues --github-repo "myorg/myrepo"
+#
+# 3. Analysis with Slack notifications:
+#    wtf-codebot analyze /path/to/code --slack-webhook "$SLACK_WEBHOOK_URL"
+#
+# 4. Full analysis with all integrations:
+#    wtf-codebot analyze /path/to/code --github-issues --slack-webhook "$SLACK_WEBHOOK_URL" --export-sarif results.sarif
+#
+# 5. Dry run to test integrations:
+#    wtf-codebot analyze /path/to/code --dry-run --github-issues --export-sarif results.sarif
+
+# Security Best Practices:
+# 
+# 1. Never commit API keys or tokens to version control
+# 2. Use environment variables for sensitive configuration
+# 3. Rotate API tokens regularly
+# 4. Use minimal required permissions for API tokens
+# 5. Test integrations with dry_run: true first
+# 6. Monitor API usage and rate limits
+# 7. Use secure webhook endpoints (HTTPS with authentication)
+
+# Integration-Specific Notes:
+#
+# GitHub Issues:
+# - Requires a personal access token with 'repo' scope
+# - Will create individual issues for critical/high severity findings
+# - Creates a summary issue with overall analysis results
+# - Checks for duplicate issues to avoid spam
+# - Supports custom labels and assignees
+#
+# Slack:
+# - Can use either webhook URL or bot token
+# - Webhook is simpler but bot token provides more features
+# - Supports rich message formatting with blocks
+# - Can mention users for critical findings
+# - Posts findings as threaded replies for organization
+#
+# JIRA:
+# - Requires API token (not password) for authentication
+# - Can create an epic for the analysis run
+# - Maps finding severity to JIRA priority levels
+# - Supports custom components and assignees
+# - Links individual issues to the epic
+#
+# Webhook:
+# - Sends findings data to any HTTP endpoint
+# - Supports custom headers and authentication
+# - Can send full findings or summary only
+# - Useful for integrating with custom tools
+#
+# SARIF Export:
+# - Industry standard format for static analysis results
+# - Compatible with GitHub Code Scanning
+# - Can be imported into various security tools
+# - Includes detailed location and rule information

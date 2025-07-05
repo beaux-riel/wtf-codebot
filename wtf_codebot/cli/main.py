@@ -104,10 +104,49 @@ def cli(ctx: click.Context, config: Optional[Path], verbose: bool, dry_run: bool
     multiple=True,
     help='Exclude patterns (can be specified multiple times)'
 )
+@click.option(
+    '--export-sarif',
+    type=click.Path(path_type=Path),
+    help='Export results to SARIF file'
+)
+@click.option(
+    '--export-html',
+    type=click.Path(path_type=Path),
+    help='Export results to HTML file'
+)
+@click.option(
+    '--export-csv',
+    type=click.Path(path_type=Path),
+    help='Export results to CSV file'
+)
+@click.option(
+    '--github-issues',
+    is_flag=True,
+    help='Create GitHub issues for critical/high findings'
+)
+@click.option(
+    '--github-repo',
+    help='GitHub repository (owner/repo)'
+)
+@click.option(
+    '--webhook-url',
+    help='Webhook URL to send results'
+)
+@click.option(
+    '--slack-webhook',
+    help='Slack webhook URL to post results'
+)
+@click.option(
+    '--jira-project',
+    help='JIRA project key to create tickets'
+)
 @click.pass_context
 @handle_exceptions
 def analyze(ctx: click.Context, path: Path, output: Optional[Path], 
-           output_format: Optional[str], include_tests: bool, exclude: tuple):
+           output_format: Optional[str], include_tests: bool, exclude: tuple,
+           export_sarif: Optional[Path], export_html: Optional[Path], export_csv: Optional[Path],
+           github_issues: bool, github_repo: Optional[str], webhook_url: Optional[str],
+           slack_webhook: Optional[str], jira_project: Optional[str]):
     """Analyze code in the specified path."""
     config: Config = ctx.obj['config']
     logger = get_logger("cli.analyze")
@@ -123,6 +162,37 @@ def analyze(ctx: click.Context, path: Path, output: Optional[Path],
         config.analysis.include_tests = True
     if exclude:
         config.analysis.exclude_patterns.extend(exclude)
+    
+    # Handle integration options
+    if any([export_sarif, export_html, export_csv, github_issues, webhook_url, slack_webhook, jira_project]):
+        config.integrations.enabled = True
+        
+        if export_sarif:
+            config.integrations.export_sarif = True
+            config.integrations.sarif_output_path = str(export_sarif)
+        if export_html:
+            config.integrations.export_html = True
+            config.integrations.html_output_path = str(export_html)
+        if export_csv:
+            config.integrations.export_csv = True
+            config.integrations.csv_output_path = str(export_csv)
+            
+        if github_issues:
+            config.integrations.github_issues_enabled = True
+            if github_repo:
+                config.integrations.github_repository = github_repo
+                
+        if webhook_url:
+            config.integrations.webhook_enabled = True
+            config.integrations.webhook_url = webhook_url
+            
+        if slack_webhook:
+            config.integrations.slack_enabled = True
+            config.integrations.slack_webhook_url = slack_webhook
+            
+        if jira_project:
+            config.integrations.jira_enabled = True
+            config.integrations.jira_project_key = jira_project
     
     console.print(f"[green]Analyzing code in:[/green] {path}")
     console.print(f"[blue]Configuration:[/blue]")

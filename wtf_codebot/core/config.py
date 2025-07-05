@@ -44,6 +44,60 @@ class LoggingConfig(BaseModel):
         return v.upper()
 
 
+class IntegrationsConfig(BaseModel):
+    """Configuration for integrations."""
+    
+    enabled: bool = Field(default=False, description="Enable integrations")
+    dry_run: bool = Field(default=False, description="Dry run mode for integrations")
+    
+    # Export configurations
+    export_sarif: bool = Field(default=False, description="Export SARIF format")
+    sarif_output_path: str = Field(default="results.sarif", description="SARIF output file path")
+    export_json: bool = Field(default=True, description="Export JSON format")
+    json_output_path: str = Field(default="results.json", description="JSON output file path")
+    export_html: bool = Field(default=False, description="Export HTML format")
+    html_output_path: str = Field(default="results.html", description="HTML output file path")
+    export_csv: bool = Field(default=False, description="Export CSV format")
+    csv_output_path: str = Field(default="results.csv", description="CSV output file path")
+    
+    # GitHub Issues integration
+    github_issues_enabled: bool = Field(default=False, description="Enable GitHub Issues integration")
+    github_token: str = Field(default="", description="GitHub API token")
+    github_repository: str = Field(default="", description="GitHub repository (owner/repo)")
+    github_labels: List[str] = Field(default=["code-analysis", "wtf-codebot"], description="GitHub issue labels")
+    github_assignees: List[str] = Field(default=[], description="GitHub issue assignees")
+    github_create_summary: bool = Field(default=True, description="Create GitHub summary issue")
+    github_max_issues: int = Field(default=20, description="Maximum GitHub issues to create")
+    
+    # Webhook integration
+    webhook_enabled: bool = Field(default=False, description="Enable webhook integration")
+    webhook_url: str = Field(default="", description="Webhook URL")
+    webhook_method: str = Field(default="POST", description="HTTP method for webhook")
+    webhook_auth_token: str = Field(default="", description="Webhook authentication token")
+    webhook_include_full_findings: bool = Field(default=True, description="Include full findings in webhook")
+    
+    # Slack integration
+    slack_enabled: bool = Field(default=False, description="Enable Slack integration")
+    slack_webhook_url: str = Field(default="", description="Slack webhook URL")
+    slack_bot_token: str = Field(default="", description="Slack bot token")
+    slack_channel: str = Field(default="", description="Slack channel")
+    slack_username: str = Field(default="WTF CodeBot", description="Slack bot username")
+    slack_summary_only: bool = Field(default=False, description="Post only summary to Slack")
+    slack_mention_users: List[str] = Field(default=[], description="Users to mention for critical findings")
+    
+    # JIRA integration
+    jira_enabled: bool = Field(default=False, description="Enable JIRA integration")
+    jira_base_url: str = Field(default="", description="JIRA instance URL")
+    jira_username: str = Field(default="", description="JIRA username")
+    jira_api_token: str = Field(default="", description="JIRA API token")
+    jira_project_key: str = Field(default="", description="JIRA project key")
+    jira_issue_type: str = Field(default="Bug", description="JIRA issue type")
+    jira_component: str = Field(default="", description="JIRA component")
+    jira_assignee: str = Field(default="", description="JIRA assignee")
+    jira_create_epic: bool = Field(default=True, description="Create JIRA epic for analysis")
+    jira_max_issues: int = Field(default=50, description="Maximum JIRA issues to create")
+
+
 class Config(BaseModel):
     """Main configuration class for WTF CodeBot."""
     
@@ -56,6 +110,9 @@ class Config(BaseModel):
     
     # Logging Configuration
     logging: LoggingConfig = Field(default_factory=LoggingConfig)
+    
+    # Integrations Configuration
+    integrations: IntegrationsConfig = Field(default_factory=IntegrationsConfig)
     
     # Output Configuration
     output_format: str = Field(default="console", description="Output format: console, json, markdown")

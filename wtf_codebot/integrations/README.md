@@ -1,0 +1,412 @@
+# WTF CodeBot Integrations
+
+The integrations module provides comprehensive support for pushing code analysis results to external tools and exporting to various formats. This enables seamless integration into existing development workflows and CI/CD pipelines.
+
+## Overview
+
+The integrations system supports:
+- **External Tool Integration**: GitHub Issues, Slack, JIRA, Webhooks
+- **Export Formats**: SARIF, JSON, HTML, CSV
+- **Configurable Filtering**: By severity, finding type, and other criteria
+- **Dry Run Mode**: Test integrations without creating actual issues/messages
+- **Rate Limiting**: Respect API limits and avoid spam
+- **Error Handling**: Robust error handling with detailed logging
+
+## Supported Integrations
+
+### 1. GitHub Issues Integration
+
+Automatically creates GitHub issues for critical and high-severity findings.
+
+**Features:**
+- Creates individual issues for critical/high severity findings
+- Creates a summary issue with overall analysis results
+- Supports custom labels, assignees, and milestones
+- Checks for duplicate issues to avoid spam
+- Rich issue descriptions with code snippets and suggestions
+
+**Configuration:**
+```yaml
+integrations:
+  github_issues_enabled: true
+  github_token: "${GITHUB_TOKEN}"
+  github_repository: "your-org/your-repo"
+  github_labels: ["code-analysis", "security", "wtf-codebot"]
+  github_assignees: ["dev-team-lead"]
+  github_create_summary: true
+  github_max_issues: 20
+```
+
+**Required Permissions:**
+- GitHub personal access token with `repo` scope
+
+### 2. Slack Integration
+
+Posts analysis results to Slack channels with rich formatting.
+
+**Features:**
+- Rich message formatting with Slack blocks
+- Summary message with severity breakdown
+- Individual messages for critical/high findings
+- Thread replies for organization
+- User mentions for critical findings
+- Customizable bot appearance
+
+**Configuration:**
+```yaml
+integrations:
+  slack_enabled: true
+  slack_webhook_url: "${SLACK_WEBHOOK_URL}"
+  slack_channel: "#code-analysis"
+  slack_username: "WTF CodeBot"
+  slack_summary_only: false
+  slack_mention_users: ["@dev-team", "@security-team"]
+```
+
+**Setup Options:**
+- **Webhook URL**: Simple setup, posts to predetermined channel
+- **Bot Token**: More flexibility, can post to any channel
+
+### 3. JIRA Integration
+
+Creates JIRA tickets for findings with proper priority mapping.
+
+**Features:**
+- Creates an epic for the analysis run
+- Individual tickets for filtered findings
+- Maps severity to JIRA priority levels
+- Supports custom components and assignees
+- Rich ticket descriptions with JIRA markup
+- Links tickets to the analysis epic
+
+**Configuration:**
+```yaml
+integrations:
+  jira_enabled: true
+  jira_base_url: "https://your-company.atlassian.net"
+  jira_username: "${JIRA_USERNAME}"
+  jira_api_token: "${JIRA_API_TOKEN}"
+  jira_project_key: "DEV"
+  jira_issue_type: "Bug"
+  jira_create_epic: true
+  jira_max_issues: 50
+```
+
+**Required Setup:**
+- JIRA API token (not password)
+- Project access with issue creation permissions
+
+### 4. Webhook Integration
+
+Sends analysis results to any HTTP endpoint.
+
+**Features:**
+- Configurable HTTP method and headers
+- Authentication token support
+- Custom payload templates
+- Full findings or summary-only modes
+- Retry logic with exponential backoff
+
+**Configuration:**
+```yaml
+integrations:
+  webhook_enabled: true
+  webhook_url: "https://your-api.example.com/code-analysis"
+  webhook_method: "POST"
+  webhook_auth_token: "${WEBHOOK_TOKEN}"
+  webhook_include_full_findings: true
+```
+
+**Use Cases:**
+- Custom dashboards and reporting tools
+- Integration with security orchestration platforms
+- Triggering automated workflows
+- Feeding data to data lakes or analytics systems
+
+## Export Formats
+
+### SARIF (Static Analysis Results Interchange Format)
+
+Industry-standard format for static analysis results.
+
+**Features:**
+- Compatible with GitHub Code Scanning
+- Supports multiple tools and rules
+- Rich location and diagnostic information
+- Can be imported into various security tools
+
+**Usage:**
+```bash
+wtf-codebot analyze /path/to/code --export-sarif results.sarif
+```
+
+### HTML Reports
+
+Rich, interactive HTML reports with filtering and search.
+
+**Features:**
+- Interactive filtering by severity and type
+- Responsive design for mobile/desktop
+- Code syntax highlighting
+- Collapsible sections for better organization
+- Print-friendly styles
+
+### JSON Reports
+
+Structured JSON output for programmatic consumption.
+
+**Features:**
+- Complete finding data with metadata
+- Summary statistics
+- Machine-readable format for automation
+- Pretty-printed or minified options
+
+### CSV Reports
+
+Tabular format for spreadsheet analysis.
+
+**Features:**
+- All finding data in flat structure
+- Compatible with Excel and Google Sheets
+- Suitable for data analysis and reporting
+- Easy filtering and sorting
+
+## Configuration
+
+### Environment Variables
+
+For security, use environment variables for sensitive data:
+
+```bash
+# Core
+export ANTHROPIC_API_KEY="your-api-key"
+
+# GitHub
+export GITHUB_TOKEN="ghp_your_token"
+
+# Slack
+export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/..."
+
+# JIRA
+export JIRA_USERNAME="your-email@company.com"
+export JIRA_API_TOKEN="your-api-token"
+
+# Webhook
+export WEBHOOK_TOKEN="your-webhook-secret"
+```
+
+### Configuration File
+
+Complete example in `wtf-codebot-integrations.yaml`:
+
+```yaml
+integrations:
+  enabled: true
+  dry_run: false  # Set to true for testing
+  
+  # Export formats
+  export_sarif: true
+  export_json: true
+  export_html: true
+  
+  # GitHub Issues
+  github_issues_enabled: true
+  github_token: "${GITHUB_TOKEN}"
+  github_repository: "your-org/your-repo"
+  
+  # Slack
+  slack_enabled: true
+  slack_webhook_url: "${SLACK_WEBHOOK_URL}"
+  slack_channel: "#code-analysis"
+  
+  # Webhook
+  webhook_enabled: true
+  webhook_url: "https://your-api.example.com/webhook"
+```
+
+## Usage Examples
+
+### Command Line
+
+```bash
+# Basic export
+wtf-codebot analyze /path/to/code --export-sarif results.sarif
+
+# GitHub Issues
+wtf-codebot analyze /path/to/code --github-issues --github-repo "myorg/myrepo"
+
+# Multiple integrations
+wtf-codebot analyze /path/to/code \\
+  --github-issues \\
+  --slack-webhook "$SLACK_WEBHOOK_URL" \\
+  --export-sarif results.sarif \\
+  --export-html report.html
+
+# Dry run for testing
+wtf-codebot analyze /path/to/code --dry-run --github-issues
+```
+
+### Programmatic Usage
+
+```python
+from wtf_codebot.integrations.manager import IntegrationsManager, IntegrationsConfig
+from wtf_codebot.integrations.github_issues import GitHubIssuesConfig
+
+# Configure GitHub integration
+github_config = GitHubIssuesConfig(
+    enabled=True,
+    token="your-token",
+    repository="your-org/your-repo",
+    create_summary_issue=True
+)
+
+# Configure integrations
+config = IntegrationsConfig(
+    enabled=True,
+    github_issues=github_config,
+    export_sarif=True,
+    sarif_output_path="results.sarif"
+)
+
+# Initialize manager
+manager = IntegrationsManager(config)
+
+# Push findings
+results = manager.push_findings(your_findings_collection)
+print(f"Success: {results['success']}")
+```
+
+## Security Best Practices
+
+1. **Never commit secrets**: Use environment variables for API tokens
+2. **Minimal permissions**: Use tokens with only required permissions
+3. **Rotate tokens**: Regularly rotate API tokens and webhooks
+4. **Test first**: Use dry run mode to test integrations
+5. **Monitor usage**: Watch for API rate limits and errors
+6. **Secure webhooks**: Use HTTPS and authentication for webhooks
+7. **Review settings**: Regularly audit integration configurations
+
+## Rate Limiting and Error Handling
+
+### Rate Limiting
+- Configurable delays between API calls
+- Respects service-specific rate limits
+- Exponential backoff for retries
+
+### Error Handling
+- Comprehensive error logging
+- Graceful degradation when services are unavailable
+- Detailed error messages for troubleshooting
+- Partial success reporting (some integrations succeed, others fail)
+
+### Monitoring
+- Structured logging for all integration activities
+- Success/failure metrics for each integration
+- Detailed error information for debugging
+
+## CI/CD Integration
+
+### GitHub Actions
+
+```yaml
+name: Code Analysis
+on: [push, pull_request]
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run WTF CodeBot
+      run: |
+        wtf-codebot analyze . \\
+          --export-sarif results.sarif \\
+          --github-issues \\
+          --github-repo "${{ github.repository }}"
+      env:
+        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload SARIF
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: results.sarif
+```
+
+### Jenkins
+
+```groovy
+pipeline {
+    agent any
+    environment {
+        ANTHROPIC_API_KEY = credentials('anthropic-api-key')
+        SLACK_WEBHOOK_URL = credentials('slack-webhook-url')
+    }
+    stages {
+        stage('Code Analysis') {
+            steps {
+                sh '''
+                    wtf-codebot analyze . \\
+                        --export-json results.json \\
+                        --slack-webhook "$SLACK_WEBHOOK_URL"
+                '''
+            }
+        }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: 'results.json'
+        }
+    }
+}
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Authentication Failures**
+   - Verify API tokens are correctly set
+   - Check token permissions and scopes
+   - Ensure tokens haven't expired
+
+2. **Rate Limiting**
+   - Increase `rate_limit_delay` in configuration
+   - Reduce `max_issues_per_run` for ticket systems
+   - Monitor API usage in service dashboards
+
+3. **Network Issues**
+   - Check firewall rules for outbound connections
+   - Verify proxy settings if applicable
+   - Test connectivity to service endpoints
+
+4. **Configuration Errors**
+   - Validate YAML syntax
+   - Check required fields are provided
+   - Use dry run mode to test configuration
+
+### Debug Mode
+
+Enable verbose logging for troubleshooting:
+
+```bash
+wtf-codebot analyze /path/to/code --verbose --github-issues
+```
+
+Or in configuration:
+```yaml
+verbose: true
+logging:
+  level: "DEBUG"
+```
+
+## Contributing
+
+To add a new integration:
+
+1. Create a new integration class inheriting from `BaseIntegration`
+2. Implement required methods: `validate_config()` and `push_findings()`
+3. Add configuration dataclass
+4. Register in `IntegrationsManager.INTEGRATION_CLASSES`
+5. Add tests and documentation
+6. Update configuration schema
+
+See existing integrations as examples of the expected structure and patterns.
