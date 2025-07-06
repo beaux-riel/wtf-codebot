@@ -43,10 +43,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/beaux-riel/wtf-codebot"
-Repository = "https://github.com/beaux-riel/wtf-codebot"
-Documentation = "https://github.com/beaux-riel/wtf-codebot/blob/main/README.md"
-Changelog = "https://github.com/beaux-riel/wtf-codebot/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/your-org/wtf-codebot"
+Repository = "https://github.com/your-org/wtf-codebot"
+Documentation = "https://github.com/your-org/wtf-codebot/blob/main/README.md"
+Changelog = "https://github.com/your-org/wtf-codebot/blob/main/CHANGELOG.md"
 
 [project.scripts]
 wtf-codebot = "wtf_codebot.cli.main:main"

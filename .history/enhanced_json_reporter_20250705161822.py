@@ -218,7 +218,7 @@ class EnhancedJSONReporter(UnifiedReporter):
             "schema": {
                 "version": "2.0.0",
                 "specification": "wtf-codebot-enhanced-findings",
-                "documentation": "https://github.com/beaux-riel/wtf-codebot/docs/json-schema.md"
+                "documentation": "https://github.com/your-org/wtf-codebot/docs/json-schema.md"
             },
             "metadata": metadata.to_dict(),
             "statistics": stats,

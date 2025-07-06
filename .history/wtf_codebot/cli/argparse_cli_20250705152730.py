@@ -84,7 +84,7 @@ Examples:
   # Dry run to test configuration
   wtf-codebot analyze /path/to/code --dry-run
 
-For more information, visit: https://github.com/beaux-riel/wtf-codebot
+For more information, visit: https://github.com/your-org/wtf-codebot
         """,
         formatter_class=CustomHelpFormatter
     )

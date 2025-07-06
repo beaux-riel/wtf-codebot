@@ -30,16 +30,16 @@ Defines the JSON schema version and specification details.
   "schema": {
     "version": "2.0.0",
     "specification": "wtf-codebot-enhanced-findings",
-    "documentation": "https://github.com/beaux-riel/wtf-codebot/docs/json-schema.md"
+    "documentation": "https://github.com/your-org/wtf-codebot/docs/json-schema.md"
   }
 }
 ```
 
-| Field           | Type   | Description                                     |
-| --------------- | ------ | ----------------------------------------------- |
-| `version`       | string | Schema version following semantic versioning    |
+| Field | Type | Description |
+|-------|------|-------------|
+| `version` | string | Schema version following semantic versioning |
 | `specification` | string | Unique identifier for this schema specification |
-| `documentation` | string | URL to detailed schema documentation            |
+| `documentation` | string | URL to detailed schema documentation |
 
 ## Metadata Section
 
@@ -77,20 +77,20 @@ Contains comprehensive metadata about the report generation and analysis context
 }
 ```
 
-| Field                           | Type              | Description                             |
-| ------------------------------- | ----------------- | --------------------------------------- |
-| `generated_at`                  | string (ISO 8601) | Timestamp when the report was generated |
-| `tool.name`                     | string            | Name of the analysis tool               |
-| `tool.version`                  | string            | Version of the analysis tool            |
-| `tool.schema_version`           | string            | Version of the JSON schema used         |
-| `tool.report_id`                | string            | Unique identifier for this report       |
-| `analysis.start_time`           | string (ISO 8601) | When the analysis started               |
-| `analysis.end_time`             | string (ISO 8601) | When the analysis completed             |
-| `analysis.duration_seconds`     | number            | Total analysis duration in seconds      |
-| `analysis.total_files_analyzed` | number            | Number of files analyzed                |
-| `analysis.total_lines_analyzed` | number            | Total lines of code analyzed            |
-| `configuration`                 | object            | Analysis configuration settings         |
-| `environment`                   | object            | Runtime environment information         |
+| Field | Type | Description |
+|-------|------|-------------|
+| `generated_at` | string (ISO 8601) | Timestamp when the report was generated |
+| `tool.name` | string | Name of the analysis tool |
+| `tool.version` | string | Version of the analysis tool |
+| `tool.schema_version` | string | Version of the JSON schema used |
+| `tool.report_id` | string | Unique identifier for this report |
+| `analysis.start_time` | string (ISO 8601) | When the analysis started |
+| `analysis.end_time` | string (ISO 8601) | When the analysis completed |
+| `analysis.duration_seconds` | number | Total analysis duration in seconds |
+| `analysis.total_files_analyzed` | number | Number of files analyzed |
+| `analysis.total_lines_analyzed` | number | Total lines of code analyzed |
+| `configuration` | object | Analysis configuration settings |
+| `environment` | object | Runtime environment information |
 
 ## Statistics Section
 
@@ -179,7 +179,7 @@ Array of enhanced finding objects with comprehensive details.
   "effort_to_fix": "medium",
   "related_findings": [],
   "duplicate_of": null,
-
+  
   // Enhanced fields
   "pattern_info": {
     "pattern_id": "god_object",
@@ -187,11 +187,7 @@ Array of enhanced finding objects with comprehensive details.
     "category": "anti_pattern",
     "description": "A class that knows too much or does too much",
     "confidence_score": 0.85,
-    "evidence": [
-      "Large class size",
-      "Multiple responsibilities",
-      "High coupling"
-    ],
+    "evidence": ["Large class size", "Multiple responsibilities", "High coupling"],
     "related_patterns": ["single_responsibility_violation", "high_coupling"]
   },
   "remediation": {
@@ -229,65 +225,65 @@ Array of enhanced finding objects with comprehensive details.
 
 ### Core Finding Fields
 
-| Field          | Type              | Description                                        |
-| -------------- | ----------------- | -------------------------------------------------- |
-| `id`           | string            | Unique identifier for the finding                  |
-| `title`        | string            | Human-readable title                               |
-| `description`  | string            | Detailed description                               |
-| `finding_type` | string            | Type of finding (enum)                             |
-| `severity`     | string            | Severity level (critical, high, medium, low, info) |
-| `confidence`   | number            | Confidence score (0.0 - 1.0)                       |
-| `source`       | string            | Source of the finding (enum)                       |
-| `tool_name`    | string            | Name of the tool that detected this                |
-| `rule_id`      | string            | Specific rule identifier                           |
-| `message`      | string            | Raw message from the tool                          |
-| `suggestion`   | string            | Suggestion for fixing                              |
-| `detected_at`  | string (ISO 8601) | When the finding was detected                      |
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique identifier for the finding |
+| `title` | string | Human-readable title |
+| `description` | string | Detailed description |
+| `finding_type` | string | Type of finding (enum) |
+| `severity` | string | Severity level (critical, high, medium, low, info) |
+| `confidence` | number | Confidence score (0.0 - 1.0) |
+| `source` | string | Source of the finding (enum) |
+| `tool_name` | string | Name of the tool that detected this |
+| `rule_id` | string | Specific rule identifier |
+| `message` | string | Raw message from the tool |
+| `suggestion` | string | Suggestion for fixing |
+| `detected_at` | string (ISO 8601) | When the finding was detected |
 
 ### Enhanced Fields
 
 #### Pattern Information
 
-| Field                           | Type   | Description                           |
-| ------------------------------- | ------ | ------------------------------------- |
-| `pattern_info.pattern_id`       | string | Unique pattern identifier             |
-| `pattern_info.name`             | string | Human-readable pattern name           |
-| `pattern_info.category`         | string | Pattern category                      |
-| `pattern_info.description`      | string | Pattern description                   |
-| `pattern_info.confidence_score` | number | Confidence in pattern detection       |
-| `pattern_info.evidence`         | array  | Evidence supporting pattern detection |
-| `pattern_info.related_patterns` | array  | Related pattern identifiers           |
+| Field | Type | Description |
+|-------|------|-------------|
+| `pattern_info.pattern_id` | string | Unique pattern identifier |
+| `pattern_info.name` | string | Human-readable pattern name |
+| `pattern_info.category` | string | Pattern category |
+| `pattern_info.description` | string | Pattern description |
+| `pattern_info.confidence_score` | number | Confidence in pattern detection |
+| `pattern_info.evidence` | array | Evidence supporting pattern detection |
+| `pattern_info.related_patterns` | array | Related pattern identifiers |
 
 #### Remediation Suggestions
 
-| Field                          | Type   | Description                                   |
-| ------------------------------ | ------ | --------------------------------------------- |
-| `remediation.priority`         | string | Priority level (immediate, high, medium, low) |
-| `remediation.category`         | string | Category (refactor, fix, optimize, modernize) |
-| `remediation.description`      | string | Remediation description                       |
-| `remediation.steps`            | array  | Step-by-step remediation instructions         |
-| `remediation.code_example`     | string | Example code for fix                          |
-| `remediation.estimated_effort` | string | Effort estimate (low, medium, high)           |
-| `remediation.risk_level`       | string | Risk level of applying fix                    |
-| `remediation.prerequisites`    | array  | Prerequisites for remediation                 |
-| `remediation.references`       | array  | Reference links and documentation             |
+| Field | Type | Description |
+|-------|------|-------------|
+| `remediation.priority` | string | Priority level (immediate, high, medium, low) |
+| `remediation.category` | string | Category (refactor, fix, optimize, modernize) |
+| `remediation.description` | string | Remediation description |
+| `remediation.steps` | array | Step-by-step remediation instructions |
+| `remediation.code_example` | string | Example code for fix |
+| `remediation.estimated_effort` | string | Effort estimate (low, medium, high) |
+| `remediation.risk_level` | string | Risk level of applying fix |
+| `remediation.prerequisites` | array | Prerequisites for remediation |
+| `remediation.references` | array | Reference links and documentation |
 
 #### Impact Analysis
 
-| Field                                    | Type   | Description                    |
-| ---------------------------------------- | ------ | ------------------------------ |
+| Field | Type | Description |
+|-------|------|-------------|
 | `impact_analysis.maintainability_impact` | string | Impact on code maintainability |
-| `impact_analysis.security_impact`        | string | Security impact level          |
-| `impact_analysis.performance_impact`     | string | Performance impact level       |
-| `impact_analysis.reliability_impact`     | string | Reliability impact level       |
+| `impact_analysis.security_impact` | string | Security impact level |
+| `impact_analysis.performance_impact` | string | Performance impact level |
+| `impact_analysis.reliability_impact` | string | Reliability impact level |
 
 #### Security Information
 
-| Field                                 | Type  | Description                     |
-| ------------------------------------- | ----- | ------------------------------- |
-| `security_info.cwe_ids`               | array | Common Weakness Enumeration IDs |
-| `security_info.owasp_categories`      | array | OWASP Top 10 categories         |
-| `security_info.compliance_violations` | array | Compliance standard violations  |
+| Field | Type | Description |
+|-------|------|-------------|
+| `security_info.cwe_ids` | array | Common Weakness Enumeration IDs |
+| `security_info.owasp_categories` | array | OWASP Top 10 categories |
+| `security_info.compliance_violations` | array | Compliance standard violations |
 
 ## Recommendations Section
 
@@ -307,13 +303,13 @@ Global recommendations based on findings patterns.
 }
 ```
 
-| Field         | Type   | Description             |
-| ------------- | ------ | ----------------------- |
-| `priority`    | string | Recommendation priority |
-| `category`    | string | Recommendation category |
-| `title`       | string | Recommendation title    |
-| `description` | string | Detailed description    |
-| `action`      | string | Recommended action      |
+| Field | Type | Description |
+|-------|------|-------------|
+| `priority` | string | Recommendation priority |
+| `category` | string | Recommendation category |
+| `title` | string | Recommendation title |
+| `description` | string | Detailed description |
+| `action` | string | Recommended action |
 
 ## Quality Metrics Section
 
@@ -330,11 +326,11 @@ Overall code quality assessment.
 }
 ```
 
-| Field                     | Type   | Description                      |
-| ------------------------- | ------ | -------------------------------- |
-| `overall_score`           | number | Overall quality score (0-100)    |
-| `grade`                   | string | Letter grade (A, B, C, D, F)     |
-| `total_issues`            | number | Total number of issues           |
+| Field | Type | Description |
+|-------|------|-------------|
+| `overall_score` | number | Overall quality score (0-100) |
+| `grade` | string | Letter grade (A, B, C, D, F) |
+| `total_issues` | number | Total number of issues |
 | `weighted_severity_score` | number | Weighted score based on severity |
 
 ## Risk Assessment Section
@@ -353,13 +349,13 @@ Risk analysis based on findings.
 }
 ```
 
-| Field                   | Type   | Description                                     |
-| ----------------------- | ------ | ----------------------------------------------- |
-| `overall_risk_level`    | string | Overall risk level (minimal, low, medium, high) |
-| `security_risk_factors` | number | Number of security-related findings             |
-| `critical_issues`       | number | Number of critical severity issues              |
-| `high_priority_issues`  | number | Number of high severity issues                  |
-| `risk_score`            | number | Calculated risk score (0-100)                   |
+| Field | Type | Description |
+|-------|------|-------------|
+| `overall_risk_level` | string | Overall risk level (minimal, low, medium, high) |
+| `security_risk_factors` | number | Number of security-related findings |
+| `critical_issues` | number | Number of critical severity issues |
+| `high_priority_issues` | number | Number of high severity issues |
+| `risk_score` | number | Calculated risk score (0-100) |
 
 ## Enumerations
 
@@ -418,20 +414,20 @@ for finding in findings:
 ```python
 # Get critical security issues
 critical_security = [
-    f for f in findings
-    if f['severity'] == 'critical' and
+    f for f in findings 
+    if f['severity'] == 'critical' and 
        f['finding_type'] == 'security_vulnerability'
 ]
 
 # Get findings with remediation suggestions
 with_remediation = [
-    f for f in findings
+    f for f in findings 
     if f.get('remediation') is not None
 ]
 
 # Get pattern-based findings
 pattern_findings = [
-    f for f in findings
+    f for f in findings 
     if f.get('pattern_info') is not None
 ]
 ```
@@ -459,7 +455,6 @@ echo "Quality Score: $quality_score"
 ## Changelog
 
 ### Version 2.0.0
-
 - Added comprehensive pattern recognition
 - Enhanced remediation suggestions with detailed steps
 - Added security mappings (CWE, OWASP)
@@ -469,7 +464,6 @@ echo "Quality Score: $quality_score"
 - Enhanced metadata with environment and configuration details
 
 ### Version 1.0.0
-
 - Initial unified findings format
 - Basic finding structure with core fields
 - Simple statistics and metadata

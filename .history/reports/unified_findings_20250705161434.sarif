@@ -7,7 +7,7 @@
         "driver": {
           "name": "pylint",
           "version": "1.0.0",
-          "informationUri": "https://github.com/beaux-riel/wtf-codebot",
+          "informationUri": "https://github.com/your-org/wtf-codebot",
           "rules": [
             {
               "id": "too-many-lines",
@@ -67,7 +67,7 @@
         "driver": {
           "name": "flake8",
           "version": "1.0.0",
-          "informationUri": "https://github.com/beaux-riel/wtf-codebot",
+          "informationUri": "https://github.com/your-org/wtf-codebot",
           "rules": [
             {
               "id": "C901",
@@ -267,7 +267,7 @@
         "driver": {
           "name": "claude_pattern_analyzer",
           "version": "1.0.0",
-          "informationUri": "https://github.com/beaux-riel/wtf-codebot",
+          "informationUri": "https://github.com/your-org/wtf-codebot",
           "rules": [
             {
               "id": "god_object",
@@ -377,7 +377,7 @@
         "driver": {
           "name": "bandit",
           "version": "1.0.0",
-          "informationUri": "https://github.com/beaux-riel/wtf-codebot",
+          "informationUri": "https://github.com/your-org/wtf-codebot",
           "rules": [
             {
               "id": "B608",
@@ -438,7 +438,7 @@
         "driver": {
           "name": "dependency_analyzer",
           "version": "1.0.0",
-          "informationUri": "https://github.com/beaux-riel/wtf-codebot",
+          "informationUri": "https://github.com/your-org/wtf-codebot",
           "rules": []
         }
       },
@@ -474,7 +474,7 @@
         "driver": {
           "name": "pylint",
           "version": "1.0.0",
-          "informationUri": "https://github.com/beaux-riel/wtf-codebot",
+          "informationUri": "https://github.com/your-org/wtf-codebot",
           "rules": [
             {
               "id": "C0103",

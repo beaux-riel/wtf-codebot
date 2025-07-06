@@ -56,7 +56,10 @@
       "severity": "medium",
       "source": "static_analyzer",
       "suggestion": "Break down into smaller, focused methods",
-      "tags": ["maintainability", "complexity"],
+      "tags": [
+        "maintainability",
+        "complexity"
+      ],
       "technical_debt_score": 5.5,
       "title": "Long method detected",
       "tool_name": "pylint"
@@ -117,7 +120,10 @@
       "severity": "medium",
       "source": "linter",
       "suggestion": "Refactor into smaller functions",
-      "tags": ["complexity", "linter"],
+      "tags": [
+        "complexity",
+        "linter"
+      ],
       "technical_debt_score": 5.5,
       "title": "Method too long",
       "tool_name": "flake8"
@@ -178,7 +184,10 @@
         ],
         "name": "God Object",
         "pattern_id": "god_object",
-        "related_patterns": ["single_responsibility_violation", "high_coupling"]
+        "related_patterns": [
+          "single_responsibility_violation",
+          "high_coupling"
+        ]
       },
       "related_findings": [],
       "remediation": {
@@ -207,7 +216,12 @@
       "severity": "high",
       "source": "ai_analysis",
       "suggestion": "Split into focused service classes; Apply Single Responsibility Principle",
-      "tags": ["code-smell", "anti-pattern", "refactoring", "ai-detected"],
+      "tags": [
+        "code-smell",
+        "anti-pattern",
+        "refactoring",
+        "ai-detected"
+      ],
       "technical_debt_score": 8.84,
       "title": "Anti-Pattern: God Object",
       "tool_name": "claude_pattern_analyzer"
@@ -241,13 +255,19 @@
       },
       "message": "Singleton pattern detected with proper implementation",
       "metadata": {
-        "benefits": ["Global access", "Single instance guarantee"],
+        "benefits": [
+          "Global access",
+          "Single instance guarantee"
+        ],
         "evidence": [
           "Private constructor",
           "Static instance method",
           "Thread-safe implementation"
         ],
-        "use_cases": ["Configuration management", "Logging services"]
+        "use_cases": [
+          "Configuration management",
+          "Logging services"
+        ]
       },
       "pattern_info": {
         "category": "creational_pattern",
@@ -272,7 +292,11 @@
       "severity": "info",
       "source": "ai_analysis",
       "suggestion": "",
-      "tags": ["design-pattern", "architecture", "ai-detected"],
+      "tags": [
+        "design-pattern",
+        "architecture",
+        "ai-detected"
+      ],
       "technical_debt_score": 0.46,
       "title": "Design Pattern: Singleton",
       "tool_name": "claude_pattern_analyzer"
@@ -306,9 +330,14 @@
       },
       "message": "Possible SQL injection vector through string formatting",
       "metadata": {
-        "affected_versions": ["1.0.0", "1.1.0"],
+        "affected_versions": [
+          "1.0.0",
+          "1.1.0"
+        ],
         "cve_id": "CVE-2023-12345",
-        "fixed_versions": ["1.2.0"]
+        "fixed_versions": [
+          "1.2.0"
+        ]
       },
       "related_findings": [],
       "remediation": {
@@ -339,14 +368,25 @@
       },
       "rule_id": "B608",
       "security_info": {
-        "compliance_violations": ["PCI-DSS", "SOX"],
-        "cwe_ids": ["CWE-89"],
-        "owasp_categories": ["A03:2021 – Injection"]
+        "compliance_violations": [
+          "PCI-DSS",
+          "SOX"
+        ],
+        "cwe_ids": [
+          "CWE-89"
+        ],
+        "owasp_categories": [
+          "A03:2021 – Injection"
+        ]
       },
       "severity": "critical",
       "source": "dependency_analysis",
       "suggestion": "Use parameterized queries or ORM methods",
-      "tags": ["security", "sql-injection", "critical"],
+      "tags": [
+        "security",
+        "sql-injection",
+        "critical"
+      ],
       "technical_debt_score": 15.0,
       "title": "Security Vulnerability: SQL Injection",
       "tool_name": "bandit"
@@ -409,7 +449,11 @@
       "severity": "low",
       "source": "dependency_analysis",
       "suggestion": "Update to the latest stable version",
-      "tags": ["maintenance", "outdated", "dependency"],
+      "tags": [
+        "maintenance",
+        "outdated",
+        "dependency"
+      ],
       "technical_debt_score": 2.0,
       "title": "Outdated Package: requests",
       "tool_name": "dependency_analyzer"
@@ -459,7 +503,10 @@
       "severity": "medium",
       "source": "linter",
       "suggestion": "",
-      "tags": ["pylint", "linter"],
+      "tags": [
+        "pylint",
+        "linter"
+      ],
       "technical_debt_score": 4.0,
       "title": "Linter Issue: C0103",
       "tool_name": "pylint"
@@ -509,7 +556,10 @@
       "severity": "medium",
       "source": "linter",
       "suggestion": "",
-      "tags": ["pylint", "linter"],
+      "tags": [
+        "pylint",
+        "linter"
+      ],
       "technical_debt_score": 4.0,
       "title": "Linter Issue: W0613",
       "tool_name": "pylint"
@@ -559,7 +609,10 @@
       "severity": "medium",
       "source": "linter",
       "suggestion": "",
-      "tags": ["pylint", "linter"],
+      "tags": [
+        "pylint",
+        "linter"
+      ],
       "technical_debt_score": 4.0,
       "title": "Linter Issue: R0903",
       "tool_name": "pylint"
@@ -609,7 +662,10 @@
       "severity": "medium",
       "source": "linter",
       "suggestion": "",
-      "tags": ["linter", "flake8"],
+      "tags": [
+        "linter",
+        "flake8"
+      ],
       "technical_debt_score": 4.0,
       "title": "Linter Issue: E501",
       "tool_name": "flake8"
@@ -659,7 +715,10 @@
       "severity": "medium",
       "source": "linter",
       "suggestion": "",
-      "tags": ["linter", "flake8"],
+      "tags": [
+        "linter",
+        "flake8"
+      ],
       "technical_debt_score": 4.0,
       "title": "Linter Issue: F401",
       "tool_name": "flake8"
@@ -709,7 +768,10 @@
       "severity": "medium",
       "source": "linter",
       "suggestion": "",
-      "tags": ["linter", "flake8"],
+      "tags": [
+        "linter",
+        "flake8"
+      ],
       "technical_debt_score": 4.0,
       "title": "Linter Issue: E203",
       "tool_name": "flake8"
@@ -744,7 +806,9 @@
         "pattern_recognition",
         "security_scan"
       ],
-      "enabled_rules": ["all"],
+      "enabled_rules": [
+        "all"
+      ],
       "severity_threshold": "info"
     },
     "environment": {
@@ -790,7 +854,7 @@
     "security_risk_factors": 1
   },
   "schema": {
-    "documentation": "https://github.com/beaux-riel/wtf-codebot/docs/json-schema.md",
+    "documentation": "https://github.com/your-org/wtf-codebot/docs/json-schema.md",
     "specification": "wtf-codebot-enhanced-findings",
     "version": "2.0.0"
   },
@@ -810,8 +874,12 @@
     },
     "security": {
       "total_security_findings": 1,
-      "unique_cwe_ids": ["CWE-89"],
-      "unique_owasp_categories": ["A03:2021 – Injection"]
+      "unique_cwe_ids": [
+        "CWE-89"
+      ],
+      "unique_owasp_categories": [
+        "A03:2021 – Injection"
+      ]
     },
     "severity_counts": {
       "critical": 1,

@@ -68,8 +68,8 @@ LABEL org.opencontainers.image.title="WTF CodeBot" \
       org.opencontainers.image.version="0.1.0" \
       org.opencontainers.image.vendor="WTF CodeBot Team" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.source="https://github.com/beaux-riel/wtf-codebot" \
-      org.opencontainers.image.documentation="https://github.com/beaux-riel/wtf-codebot/blob/main/README.md"
+      org.opencontainers.image.source="https://github.com/your-org/wtf-codebot" \
+      org.opencontainers.image.documentation="https://github.com/your-org/wtf-codebot/blob/main/README.md"
 
 # Development stage (optional, for development use)
 FROM production as development

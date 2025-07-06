@@ -12,21 +12,8 @@ analysis:
   max_file_size: 1048576
   include_tests: true
   analysis_depth: "standard"
-  supported_extensions:
-    [
-      ".py",
-      ".js",
-      ".ts",
-      ".java",
-      ".cpp",
-      ".c",
-      ".h",
-      ".hpp",
-      ".go",
-      ".rs",
-      ".rb",
-    ]
-  exclude_patterns:
+  supported_extensions: [".py", ".js", ".ts", ".java", ".cpp", ".c", ".h", ".hpp", ".go", ".rs", ".rb"]
+  exclude_patterns: 
     - "**/node_modules/**"
     - "**/.git/**"
     - "**/__pycache__/**"
@@ -45,8 +32,8 @@ output_file: null
 # Integrations configuration
 integrations:
   enabled: true
-  dry_run: false # Set to true for testing
-
+  dry_run: false  # Set to true for testing
+  
   # Export formats
   export_sarif: true
   sarif_output_path: "results/analysis.sarif"
@@ -56,45 +43,46 @@ integrations:
   html_output_path: "results/analysis.html"
   export_csv: false
   csv_output_path: "results/analysis.csv"
-
+  
   # GitHub Issues Integration
   github_issues_enabled: true
-  github_token: "${GITHUB_TOKEN}" # Use environment variable
-  github_repository: "beaux-riel/your-repo"
+  github_token: "${GITHUB_TOKEN}"  # Use environment variable
+  github_repository: "your-org/your-repo"
   github_labels: ["code-analysis", "wtf-codebot", "security"]
   github_assignees: ["dev-team-lead", "security-team"]
   github_create_summary: true
   github_max_issues: 20
-
+  
   # Webhook Integration
   webhook_enabled: true
   webhook_url: "https://your-api.example.com/webhooks/code-analysis"
   webhook_method: "POST"
-  webhook_auth_token: "${WEBHOOK_TOKEN}" # Use environment variable
+  webhook_auth_token: "${WEBHOOK_TOKEN}"  # Use environment variable
   webhook_include_full_findings: true
-
+  
   # Slack Integration
   slack_enabled: true
-  slack_webhook_url: "${SLACK_WEBHOOK_URL}" # Use environment variable
-  slack_bot_token: "" # Alternative to webhook
+  slack_webhook_url: "${SLACK_WEBHOOK_URL}"  # Use environment variable
+  slack_bot_token: ""  # Alternative to webhook
   slack_channel: "#code-analysis"
   slack_username: "WTF CodeBot"
   slack_summary_only: false
   slack_mention_users: ["@dev-team", "@security-team"]
-
+  
   # JIRA Integration
-  jira_enabled: false # Disabled by default
+  jira_enabled: false  # Disabled by default
   jira_base_url: "https://your-company.atlassian.net"
-  jira_username: "${JIRA_USERNAME}" # Use environment variable
-  jira_api_token: "${JIRA_API_TOKEN}" # Use environment variable
+  jira_username: "${JIRA_USERNAME}"  # Use environment variable
+  jira_api_token: "${JIRA_API_TOKEN}"  # Use environment variable
   jira_project_key: "DEV"
   jira_issue_type: "Bug"
   jira_component: "Security"
   jira_assignee: "john.doe"
   jira_create_epic: true
   jira_max_issues: 50
+
 # Environment Variables to Set:
-#
+# 
 # Required for core functionality:
 # - ANTHROPIC_API_KEY: Your Anthropic API key
 #
@@ -137,7 +125,7 @@ integrations:
 #    wtf-codebot analyze /path/to/code --dry-run --github-issues --export-sarif results.sarif
 
 # Security Best Practices:
-#
+# 
 # 1. Never commit API keys or tokens to version control
 # 2. Use environment variables for sensitive configuration
 # 3. Rotate API tokens regularly

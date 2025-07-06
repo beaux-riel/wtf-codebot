@@ -194,7 +194,7 @@ def demo_github_integration():
         enabled=True,
         dry_run=True,  # Safe for demo
         token="ghp_your_token_here",  # Would be real token in production
-        repository="beaux-riel/your-repo",
+        repository="your-org/your-repo",
         labels=["code-analysis", "wtf-codebot", "security"],
         assignees=["dev-team-lead"],
         create_summary_issue=True,

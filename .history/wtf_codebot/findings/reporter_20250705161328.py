@@ -404,7 +404,7 @@ class UnifiedReporter:
                     "driver": {
                         "name": tool_name,
                         "version": "1.0.0",
-                        "informationUri": "https://github.com/beaux-riel/wtf-codebot",
+                        "informationUri": "https://github.com/your-org/wtf-codebot",
                         "rules": list(rules.values())
                     }
                 },
