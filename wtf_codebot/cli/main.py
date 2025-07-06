@@ -204,8 +204,13 @@ def analyze(ctx: click.Context, path: Path, output: Optional[Path],
     if config.dry_run:
         console.print("[yellow]Dry run mode - no changes will be made[/yellow]")
     
-    # TODO: Implement actual analysis logic
-    console.print("[yellow]Analysis functionality not yet implemented[/yellow]")
+    # Implement analysis logic using the new AnalysisEngine
+    from ..core.analysis_engine import AnalysisEngine
+    analysis_engine = AnalysisEngine(config)
+    results = analysis_engine.analyze(path)
+    report = analysis_engine.generate_report(results, output_format=config.output_format)
+
+    console.print(report)
 
 
 @cli.command()
@@ -275,6 +280,69 @@ def init_config(ctx: click.Context, output: Path):
     
     console.print(f"[green]Configuration file created:[/green] {output}")
     console.print("[yellow]Please edit the configuration file to set your Anthropic API key and other preferences.[/yellow]")
+
+
+@cli.command()
+@click.option(
+    '--host',
+    default='0.0.0.0',
+    help='Host to bind the web server to'
+)
+@click.option(
+    '--port',
+    default=8000,
+    type=int,
+    help='Port to run the web server on'
+)
+@click.option(
+    '--reload',
+    is_flag=True,
+    help='Enable auto-reload for development'
+)
+@click.pass_context
+@handle_exceptions
+def web(ctx: click.Context, host: str, port: int, reload: bool):
+    """Start the web interface server."""
+    config: Config = ctx.obj['config']
+    
+    console.print(f"[green]Starting WTF Codebot Web Interface...[/green]")
+    console.print(f"[blue]Host:[/blue] {host}")
+    console.print(f"[blue]Port:[/blue] {port}")
+    console.print(f"[blue]Reload:[/blue] {reload}")
+    console.print(f"\n[green]Access the web interface at:[/green] http://{host}:{port}")
+    console.print("[yellow]Press Ctrl+C to stop the server[/yellow]\n")
+    
+    try:
+        import uvicorn
+    except ImportError as e:
+        console.print(f"[red]Error:[/red] uvicorn not available: {e}")
+        console.print("[yellow]Install web dependencies with: pip install wtf-codebot[web][/yellow]")
+        sys.exit(1)
+    
+    try:
+        from ..web.server import app
+    except ImportError as e:
+        console.print(f"[red]Error:[/red] Failed to import web server: {e}")
+        console.print("[yellow]There may be missing dependencies or import issues.[/yellow]")
+        sys.exit(1)
+    except Exception as e:
+        console.print(f"[red]Error:[/red] Failed to initialize web server: {e}")
+        sys.exit(1)
+    
+    try:
+        # Run the server
+        uvicorn.run(
+            app,
+            host=host,
+            port=port,
+            reload=reload,
+            log_level="info" if config.verbose else "warning"
+        )
+    except KeyboardInterrupt:
+        console.print("\n[yellow]Server stopped by user[/yellow]")
+    except Exception as e:
+        console.print(f"[red]Error:[/red] Server failed to start: {e}")
+        sys.exit(1)
 
 
 @cli.command()

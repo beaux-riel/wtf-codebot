@@ -450,8 +450,8 @@ class SecurityAdvisoryClient:
 class DependencyAnalyzer(BaseAnalyzer):
     """Main dependency analyzer class"""
     
-    def __init__(self):
-        super().__init__("dependency_analyzer")
+    def __init__(self, name: str = "dependency_analyzer"):
+        super().__init__(name)
         self.logger = logging.getLogger(__name__)
         self.parsers = {
             'package.json': NPMParser(),
