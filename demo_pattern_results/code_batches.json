@@ -1,0 +1,4010 @@
+{
+  "total_batches": 113,
+  "total_snippets": 132,
+  "total_tokens": 5375231,
+  "config": {
+    "max_tokens_per_batch": 50000,
+    "overlap_tokens": 2000,
+    "min_batch_size": 1000
+  },
+  "batches": [
+    {
+      "id": "batch_001",
+      "total_tokens": 3287,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "html"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 10
+      },
+      "snippets": [
+        {
+          "file_path": "custom_templates/main_report.html",
+          "start_line": 1,
+          "end_line": 435,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 3287,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "batch_002",
+      "total_tokens": 49470,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "html"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 10
+      },
+      "snippets": [
+        {
+          "file_path": ".history/reports/interactive_report_20250705210204.html",
+          "start_line": 1,
+          "end_line": 6819,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 49470,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 2
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "batch_003",
+      "total_tokens": 5393,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "html"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 10
+      },
+      "snippets": [
+        {
+          "file_path": ".history/reports/interactive_report_20250705210204.html",
+          "start_line": 6820,
+          "end_line": 7483,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 5393,
+          "metadata": {
+            "chunk_id": 2,
+            "total_chunks": 2
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "batch_004",
+      "total_tokens": 49474,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "html"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 10
+      },
+      "snippets": [
+        {
+          "file_path": ".history/reports/enhanced_interactive_report_20250705210204.html",
+          "start_line": 1,
+          "end_line": 6820,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 49474,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 2
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "batch_005",
+      "total_tokens": 5393,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "html"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 10
+      },
+      "snippets": [
+        {
+          "file_path": ".history/reports/enhanced_interactive_report_20250705210204.html",
+          "start_line": 6821,
+          "end_line": 7484,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 5393,
+          "metadata": {
+            "chunk_id": 2,
+            "total_chunks": 2
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "batch_006",
+      "total_tokens": 51645,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "html"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 10
+      },
+      "snippets": [
+        {
+          "file_path": ".history/reports/interactive_report_20250705162452.html",
+          "start_line": 1,
+          "end_line": 3030,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 51645,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 2
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "batch_007",
+      "total_tokens": 1046,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "html"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 10
+      },
+      "snippets": [
+        {
+          "file_path": ".history/reports/interactive_report_20250705162452.html",
+          "start_line": 3031,
+          "end_line": 3194,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 1046,
+          "metadata": {
+            "chunk_id": 2,
+            "total_chunks": 2
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "batch_008",
+      "total_tokens": 51647,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "html"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 10
+      },
+      "snippets": [
+        {
+          "file_path": ".history/reports/enhanced_interactive_report_20250705162751.html",
+          "start_line": 1,
+          "end_line": 3030,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 51647,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 2
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "batch_009",
+      "total_tokens": 17189,
+      "snippet_count": 3,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 3,
+        "languages": [
+          "html"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 10
+      },
+      "snippets": [
+        {
+          "file_path": ".history/reports/enhanced_interactive_report_20250705162751.html",
+          "start_line": 3031,
+          "end_line": 3194,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 1046,
+          "metadata": {
+            "chunk_id": 2,
+            "total_chunks": 2
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        },
+        {
+          "file_path": "templates/main_report.html",
+          "start_line": 1,
+          "end_line": 435,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 3287,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        },
+        {
+          "file_path": "reports/demo_enhanced_report.html",
+          "start_line": 1,
+          "end_line": 1275,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 12856,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "batch_010",
+      "total_tokens": 49474,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "html"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 10
+      },
+      "snippets": [
+        {
+          "file_path": "reports/enhanced_interactive_report.html",
+          "start_line": 1,
+          "end_line": 6820,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 49474,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 2
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "batch_011",
+      "total_tokens": 18243,
+      "snippet_count": 2,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 2,
+        "languages": [
+          "html"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 10
+      },
+      "snippets": [
+        {
+          "file_path": "reports/enhanced_interactive_report.html",
+          "start_line": 6821,
+          "end_line": 7484,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 5393,
+          "metadata": {
+            "chunk_id": 2,
+            "total_chunks": 2
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        },
+        {
+          "file_path": "reports/demo_basic_report.html",
+          "start_line": 1,
+          "end_line": 1275,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 12850,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "batch_012",
+      "total_tokens": 49470,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "html"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 10
+      },
+      "snippets": [
+        {
+          "file_path": "reports/interactive_report.html",
+          "start_line": 1,
+          "end_line": 6819,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 49470,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 2
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "batch_013",
+      "total_tokens": 28924,
+      "snippet_count": 4,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 4,
+        "languages": [
+          "html",
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 10
+      },
+      "snippets": [
+        {
+          "file_path": "reports/interactive_report.html",
+          "start_line": 6820,
+          "end_line": 7483,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 5393,
+          "metadata": {
+            "chunk_id": 2,
+            "total_chunks": 2
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        },
+        {
+          "file_path": "reports/demo_custom_report.html",
+          "start_line": 1,
+          "end_line": 1275,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 12852,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css",
+            "https://cdn.jsdelivr.net/npm/chart.js",
+            "https://cdn.plot.ly/plotly-latest.min.js",
+            "https://unpkg.com/vis-network/standalone/umd/vis-network.min.js",
+            "https://code.jquery.com/jquery-3.6.0.min.js",
+            "https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js",
+            "https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+          ]
+        },
+        {
+          "file_path": "wtf_codebot/web/templates/index.html",
+          "start_line": 1,
+          "end_line": 1216,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 9492,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": [
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js",
+            "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          ]
+        },
+        {
+          "file_path": "pyproject.toml",
+          "start_line": 1,
+          "end_line": 120,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 1187,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_014",
+      "total_tokens": 50648,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "poetry.lock",
+          "start_line": 1,
+          "end_line": 1463,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 50648,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 3
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_015",
+      "total_tokens": 53254,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "poetry.lock",
+          "start_line": 1464,
+          "end_line": 2926,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 53254,
+          "metadata": {
+            "chunk_id": 2,
+            "total_chunks": 3
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_016",
+      "total_tokens": 33315,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "poetry.lock",
+          "start_line": 2927,
+          "end_line": 4016,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 33315,
+          "metadata": {
+            "chunk_id": 3,
+            "total_chunks": 3
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_017",
+      "total_tokens": 20018,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": ".wtf_cache/analysis.db",
+          "start_line": 1,
+          "end_line": 17,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 20018,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_018",
+      "total_tokens": 48453,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 1,
+          "end_line": 2171,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 48453,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_019",
+      "total_tokens": 42146,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 2172,
+          "end_line": 4342,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 42146,
+          "metadata": {
+            "chunk_id": 2,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_020",
+      "total_tokens": 36255,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 4343,
+          "end_line": 6513,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 36255,
+          "metadata": {
+            "chunk_id": 3,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_021",
+      "total_tokens": 36406,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 6514,
+          "end_line": 8684,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 36406,
+          "metadata": {
+            "chunk_id": 4,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_022",
+      "total_tokens": 35912,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 8685,
+          "end_line": 10855,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 35912,
+          "metadata": {
+            "chunk_id": 5,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_023",
+      "total_tokens": 31626,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 10856,
+          "end_line": 13026,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 31626,
+          "metadata": {
+            "chunk_id": 6,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_024",
+      "total_tokens": 36870,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 13027,
+          "end_line": 15197,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 36870,
+          "metadata": {
+            "chunk_id": 7,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_025",
+      "total_tokens": 39059,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 15198,
+          "end_line": 17368,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 39059,
+          "metadata": {
+            "chunk_id": 8,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_026",
+      "total_tokens": 37314,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 17369,
+          "end_line": 19539,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 37314,
+          "metadata": {
+            "chunk_id": 9,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_027",
+      "total_tokens": 40674,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 19540,
+          "end_line": 21710,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 40674,
+          "metadata": {
+            "chunk_id": 10,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_028",
+      "total_tokens": 18872,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 21711,
+          "end_line": 23881,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 18872,
+          "metadata": {
+            "chunk_id": 11,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_029",
+      "total_tokens": 33454,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 23882,
+          "end_line": 26052,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 33454,
+          "metadata": {
+            "chunk_id": 12,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_030",
+      "total_tokens": 37406,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 26053,
+          "end_line": 28223,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 37406,
+          "metadata": {
+            "chunk_id": 13,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_031",
+      "total_tokens": 36602,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 28224,
+          "end_line": 30394,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 36602,
+          "metadata": {
+            "chunk_id": 14,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_032",
+      "total_tokens": 38494,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 30395,
+          "end_line": 32565,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 38494,
+          "metadata": {
+            "chunk_id": 15,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_033",
+      "total_tokens": 34777,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 32566,
+          "end_line": 34736,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 34777,
+          "metadata": {
+            "chunk_id": 16,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_034",
+      "total_tokens": 39594,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 34737,
+          "end_line": 36907,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 39594,
+          "metadata": {
+            "chunk_id": 17,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_035",
+      "total_tokens": 40600,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 36908,
+          "end_line": 39078,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 40600,
+          "metadata": {
+            "chunk_id": 18,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_036",
+      "total_tokens": 24624,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 39079,
+          "end_line": 41249,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 24624,
+          "metadata": {
+            "chunk_id": 19,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_037",
+      "total_tokens": 37244,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 41250,
+          "end_line": 43420,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 37244,
+          "metadata": {
+            "chunk_id": 20,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_038",
+      "total_tokens": 36925,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 43421,
+          "end_line": 45591,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 36925,
+          "metadata": {
+            "chunk_id": 21,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_039",
+      "total_tokens": 28368,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 45592,
+          "end_line": 47762,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 28368,
+          "metadata": {
+            "chunk_id": 22,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_040",
+      "total_tokens": 60163,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 47763,
+          "end_line": 49933,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 60163,
+          "metadata": {
+            "chunk_id": 23,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_041",
+      "total_tokens": 40007,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 49934,
+          "end_line": 52104,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 40007,
+          "metadata": {
+            "chunk_id": 24,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_042",
+      "total_tokens": 72951,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 52105,
+          "end_line": 54275,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 72951,
+          "metadata": {
+            "chunk_id": 25,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_043",
+      "total_tokens": 34985,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 54276,
+          "end_line": 56446,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 34985,
+          "metadata": {
+            "chunk_id": 26,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_044",
+      "total_tokens": 37186,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 56447,
+          "end_line": 58617,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 37186,
+          "metadata": {
+            "chunk_id": 27,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_045",
+      "total_tokens": 39701,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 58618,
+          "end_line": 60788,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 39701,
+          "metadata": {
+            "chunk_id": 28,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_046",
+      "total_tokens": 30041,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 60789,
+          "end_line": 62959,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 30041,
+          "metadata": {
+            "chunk_id": 29,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_047",
+      "total_tokens": 33891,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 62960,
+          "end_line": 65130,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 33891,
+          "metadata": {
+            "chunk_id": 30,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_048",
+      "total_tokens": 36387,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 65131,
+          "end_line": 67301,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 36387,
+          "metadata": {
+            "chunk_id": 31,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_049",
+      "total_tokens": 46846,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 67302,
+          "end_line": 69472,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 46846,
+          "metadata": {
+            "chunk_id": 32,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_050",
+      "total_tokens": 61083,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 69473,
+          "end_line": 71643,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 61083,
+          "metadata": {
+            "chunk_id": 33,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_051",
+      "total_tokens": 58005,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 71644,
+          "end_line": 73814,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 58005,
+          "metadata": {
+            "chunk_id": 34,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_052",
+      "total_tokens": 62919,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 73815,
+          "end_line": 75985,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 62919,
+          "metadata": {
+            "chunk_id": 35,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_053",
+      "total_tokens": 59224,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 75986,
+          "end_line": 78156,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 59224,
+          "metadata": {
+            "chunk_id": 36,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_054",
+      "total_tokens": 61726,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 78157,
+          "end_line": 80327,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 61726,
+          "metadata": {
+            "chunk_id": 37,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_055",
+      "total_tokens": 59042,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 80328,
+          "end_line": 82498,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 59042,
+          "metadata": {
+            "chunk_id": 38,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_056",
+      "total_tokens": 58515,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 82499,
+          "end_line": 84669,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 58515,
+          "metadata": {
+            "chunk_id": 39,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_057",
+      "total_tokens": 57160,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 84670,
+          "end_line": 86840,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 57160,
+          "metadata": {
+            "chunk_id": 40,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_058",
+      "total_tokens": 63717,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 86841,
+          "end_line": 89011,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 63717,
+          "metadata": {
+            "chunk_id": 41,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_059",
+      "total_tokens": 51504,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 89012,
+          "end_line": 91182,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 51504,
+          "metadata": {
+            "chunk_id": 42,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_060",
+      "total_tokens": 58278,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 91183,
+          "end_line": 93353,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 58278,
+          "metadata": {
+            "chunk_id": 43,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_061",
+      "total_tokens": 54494,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 93354,
+          "end_line": 95524,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 54494,
+          "metadata": {
+            "chunk_id": 44,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_062",
+      "total_tokens": 52132,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 95525,
+          "end_line": 97695,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 52132,
+          "metadata": {
+            "chunk_id": 45,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_063",
+      "total_tokens": 64851,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 97696,
+          "end_line": 99866,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 64851,
+          "metadata": {
+            "chunk_id": 46,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_064",
+      "total_tokens": 69318,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 99867,
+          "end_line": 102037,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 69318,
+          "metadata": {
+            "chunk_id": 47,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_065",
+      "total_tokens": 62013,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 102038,
+          "end_line": 104208,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 62013,
+          "metadata": {
+            "chunk_id": 48,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_066",
+      "total_tokens": 61540,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 104209,
+          "end_line": 106379,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 61540,
+          "metadata": {
+            "chunk_id": 49,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_067",
+      "total_tokens": 59656,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 106380,
+          "end_line": 108550,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 59656,
+          "metadata": {
+            "chunk_id": 50,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_068",
+      "total_tokens": 60340,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 108551,
+          "end_line": 110721,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 60340,
+          "metadata": {
+            "chunk_id": 51,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_069",
+      "total_tokens": 58399,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 110722,
+          "end_line": 112892,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 58399,
+          "metadata": {
+            "chunk_id": 52,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_070",
+      "total_tokens": 58286,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 112893,
+          "end_line": 115063,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 58286,
+          "metadata": {
+            "chunk_id": 53,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_071",
+      "total_tokens": 55276,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 115064,
+          "end_line": 117234,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 55276,
+          "metadata": {
+            "chunk_id": 54,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_072",
+      "total_tokens": 59321,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 117235,
+          "end_line": 119405,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 59321,
+          "metadata": {
+            "chunk_id": 55,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_073",
+      "total_tokens": 55998,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 119406,
+          "end_line": 121576,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 55998,
+          "metadata": {
+            "chunk_id": 56,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_074",
+      "total_tokens": 45812,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 121577,
+          "end_line": 123747,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 45812,
+          "metadata": {
+            "chunk_id": 57,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_075",
+      "total_tokens": 72071,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 123748,
+          "end_line": 125918,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 72071,
+          "metadata": {
+            "chunk_id": 58,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_076",
+      "total_tokens": 56134,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 125919,
+          "end_line": 128089,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 56134,
+          "metadata": {
+            "chunk_id": 59,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_077",
+      "total_tokens": 68928,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 128090,
+          "end_line": 130260,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 68928,
+          "metadata": {
+            "chunk_id": 60,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_078",
+      "total_tokens": 61908,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 130261,
+          "end_line": 132431,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 61908,
+          "metadata": {
+            "chunk_id": 61,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_079",
+      "total_tokens": 60850,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 132432,
+          "end_line": 134602,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 60850,
+          "metadata": {
+            "chunk_id": 62,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_080",
+      "total_tokens": 65207,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 134603,
+          "end_line": 136773,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 65207,
+          "metadata": {
+            "chunk_id": 63,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_081",
+      "total_tokens": 50549,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 136774,
+          "end_line": 138944,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 50549,
+          "metadata": {
+            "chunk_id": 64,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_082",
+      "total_tokens": 64545,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 138945,
+          "end_line": 141115,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 64545,
+          "metadata": {
+            "chunk_id": 65,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_083",
+      "total_tokens": 58433,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 141116,
+          "end_line": 143286,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 58433,
+          "metadata": {
+            "chunk_id": 66,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_084",
+      "total_tokens": 59533,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 143287,
+          "end_line": 145457,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 59533,
+          "metadata": {
+            "chunk_id": 67,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_085",
+      "total_tokens": 61363,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 145458,
+          "end_line": 147628,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 61363,
+          "metadata": {
+            "chunk_id": 68,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_086",
+      "total_tokens": 66906,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 147629,
+          "end_line": 149799,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 66906,
+          "metadata": {
+            "chunk_id": 69,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_087",
+      "total_tokens": 53746,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 149800,
+          "end_line": 151970,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 53746,
+          "metadata": {
+            "chunk_id": 70,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_088",
+      "total_tokens": 54148,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 151971,
+          "end_line": 154141,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 54148,
+          "metadata": {
+            "chunk_id": 71,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_089",
+      "total_tokens": 58316,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 154142,
+          "end_line": 156312,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 58316,
+          "metadata": {
+            "chunk_id": 72,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_090",
+      "total_tokens": 55607,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 156313,
+          "end_line": 158483,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 55607,
+          "metadata": {
+            "chunk_id": 73,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_091",
+      "total_tokens": 58176,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 158484,
+          "end_line": 160654,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 58176,
+          "metadata": {
+            "chunk_id": 74,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_092",
+      "total_tokens": 47454,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 160655,
+          "end_line": 162825,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 47454,
+          "metadata": {
+            "chunk_id": 75,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_093",
+      "total_tokens": 64883,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 162826,
+          "end_line": 164996,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 64883,
+          "metadata": {
+            "chunk_id": 76,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_094",
+      "total_tokens": 54890,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 164997,
+          "end_line": 167167,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 54890,
+          "metadata": {
+            "chunk_id": 77,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_095",
+      "total_tokens": 66508,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 167168,
+          "end_line": 169338,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 66508,
+          "metadata": {
+            "chunk_id": 78,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_096",
+      "total_tokens": 47848,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 169339,
+          "end_line": 171509,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 47848,
+          "metadata": {
+            "chunk_id": 79,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_097",
+      "total_tokens": 59058,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 171510,
+          "end_line": 173680,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 59058,
+          "metadata": {
+            "chunk_id": 80,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_098",
+      "total_tokens": 65220,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 173681,
+          "end_line": 175851,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 65220,
+          "metadata": {
+            "chunk_id": 81,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_099",
+      "total_tokens": 44017,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 175852,
+          "end_line": 178022,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 44017,
+          "metadata": {
+            "chunk_id": 82,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_100",
+      "total_tokens": 57889,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 178023,
+          "end_line": 180193,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 57889,
+          "metadata": {
+            "chunk_id": 83,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_101",
+      "total_tokens": 61665,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 180194,
+          "end_line": 182364,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 61665,
+          "metadata": {
+            "chunk_id": 84,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_102",
+      "total_tokens": 62983,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 182365,
+          "end_line": 184535,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 62983,
+          "metadata": {
+            "chunk_id": 85,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_103",
+      "total_tokens": 40618,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 184536,
+          "end_line": 186706,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 40618,
+          "metadata": {
+            "chunk_id": 86,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_104",
+      "total_tokens": 19136,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 186707,
+          "end_line": 188877,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 19136,
+          "metadata": {
+            "chunk_id": 87,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_105",
+      "total_tokens": 66015,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 188878,
+          "end_line": 191048,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 66015,
+          "metadata": {
+            "chunk_id": 88,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_106",
+      "total_tokens": 54674,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 191049,
+          "end_line": 193219,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 54674,
+          "metadata": {
+            "chunk_id": 89,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_107",
+      "total_tokens": 43758,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 193220,
+          "end_line": 195390,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 43758,
+          "metadata": {
+            "chunk_id": 90,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_108",
+      "total_tokens": 42354,
+      "snippet_count": 2,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 195391,
+          "end_line": 197561,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 27292,
+          "metadata": {
+            "chunk_id": 91,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 197562,
+          "end_line": 199732,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 15062,
+          "metadata": {
+            "chunk_id": 92,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_109",
+      "total_tokens": 55788,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 199733,
+          "end_line": 201903,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 55788,
+          "metadata": {
+            "chunk_id": 93,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_110",
+      "total_tokens": 56581,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 201904,
+          "end_line": 204074,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 56581,
+          "metadata": {
+            "chunk_id": 94,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_111",
+      "total_tokens": 36101,
+      "snippet_count": 1,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 1,
+        "languages": [
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 204075,
+          "end_line": 206245,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 36101,
+          "metadata": {
+            "chunk_id": 95,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_112",
+      "total_tokens": 49985,
+      "snippet_count": 8,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 8,
+        "languages": [
+          "html",
+          "unknown",
+          "python"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "benchmark_results/cache/analysis.db",
+          "start_line": 206246,
+          "end_line": 208416,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 31995,
+          "metadata": {
+            "chunk_id": 96,
+            "total_chunks": 96
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": "custom_templates/tables.html",
+          "start_line": 1,
+          "end_line": 191,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 1751,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": ".history/pyproject_20250705170606.toml",
+          "start_line": 1,
+          "end_line": 107,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 1049,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": ".history/pyproject_20250705210202.toml",
+          "start_line": 1,
+          "end_line": 107,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 1053,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": ".history/wtf_codebot/pattern_recognition/cost_tracker_20250706092819.py",
+          "start_line": 1,
+          "end_line": 475,
+          "snippet_type": "chunk",
+          "language": "python",
+          "token_count": 3534,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": ".history/wtf_codebot/pattern_recognition/cost_tracker_20250706092816.py",
+          "start_line": 1,
+          "end_line": 475,
+          "snippet_type": "chunk",
+          "language": "python",
+          "token_count": 3503,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": ".history/reports/unified_findings_20250705161434.sarif",
+          "start_line": 1,
+          "end_line": 625,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 3547,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": ".history/reports/unified_findings_20250705210202.sarif",
+          "start_line": 1,
+          "end_line": 625,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 3553,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        }
+      ]
+    },
+    {
+      "id": "batch_113",
+      "total_tokens": 21054,
+      "snippet_count": 6,
+      "batch_metadata": {
+        "creation_timestamp": "now",
+        "file_count": 6,
+        "languages": [
+          "html",
+          "unknown"
+        ],
+        "snippet_types": [
+          "chunk"
+        ],
+        "total_dependencies": 0
+      },
+      "snippets": [
+        {
+          "file_path": "templates/tables.html",
+          "start_line": 1,
+          "end_line": 191,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 1751,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": "reports/dependencies.csv",
+          "start_line": 1,
+          "end_line": 96,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 3570,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": "reports/unified_findings.csv",
+          "start_line": 1,
+          "end_line": 13,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 1170,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": "reports/dependency_analysis.html",
+          "start_line": 1,
+          "end_line": 658,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 7321,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": "reports/unified_findings.html",
+          "start_line": 1,
+          "end_line": 433,
+          "snippet_type": "chunk",
+          "language": "html",
+          "token_count": 3689,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": "reports/unified_findings.sarif",
+          "start_line": 1,
+          "end_line": 625,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 3553,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        }
+      ]
+    }
+  ]
+}

@@ -49,7 +49,7 @@ def test_cost_calculation():
     tracker = CostTracker()
     
     # Test cost calculation for Claude Sonnet
-    cost = tracker.calculate_cost("claude-3-sonnet-20240229", 1000, 500)
+    cost = tracker.calculate_cost("claude-sonnet-4-0", 1000, 500)
     print(f"Cost for 1000 input + 500 output tokens: ${cost:.4f}")
     assert cost > 0, "Cost should be positive"
     
@@ -188,7 +188,7 @@ def test_usage_tracking():
     
     # Record some usage
     usage = tracker.record_usage(
-        model="claude-3-sonnet-20240229",
+        model="claude-sonnet-4-0",
         input_tokens=1000,
         output_tokens=500,
         request_type="test_request",
@@ -196,7 +196,7 @@ def test_usage_tracking():
         success=True
     )
     
-    assert usage.model == "claude-3-sonnet-20240229"
+    assert usage.model == "claude-sonnet-4-0"
     assert usage.input_tokens == 1000
     assert usage.output_tokens == 500
     assert usage.success is True

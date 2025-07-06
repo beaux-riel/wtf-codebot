@@ -25,7 +25,7 @@ except ImportError:
     # Fallback if config module is not available
     class MockConfig:
         anthropic_api_key = ""
-        anthropic_model = "claude-3-sonnet-20240229"
+        anthropic_model = "claude-sonnet-4-0"
     def get_config():
         return MockConfig()
 
@@ -98,9 +98,9 @@ For each pattern detected, provide:
 
 Respond in valid JSON format with this structure:
 ```json
-{
+{{
   "design_patterns": [
-    {
+    {{
       "pattern_type": "singleton",
       "confidence": 0.9,
       "file_path": "path/to/file.py",
@@ -114,10 +114,10 @@ Respond in valid JSON format with this structure:
       "benefits": ["Controlled instantiation", "Global access point"],
       "use_cases": ["Configuration managers", "Logging services"],
       "related_patterns": ["Factory", "Abstract Factory"]
-    }
+    }}
   ],
   "anti_patterns": [
-    {
+    {{
       "pattern_type": "god_object",
       "confidence": 0.8,
       "file_path": "path/to/file.py",
@@ -131,10 +131,10 @@ Respond in valid JSON format with this structure:
       "problems": ["Poor maintainability", "High coupling"],
       "solutions": ["Split into focused classes", "Use composition"],
       "refactoring_suggestions": ["Extract service classes", "Apply Single Responsibility Principle"]
-    }
+    }}
   ],
   "code_quality_issues": [
-    {
+    {{
       "pattern_type": "security_vulnerability",
       "confidence": 0.95,
       "file_path": "path/to/file.py",
@@ -145,9 +145,9 @@ Respond in valid JSON format with this structure:
       "severity": "critical",
       "impact": "critical",
       "effort": "medium"
-    }
+    }}
   ]
-}
+}}
 ```
 
 Code to analyze:
@@ -341,7 +341,7 @@ Provide analysis in JSON format, one pattern per response.
             )
             
         except Exception as e:
-            logger.error(f"Failed to analyze batch {batch.id}: {e}")
+            logger.error(f"Failed to analyze batch {batch.id}: {e}", exc_info=True)
             return PatternAnalysisResult(
                 batch_id=batch.id,
                 patterns=[],

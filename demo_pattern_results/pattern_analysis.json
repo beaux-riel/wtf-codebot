@@ -1,0 +1,18 @@
+{
+  "design_patterns": [],
+  "anti_patterns": [],
+  "code_quality_issues": [],
+  "total_files_analyzed": 0,
+  "total_lines_analyzed": 0,
+  "analysis_duration": 0.9173641204833984,
+  "summary": {
+    "total_patterns": 0,
+    "design_patterns_count": 0,
+    "anti_patterns_count": 0,
+    "code_quality_issues_count": 0,
+    "critical_issues": 0,
+    "high_issues": 0,
+    "medium_issues": 0,
+    "low_issues": 0
+  }
+}

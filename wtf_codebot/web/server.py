@@ -35,6 +35,7 @@ class FileTreeNode(BaseModel):
 class AnalysisRequest(BaseModel):
     directory: str
     excluded_paths: List[str] = []
+    included_paths: List[str] = []  # Paths that should be included in analysis
     include_patterns: List[str] = []
     exclude_patterns: List[str] = []
 
@@ -68,9 +69,14 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 current_analysis_state = {
     "directory": None,
     "excluded_paths": [],
+    "included_paths": [],
     "analysis_result": None,
     "config": None
 }
+
+# Store for analysis history
+from datetime import datetime
+analysis_history = []  # List of completed analyses with timestamps
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -91,7 +97,16 @@ async def get_file_tree_api(directory: str = "."):
             raise HTTPException(status_code=400, detail="Path is not a directory")
         
         tree = build_file_tree(directory_path)
-        return JSONResponse(content=tree)
+        
+        # Add navigation info
+        parent_path = str(directory_path.parent) if directory_path.parent != directory_path else None
+        
+        return JSONResponse(content={
+            "tree": tree,
+            "current_directory": str(directory_path),
+            "parent_directory": parent_path,
+            "directory_name": directory_path.name or str(directory_path)
+        })
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -108,6 +123,7 @@ async def analyze_codebase(request: AnalysisRequest):
         # Update global state
         current_analysis_state["directory"] = str(directory_path)
         current_analysis_state["excluded_paths"] = request.excluded_paths
+        current_analysis_state["included_paths"] = request.included_paths
         
         # Create config with exclusions  
         from wtf_codebot.core.config import get_config
@@ -119,17 +135,48 @@ async def analyze_codebase(request: AnalysisRequest):
         
         current_analysis_state["config"] = config
         
-        # Run analysis
-        analyzer = AnalysisEngine(config)
-        analysis_result = analyzer.analyze(directory_path)
+        # If specific paths are included, analyze only those
+        if request.included_paths:
+            # Analyze only the included paths
+            analyzer = AnalysisEngine(config)
+            analysis_result = analyzer.analyze_selected_paths(directory_path, request.included_paths)
+        else:
+            # Run full analysis
+            analyzer = AnalysisEngine(config)
+            analysis_result = analyzer.analyze(directory_path)
         
         # Store result
         current_analysis_state["analysis_result"] = analysis_result
         
+        # Format the analysis result for display
+        formatted_result = {
+            "summary": analysis_result.get("summary", {}),
+            "total_files": analysis_result.get("total_files", 0),
+            "findings": analysis_result.get("findings", []),
+            "metrics": analysis_result.get("metrics", {}),
+            "dependencies": analysis_result.get("dependencies", []),
+            "vulnerabilities": analysis_result.get("vulnerabilities", []),
+        }
+        
+        # Store in history
+        history_entry = {
+            "id": len(analysis_history) + 1,
+            "timestamp": datetime.now().isoformat(),
+            "directory": str(directory_path),
+            "excluded_paths": request.excluded_paths,
+            "included_paths": request.included_paths,
+            "result": formatted_result
+        }
+        analysis_history.append(history_entry)
+        
+        # Keep only last 20 analyses in memory
+        if len(analysis_history) > 20:
+            analysis_history.pop(0)
+        
         return AnalysisResult(
             success=True,
             message="Analysis completed successfully",
-            analysis_data=analysis_result.to_dict() if hasattr(analysis_result, 'to_dict') else None
+            analysis_data=formatted_result
         )
     
     except Exception as e:
@@ -213,6 +260,56 @@ async def get_current_state():
     })
 
 
+@app.get("/api/analysis-history")
+async def get_analysis_history():
+    """Get the analysis history."""
+    return JSONResponse(content={
+        "history": analysis_history,
+        "total": len(analysis_history)
+    })
+
+
+@app.get("/api/analysis-history/{analysis_id}")
+async def get_analysis_by_id(analysis_id: int):
+    """Get a specific analysis by ID."""
+    for entry in analysis_history:
+        if entry["id"] == analysis_id:
+            return JSONResponse(content=entry)
+    
+    raise HTTPException(status_code=404, detail="Analysis not found")
+
+
+@app.delete("/api/analysis-history/{analysis_id}")
+async def delete_analysis(analysis_id: int):
+    """Delete a specific analysis by ID."""
+    global analysis_history
+    
+    for i, entry in enumerate(analysis_history):
+        if entry["id"] == analysis_id:
+            deleted_entry = analysis_history.pop(i)
+            return JSONResponse(content={
+                "success": True,
+                "message": f"Deleted analysis {analysis_id}",
+                "deleted": deleted_entry
+            })
+    
+    raise HTTPException(status_code=404, detail="Analysis not found")
+
+
+@app.delete("/api/analysis-history")
+async def clear_analysis_history():
+    """Clear all analysis history."""
+    global analysis_history
+    count = len(analysis_history)
+    analysis_history = []
+    
+    return JSONResponse(content={
+        "success": True,
+        "message": f"Cleared {count} analysis entries",
+        "cleared": count
+    })
+
+
 def build_file_tree(directory: Path, excluded_paths: List[str] = None) -> Dict[str, Any]:
     """Build a file tree structure for the given directory."""
     if excluded_paths is None:
@@ -228,27 +325,43 @@ def build_file_tree(directory: Path, excluded_paths: List[str] = None) -> Dict[s
     
     def build_node(path: Path) -> Dict[str, Any]:
         """Build a tree node for a file or directory."""
+        is_file = path.is_file()
+        is_excluded = should_exclude(path)
+        
         node = {
+            "id": str(path),  # Unique identifier
             "name": path.name,
             "path": str(path),
-            "is_file": path.is_file(),
-            "is_excluded": should_exclude(path)
+            "is_file": is_file,
+            "is_excluded": is_excluded,
+            "is_expanded": False,  # For UI collapsing
+            "has_children": False
         }
         
-        if path.is_file():
+        if is_file:
             try:
-                node["size"] = path.stat().st_size
+                stat = path.stat()
+                node["size"] = stat.st_size
+                node["modified"] = stat.st_mtime
             except (OSError, IOError):
                 node["size"] = None
+                node["modified"] = None
         else:
             # Directory
             node["children"] = []
+            child_count = 0
             try:
+                children = []
                 for child in sorted(path.iterdir()):
-                    # Skip hidden files and common build directories
-                    if child.name.startswith('.') or child.name in ['__pycache__', 'node_modules', '.git']:
+                    # Skip hidden files and common build directories by default
+                    if child.name.startswith('.') or child.name in ['__pycache__', 'node_modules', '.git', '.venv', 'venv']:
                         continue
-                    node["children"].append(build_node(child))
+                    children.append(build_node(child))
+                    child_count += 1
+                
+                node["children"] = children
+                node["has_children"] = child_count > 0
+                node["child_count"] = child_count
             except (OSError, IOError):
                 pass  # Permission denied or other issues
         

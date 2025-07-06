@@ -332,7 +332,7 @@ class PatternRecognitionOrchestrator:
             logger.info(f"Analysis cost: ${usage_summary['total_cost']:.2f}")
             logger.info(f"Tokens processed: {usage_summary['total_tokens']:,}")
         
-        logger.info("Results saved to:", str(self.config.output_directory))
+        logger.info(f"Results saved to: {self.config.output_directory}")
     
     def get_cost_summary(self) -> Optional[Dict[str, Any]]:
         """Get cost tracking summary.

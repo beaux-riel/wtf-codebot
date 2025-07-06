@@ -147,7 +147,7 @@ def _add_analyze_arguments(parser: argparse.ArgumentParser) -> None:
     api_group.add_argument(
         "--model", "-m",
         type=str,
-        default="claude-3-sonnet-20240229",
+        default="claude-sonnet-4-0",
         help="Anthropic model to use (default: %(default)s)"
     )
     
@@ -552,7 +552,7 @@ def _init_config(file_path: str) -> None:
     # Create sample configuration
     sample_config = Config(
         anthropic_api_key="your-api-key-here",
-        anthropic_model="claude-3-sonnet-20240229",
+        anthropic_model="claude-sonnet-4-0",
         output_format="console",
         verbose=False,
         dry_run=False,

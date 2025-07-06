@@ -231,7 +231,7 @@ def analyze(
     
     # Model Configuration
     model: str = typer.Option(
-        "claude-3-sonnet-20240229",
+        "claude-sonnet-4-0",
         "--model", "-m",
         help="Anthropic model to use"
     ),
@@ -531,7 +531,7 @@ def _init_config(file_path: str):
     # Create sample configuration
     sample_config = Config(
         anthropic_api_key="your-api-key-here",
-        anthropic_model="claude-3-sonnet-20240229",
+        anthropic_model="claude-sonnet-4-0",
         output_format="console",
         verbose=False,
         dry_run=False,

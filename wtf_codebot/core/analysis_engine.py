@@ -73,9 +73,13 @@ class AnalysisEngine:
             logger.info("Running static analysis...")
             static_results = self.analyzer_registry.analyze_codebase(codebase_graph)
             
-            # Step 3: Run dependency analysis
-            logger.info("Running dependency analysis...")
-            dependency_results = self.dependency_analyzer.analyze_directory(str(path))
+            # Step 3: Run dependency analysis (skip for single files)
+            dependency_results = {}
+            if path.is_file():
+                logger.info("Skipping dependency analysis for single file")
+            else:
+                logger.info("Running dependency analysis...")
+                dependency_results = self.dependency_analyzer.analyze_directory(str(path))
             
             # Step 4: Aggregate findings
             logger.info("Aggregating findings...")
@@ -87,8 +91,78 @@ class AnalysisEngine:
                 "codebase_info": self._get_codebase_info(codebase_graph),
                 "findings": self._convert_findings_to_dict(all_findings),
                 "metrics": self._calculate_metrics(codebase_graph, all_findings),
-                "dependencies": dependency_results.get("dependencies", []) if dependency_results else [],
-                "vulnerabilities": dependency_results.get("vulnerabilities", []) if dependency_results else [],
+                "dependencies": self._extract_dependencies(dependency_results),
+                "vulnerabilities": self._extract_vulnerabilities(dependency_results),
+            }
+            
+            logger.info(f"Analysis complete. Found {len(all_findings)} findings")
+            return results
+            
+        except Exception as e:
+            logger.error(f"Analysis failed: {str(e)}")
+            raise WTFCodeBotError(f"Analysis failed: {str(e)}") from e
+    
+    def analyze_selected_paths(self, base_path: Path, selected_paths: List[str]) -> Dict[str, Any]:
+        """
+        Analyze only selected files and directories.
+        
+        Args:
+            base_path: Base directory path
+            selected_paths: List of paths to analyze (relative to base_path)
+            
+        Returns:
+            Dict[str, Any]: Analysis results
+        """
+        logger.info(f"Starting analysis of selected paths in {base_path}")
+        
+        try:
+            # Create a custom codebase graph with only selected files
+            from ..discovery.models import CodebaseGraph
+            codebase_graph = CodebaseGraph(root_path=base_path)
+            
+            for path_str in selected_paths:
+                # Handle both absolute and relative paths
+                if Path(path_str).is_absolute():
+                    path = Path(path_str)
+                else:
+                    path = base_path / path_str
+                    
+                if path.exists():
+                    if path.is_file():
+                        # Scan single file
+                        file_graph = self._scan_single_file(path)
+                        for file_node in file_graph.files.values():
+                            codebase_graph.add_file(file_node)
+                    else:
+                        # Scan directory
+                        dir_graph = self.scanner.scan_directory(path)
+                        for file_node in dir_graph.files.values():
+                            codebase_graph.add_file(file_node)
+            
+            logger.info(f"Found {codebase_graph.total_files} files in selected paths")
+            
+            # Run static analysis
+            logger.info("Running static analysis...")
+            static_results = self.analyzer_registry.analyze_codebase(codebase_graph)
+            
+            # Skip dependency analysis for single file analysis or when only one file is selected
+            dependency_results = {}
+            if codebase_graph.total_files > 1 or len(selected_paths) > 1:
+                logger.info("Running dependency analysis...")
+                dependency_results = self.dependency_analyzer.analyze_directory(str(base_path))
+            else:
+                logger.info("Skipping dependency analysis for single file")
+            
+            # Aggregate findings
+            logger.info("Aggregating findings...")
+            all_findings = self._aggregate_findings(static_results, dependency_results)
+            
+            # Generate analysis results
+            results = {
+                "total_files": codebase_graph.total_files,
+                "findings": all_findings,
+                "dependencies": self._extract_dependencies(dependency_results),
+                "vulnerabilities": self._extract_vulnerabilities(dependency_results),
             }
             
             logger.info(f"Analysis complete. Found {len(all_findings)} findings")
@@ -168,26 +242,86 @@ class AnalysisEngine:
                 all_findings.append(finding_dict)
         
         # Add dependency vulnerabilities
-        if dependency_results and "vulnerabilities" in dependency_results:
-            for i, vuln in enumerate(dependency_results["vulnerabilities"]):
-                finding_dict = {
-                    "id": f"vuln_{i}",
-                    "source": "dependency_analysis",
-                    "tool": "dependency_analyzer",
-                    "severity": vuln.get("severity", "medium"),
-                    "type": "vulnerability",
-                    "title": vuln.get("title", "Security Vulnerability"),
-                    "description": vuln.get("description", ""),
-                    "file_path": vuln.get("file_path", ""),
-                    "line_number": None,
-                    "column_number": None,
-                    "message": vuln.get("summary", ""),
-                    "suggestion": vuln.get("fix_recommendation", ""),
-                    "metadata": vuln
-                }
-                all_findings.append(finding_dict)
+        if dependency_results:
+            # Handle list of DependencyAnalysisResult objects
+            if isinstance(dependency_results, list):
+                vuln_count = 0
+                for dep_result in dependency_results:
+                    if hasattr(dep_result, 'vulnerabilities'):
+                        for vuln in dep_result.vulnerabilities:
+                            finding_dict = {
+                                "id": f"vuln_{vuln_count}",
+                                "source": "dependency_analysis",
+                                "tool": "dependency_analyzer",
+                                "severity": getattr(vuln, 'severity', 'medium'),
+                                "type": "vulnerability",
+                                "title": getattr(vuln, 'title', 'Security Vulnerability'),
+                                "description": getattr(vuln, 'description', ''),
+                                "file_path": getattr(vuln, 'file_path', ''),
+                                "line_number": None,
+                                "column_number": None,
+                                "message": getattr(vuln, 'summary', ''),
+                                "suggestion": getattr(vuln, 'fix_recommendation', ''),
+                                "metadata": vuln.__dict__ if hasattr(vuln, '__dict__') else {}
+                            }
+                            all_findings.append(finding_dict)
+                            vuln_count += 1
+            # Handle dict format (legacy)
+            elif isinstance(dependency_results, dict) and "vulnerabilities" in dependency_results:
+                for i, vuln in enumerate(dependency_results["vulnerabilities"]):
+                    finding_dict = {
+                        "id": f"vuln_{i}",
+                        "source": "dependency_analysis",
+                        "tool": "dependency_analyzer",
+                        "severity": vuln.get("severity", "medium"),
+                        "type": "vulnerability",
+                        "title": vuln.get("title", "Security Vulnerability"),
+                        "description": vuln.get("description", ""),
+                        "file_path": vuln.get("file_path", ""),
+                        "line_number": None,
+                        "column_number": None,
+                        "message": vuln.get("summary", ""),
+                        "suggestion": vuln.get("fix_recommendation", ""),
+                        "metadata": vuln
+                    }
+                    all_findings.append(finding_dict)
         
         return all_findings
+    
+    def _extract_dependencies(self, dependency_results):
+        """Extract dependencies from dependency analysis results."""
+        dependencies = []
+        if isinstance(dependency_results, list):
+            for dep_result in dependency_results:
+                if hasattr(dep_result, 'dependencies'):
+                    for name, dep_info in dep_result.dependencies.items():
+                        dependencies.append({
+                            "name": name,
+                            "version": getattr(dep_info, 'version', ''),
+                            "license": getattr(dep_info, 'license', ''),
+                            "description": getattr(dep_info, 'description', ''),
+                        })
+        elif isinstance(dependency_results, dict):
+            dependencies = dependency_results.get("dependencies", [])
+        return dependencies
+    
+    def _extract_vulnerabilities(self, dependency_results):
+        """Extract vulnerabilities from dependency analysis results."""
+        vulnerabilities = []
+        if isinstance(dependency_results, list):
+            for dep_result in dependency_results:
+                if hasattr(dep_result, 'vulnerabilities'):
+                    for vuln in dep_result.vulnerabilities:
+                        vulnerabilities.append({
+                            "advisory_id": getattr(vuln, 'advisory_id', ''),
+                            "severity": getattr(vuln, 'severity', 'unknown'),
+                            "title": getattr(vuln, 'title', ''),
+                            "description": getattr(vuln, 'description', ''),
+                            "source": getattr(vuln, 'source', ''),
+                        })
+        elif isinstance(dependency_results, dict):
+            vulnerabilities = dependency_results.get("vulnerabilities", [])
+        return vulnerabilities
     
     def _convert_findings_to_dict(self, findings: List[Dict]) -> List[Dict]:
         """Convert findings to dictionary format."""

@@ -9,6 +9,10 @@ code for design patterns, anti-patterns, and code quality issues.
 import asyncio
 import sys
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Add the project root to the Python path
 project_root = Path(__file__).parent
@@ -35,7 +39,7 @@ async def demo_pattern_recognition():
     # Scan the current codebase
     print("\n1. Scanning codebase...")
     scanner = CodebaseScanner()
-    codebase = await scanner.scan_codebase(project_root)
+    codebase = scanner.scan_directory(project_root)
     
     print(f"Found {codebase.total_files} files ({codebase.total_size:,} bytes)")
     
@@ -162,7 +166,7 @@ async def demo_simple_analysis():
     
     # Scan codebase
     scanner = CodebaseScanner()
-    codebase = await scanner.scan_codebase(project_root)
+    codebase = scanner.scan_directory(project_root)
     
     # Use the convenience function
     results = await analyze_codebase_patterns(

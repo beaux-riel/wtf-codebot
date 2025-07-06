@@ -7,41 +7,143 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .main-container {
+            min-height: calc(100vh - 56px); /* Subtract navbar height */
+            padding: 1rem;
+        }
+        .analysis-container {
+            height: calc(100vh - 100px);
+            display: flex;
+            flex-direction: column;
+        }
         .file-tree {
             max-height: 500px;
             overflow-y: auto;
             border: 1px solid #dee2e6;
             border-radius: 0.375rem;
-            padding: 1rem;
+            padding: 0.5rem;
+            background-color: #fdfdfd;
         }
-        .file-tree-item {
+        .directory-navigation {
+            padding: 0.75rem;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            border-radius: 0.375rem 0.375rem 0 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-button {
+            background: none;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
             cursor: pointer;
+            transition: all 0.15s ease-in-out;
+        }
+        .nav-button:hover:not(:disabled) {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+        }
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .current-path {
+            font-family: monospace;
+            font-size: 0.9rem;
+            background-color: #e9ecef;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .tree-item {
+            display: flex;
+            align-items: center;
             padding: 0.25rem 0.5rem;
             margin: 0.125rem 0;
             border-radius: 0.25rem;
             transition: background-color 0.15s ease-in-out;
+            user-select: none;
         }
-        .file-tree-item:hover {
-            background-color: #f8f9fa;
+        .tree-item:hover {
+            background-color: #f1f3f4;
         }
-        .file-tree-item.excluded {
+        .tree-item.excluded {
             background-color: #f8d7da;
             color: #721c24;
         }
-        .file-tree-item.excluded:hover {
+        .tree-item.excluded:hover {
             background-color: #f5c6cb;
         }
-        .file-tree-item i {
+        .tree-checkbox {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+        .tree-checkbox:indeterminate {
+            opacity: 0.6;
+        }
+        .expand-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.125rem;
+            margin-right: 0.25rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.125rem;
+            transition: all 0.15s ease-in-out;
+        }
+        .expand-toggle:hover {
+            background-color: #e9ecef;
+        }
+        .expand-toggle.invisible {
+            visibility: hidden;
+        }
+        .tree-icon {
             margin-right: 0.5rem;
             width: 1rem;
             text-align: center;
+            color: #6c757d;
+        }
+        .tree-name {
+            flex-grow: 1;
+            cursor: pointer;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.125rem;
+        }
+        .tree-name:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        .tree-meta {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-left: 0.5rem;
+        }
+        .tree-children {
+            margin-left: 1.5rem;
+            border-left: 1px dotted #dee2e6;
+            padding-left: 0.5rem;
+        }
+        .tree-children.collapsed {
+            display: none;
         }
         .analysis-result {
             background-color: #f8f9fa;
             border: 1px solid #dee2e6;
             border-radius: 0.375rem;
             padding: 1rem;
-            max-height: 600px;
+            flex: 1;
             overflow-y: auto;
         }
         .loading {
@@ -61,6 +163,8 @@
             flex-wrap: wrap;
             gap: 0.5rem;
             margin-top: 0.5rem;
+            max-height: 200px;
+            overflow-y: auto;
         }
         .exclusion-tag {
             background-color: #dc3545;
@@ -80,38 +184,139 @@
             font-size: 1rem;
             padding: 0;
         }
-        .nested {
-            margin-left: 1.5rem;
+        .selection-controls {
+            padding: 0.5rem;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .btn-sm-custom {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 0.2rem;
+        }
+        .analysis-results {
+            font-size: 0.9rem;
+        }
+        .analysis-results .card {
+            border: none;
+            box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,0.08);
+            transition: transform 0.2s ease-in-out;
+        }
+        .analysis-results .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.12);
+        }
+        .analysis-results .card-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .analysis-results .card-text {
+            font-size: 0.875rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+        .analysis-results pre {
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+        }
+        .analysis-results .table {
+            font-size: 0.875rem;
+            border-radius: 0.375rem;
+            overflow: hidden;
+        }
+        .analysis-results .table thead {
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .analysis-results .badge {
+            font-size: 0.75rem;
+            padding: 0.35em 0.65em;
+            font-weight: 500;
+        }
+        .findings-card {
+            border-left: 4px solid;
+            margin-bottom: 1rem;
+            transition: all 0.2s ease;
+        }
+        .findings-card:hover {
+            box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1);
+        }
+        .findings-card.severity-high {
+            border-left-color: #dc3545;
+        }
+        .findings-card.severity-medium {
+            border-left-color: #ffc107;
+        }
+        .findings-card.severity-low {
+            border-left-color: #17a2b8;
+        }
+        .section-header {
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-header h6 {
+            font-weight: 600;
+            color: #495057;
+        }
+        .summary-icon {
+            font-size: 2.5rem;
+            opacity: 0.15;
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+        }
+        .vulnerability-card {
+            border-radius: 0.5rem;
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+        }
+        .empty-state {
+            padding: 3rem;
+            text-align: center;
+            color: #6c757d;
+        }
+        .empty-state i {
+            font-size: 3rem;
+            opacity: 0.3;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                    <div class="container-fluid">
-                        <a class="navbar-brand" href="#">
-                            <i class="fas fa-robot"></i> WTF Codebot
-                        </a>
-                        <div class="navbar-nav ms-auto">
-                            <span class="navbar-text">
-                                <span id="status-badge" class="status-badge bg-secondary">Ready</span>
-                            </span>
-                        </div>
-                    </div>
-                </nav>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-robot"></i> WTF Codebot
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text">
+                    <span id="status-badge" class="status-badge bg-secondary">Ready</span>
+                </span>
             </div>
         </div>
+    </nav>
 
-        <div class="row mt-4">
+    <div class="container-fluid main-container">
+        <div class="row">
             <div class="col-md-4">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-header">
                         <h5><i class="fas fa-folder-open"></i> Directory Browser</h5>
                     </div>
-                    <div class="card-body">
-                        <div class="directory-input">
+                    <div class="card-body p-0">
+                        <div class="directory-input p-3 pb-0">
                             <label for="directory-path" class="form-label">Directory Path</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="directory-path" value="." placeholder="Enter directory path">
@@ -119,6 +324,33 @@
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
+                        </div>
+                        
+                        <!-- Navigation Controls -->
+                        <div class="directory-navigation">
+                            <button class="nav-button" id="parent-dir-btn" title="Go to parent directory">
+                                <i class="fas fa-level-up-alt"></i>
+                            </button>
+                            <button class="nav-button" id="refresh-btn" title="Refresh directory">
+                                <i class="fas fa-sync"></i>
+                            </button>
+                            <div class="current-path" id="current-path">.</div>
+                        </div>
+                        
+                        <!-- Selection Controls -->
+                        <div class="selection-controls">
+                            <button class="btn btn-outline-primary btn-sm-custom" id="select-all-btn">
+                                <i class="fas fa-check-square"></i> All
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm-custom" id="select-none-btn">
+                                <i class="fas fa-square"></i> None
+                            </button>
+                            <button class="btn btn-outline-warning btn-sm-custom" id="expand-all-btn">
+                                <i class="fas fa-expand-arrows-alt"></i> Expand
+                            </button>
+                            <button class="btn btn-outline-info btn-sm-custom" id="collapse-all-btn">
+                                <i class="fas fa-compress-arrows-alt"></i> Collapse
+                            </button>
                         </div>
                         
                         <div id="file-tree" class="file-tree">
@@ -129,7 +361,8 @@
                     </div>
                 </div>
 
-                <div class="card mt-3">
+                
+                <div class="card">
                     <div class="card-header">
                         <h5><i class="fas fa-ban"></i> Excluded Paths</h5>
                     </div>
@@ -145,11 +378,14 @@
             </div>
 
             <div class="col-md-8">
-                <div class="card">
+                <div class="card analysis-container">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5><i class="fas fa-cogs"></i> Analysis</h5>
                         <div>
-                            <button class="btn btn-primary" id="analyze-btn">
+                            <button class="btn btn-outline-info" id="history-btn">
+                                <i class="fas fa-history"></i> History
+                            </button>
+                            <button class="btn btn-primary ms-2" id="analyze-btn">
                                 <i class="fas fa-play"></i> Run Analysis
                             </button>
                             <div class="btn-group ms-2">
@@ -163,8 +399,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div id="analysis-result" class="analysis-result">
+                    <div class="card-body d-flex" style="overflow: hidden; padding: 0;">
+                        <div id="analysis-result" class="analysis-result w-100">
                             <div class="text-center text-muted">
                                 <i class="fas fa-info-circle"></i>
                                 <p class="mt-2">No analysis has been run yet. Select a directory and click "Run Analysis" to get started.</p>
@@ -183,11 +419,21 @@
         // Global state
         let currentDirectory = '.';
         let excludedPaths = [];
+        let includedPaths = [];  // Paths to include in analysis
         let analysisResult = null;
+        let fileTreeData = null;
+        let expandedNodes = new Set();
 
         // DOM elements
         const directoryInput = document.getElementById('directory-path');
         const browseBtn = document.getElementById('browse-btn');
+        const parentDirBtn = document.getElementById('parent-dir-btn');
+        const refreshBtn = document.getElementById('refresh-btn');
+        const currentPathDiv = document.getElementById('current-path');
+        const selectAllBtn = document.getElementById('select-all-btn');
+        const selectNoneBtn = document.getElementById('select-none-btn');
+        const expandAllBtn = document.getElementById('expand-all-btn');
+        const collapseAllBtn = document.getElementById('collapse-all-btn');
         const fileTree = document.getElementById('file-tree');
         const analyzeBtn = document.getElementById('analyze-btn');
         const exportBtn = document.getElementById('export-btn');
@@ -195,6 +441,7 @@
         const exclusionTags = document.getElementById('exclusion-tags');
         const clearExclusionsBtn = document.getElementById('clear-exclusions');
         const analysisResultDiv = document.getElementById('analysis-result');
+        const historyBtn = document.getElementById('history-btn');
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -207,6 +454,14 @@
                 loadFileTree();
             });
 
+            parentDirBtn.addEventListener('click', goToParentDirectory);
+            refreshBtn.addEventListener('click', () => loadFileTree());
+            
+            selectAllBtn.addEventListener('click', () => setAllSelections(false)); // false = include all
+            selectNoneBtn.addEventListener('click', () => setAllSelections(true)); // true = exclude all
+            expandAllBtn.addEventListener('click', () => setAllExpanded(true));
+            collapseAllBtn.addEventListener('click', () => setAllExpanded(false));
+
             directoryInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     currentDirectory = directoryInput.value;
@@ -216,6 +471,7 @@
 
             analyzeBtn.addEventListener('click', runAnalysis);
             clearExclusionsBtn.addEventListener('click', clearExclusions);
+            historyBtn.addEventListener('click', showAnalysisHistory);
 
             // Export dropdown handlers
             document.querySelectorAll('.dropdown-item[data-format]').forEach(item => {
@@ -234,7 +490,15 @@
                 const data = await response.json();
                 
                 if (response.ok) {
-                    renderFileTree(data);
+                    fileTreeData = data;
+                    currentDirectory = data.current_directory;
+                    directoryInput.value = currentDirectory;
+                    currentPathDiv.textContent = currentDirectory;
+                    
+                    // Update parent directory button
+                    parentDirBtn.disabled = !data.parent_directory;
+                    
+                    renderFileTree();
                     setStatus('Ready', 'secondary');
                 } else {
                     throw new Error(data.detail || 'Failed to load file tree');
@@ -245,43 +509,151 @@
             }
         }
 
-        // Render file tree
-        function renderFileTree(node, level = 0) {
-            if (level === 0) {
-                fileTree.innerHTML = '';
-            }
-
-            const item = document.createElement('div');
-            item.className = `file-tree-item ${node.is_excluded ? 'excluded' : ''}`;
-            item.style.marginLeft = `${level * 1.5}rem`;
-            
-            const icon = node.is_file ? 'fas fa-file' : 'fas fa-folder';
-            const sizeText = node.is_file && node.size !== null ? ` (${formatFileSize(node.size)})` : '';
-            
-            item.innerHTML = `
-                <i class="${icon}"></i>
-                <span>${node.name}${sizeText}</span>
-            `;
-
-            item.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleExclusion(node.path);
-            });
-
-            if (level === 0) {
-                fileTree.appendChild(item);
-            } else {
-                fileTree.appendChild(item);
-            }
-
-            // Render children
-            if (node.children && node.children.length > 0) {
-                node.children.forEach(child => renderFileTree(child, level + 1));
+        // Go to parent directory
+        function goToParentDirectory() {
+            if (fileTreeData && fileTreeData.parent_directory) {
+                currentDirectory = fileTreeData.parent_directory;
+                loadFileTree();
             }
         }
 
-        // Toggle exclusion
-        function toggleExclusion(path) {
+        // Render file tree
+        function renderFileTree() {
+            if (!fileTreeData || !fileTreeData.tree) {
+                fileTree.innerHTML = '<div class="alert alert-warning">No data to display</div>';
+                return;
+            }
+            
+            // Update is_excluded status based on current excludedPaths
+            updateExclusionStatus(fileTreeData.tree);
+            
+            fileTree.innerHTML = '';
+            renderTreeNode(fileTreeData.tree, fileTree, 0);
+        }
+        
+        // Update exclusion status in tree data
+        function updateExclusionStatus(node) {
+            node.is_excluded = excludedPaths.includes(node.path);
+            if (node.children) {
+                node.children.forEach(child => updateExclusionStatus(child));
+            }
+        }
+
+        // Render individual tree node
+        function renderTreeNode(node, container, level) {
+            const nodeDiv = document.createElement('div');
+            
+            const treeItem = document.createElement('div');
+            treeItem.className = `tree-item ${node.is_excluded ? 'excluded' : ''}`;
+            
+            // Expand/collapse toggle
+            const expandToggle = document.createElement('button');
+            expandToggle.className = `expand-toggle ${!node.has_children ? 'invisible' : ''}`;
+            expandToggle.innerHTML = expandedNodes.has(node.id) ? 
+                '<i class="fas fa-chevron-down"></i>' : 
+                '<i class="fas fa-chevron-right"></i>';
+            
+            expandToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleNodeExpansion(node.id);
+            });
+            
+            // Checkbox
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'tree-checkbox';
+            checkbox.checked = !node.is_excluded;
+            checkbox.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleNodeExclusion(node.path);
+            });
+            
+            // Icon
+            const icon = document.createElement('i');
+            icon.className = `tree-icon ${node.is_file ? 'fas fa-file' : 'fas fa-folder'}`;
+            
+            // Name
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'tree-name';
+            nameSpan.textContent = node.name;
+            nameSpan.addEventListener('click', () => {
+                if (!node.is_file) {
+                    navigateToDirectory(node.path);
+                }
+            });
+            
+            // Metadata
+            const metaSpan = document.createElement('span');
+            metaSpan.className = 'tree-meta';
+            if (node.is_file && node.size !== null) {
+                metaSpan.textContent = formatFileSize(node.size);
+            } else if (!node.is_file && node.child_count !== undefined) {
+                metaSpan.textContent = `${node.child_count} items`;
+            }
+            
+            // Assemble tree item
+            treeItem.appendChild(expandToggle);
+            treeItem.appendChild(checkbox);
+            treeItem.appendChild(icon);
+            treeItem.appendChild(nameSpan);
+            treeItem.appendChild(metaSpan);
+            
+            nodeDiv.appendChild(treeItem);
+            
+            // Children container
+            if (node.children && node.children.length > 0) {
+                const childrenDiv = document.createElement('div');
+                childrenDiv.className = `tree-children ${expandedNodes.has(node.id) ? '' : 'collapsed'}`;
+                
+                node.children.forEach(child => {
+                    renderTreeNode(child, childrenDiv, level + 1);
+                });
+                
+                nodeDiv.appendChild(childrenDiv);
+            }
+            
+            container.appendChild(nodeDiv);
+        }
+
+        // Navigate to directory
+        function navigateToDirectory(path) {
+            currentDirectory = path;
+            expandedNodes.clear(); // Reset expansion state
+            loadFileTree();
+        }
+
+        // Toggle node expansion
+        function toggleNodeExpansion(nodeId) {
+            if (expandedNodes.has(nodeId)) {
+                expandedNodes.delete(nodeId);
+            } else {
+                expandedNodes.add(nodeId);
+            }
+            renderFileTree();
+        }
+
+        // Set all nodes expanded/collapsed
+        function setAllExpanded(expanded) {
+            if (expanded) {
+                // Expand all nodes
+                function collectNodeIds(node) {
+                    if (node.has_children) {
+                        expandedNodes.add(node.id);
+                    }
+                    if (node.children) {
+                        node.children.forEach(collectNodeIds);
+                    }
+                }
+                collectNodeIds(fileTreeData.tree);
+            } else {
+                // Collapse all nodes
+                expandedNodes.clear();
+            }
+            renderFileTree();
+        }
+
+        // Toggle node exclusion
+        function toggleNodeExclusion(path) {
             const index = excludedPaths.indexOf(path);
             if (index > -1) {
                 excludedPaths.splice(index, 1);
@@ -289,7 +661,24 @@
                 excludedPaths.push(path);
             }
             updateExclusionTags();
-            loadFileTree(); // Refresh to show exclusion changes
+            renderFileTree(); // Re-render to show changes
+        }
+
+        // Set all selections
+        function setAllSelections(exclude) {
+            excludedPaths = [];
+            if (exclude) {
+                // Add all paths to exclusions
+                function collectPaths(node) {
+                    excludedPaths.push(node.path);
+                    if (node.children) {
+                        node.children.forEach(collectPaths);
+                    }
+                }
+                collectPaths(fileTreeData.tree);
+            }
+            updateExclusionTags();
+            renderFileTree();
         }
 
         // Update exclusion tags
@@ -298,10 +687,18 @@
             excludedPaths.forEach(path => {
                 const tag = document.createElement('div');
                 tag.className = 'exclusion-tag';
-                tag.innerHTML = `
-                    <span>${path}</span>
-                    <button class="remove-btn" onclick="removeExclusion('${path}')">×</button>
-                `;
+                
+                const pathSpan = document.createElement('span');
+                pathSpan.textContent = path.length > 50 ? '...' + path.slice(-47) : path;
+                pathSpan.title = path;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-btn';
+                removeBtn.innerHTML = '×';
+                removeBtn.addEventListener('click', () => removeExclusion(path));
+                
+                tag.appendChild(pathSpan);
+                tag.appendChild(removeBtn);
                 exclusionTags.appendChild(tag);
             });
         }
@@ -312,7 +709,7 @@
             if (index > -1) {
                 excludedPaths.splice(index, 1);
                 updateExclusionTags();
-                loadFileTree();
+                renderFileTree();
             }
         }
 
@@ -320,7 +717,7 @@
         function clearExclusions() {
             excludedPaths = [];
             updateExclusionTags();
-            loadFileTree();
+            renderFileTree();
         }
 
         // Run analysis
@@ -329,6 +726,10 @@
                 setStatus('Analyzing...', 'warning');
                 analyzeBtn.disabled = true;
                 
+                // Collect all checked (included) paths
+                includedPaths = [];
+                collectIncludedPaths(fileTreeData.tree);
+                
                 const response = await fetch('/api/analyze', {
                     method: 'POST',
                     headers: {
@@ -336,7 +737,8 @@
                     },
                     body: JSON.stringify({
                         directory: currentDirectory,
-                        excluded_paths: excludedPaths
+                        excluded_paths: excludedPaths,
+                        included_paths: includedPaths
                     })
                 });
                 
@@ -360,15 +762,399 @@
 
         // Display analysis result
         function displayAnalysisResult(result) {
-            analysisResultDiv.innerHTML = `
-                <h6><i class="fas fa-check-circle text-success"></i> Analysis Complete</h6>
-                <p><strong>Directory:</strong> ${currentDirectory}</p>
-                <p><strong>Excluded Paths:</strong> ${excludedPaths.length > 0 ? excludedPaths.join(', ') : 'None'}</p>
-                <hr>
-                <div class="analysis-content">
-                    ${result.analysis_data ? JSON.stringify(result.analysis_data, null, 2) : result.message}
+            if (!result.analysis_data) {
+                analysisResultDiv.innerHTML = `<div class="alert alert-info">${result.message}</div>`;
+                return;
+            }
+            
+            const data = result.analysis_data;
+            
+            // Build summary cards with icons
+            const summaryCards = `
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center h-100">
+                            <div class="card-body position-relative">
+                                <i class="fas fa-file-code summary-icon"></i>
+                                <h5 class="card-title">${data.total_files || 0}</h5>
+                                <p class="card-text">Files Analyzed</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center h-100">
+                            <div class="card-body position-relative">
+                                <i class="fas fa-exclamation-circle summary-icon"></i>
+                                <h5 class="card-title">${data.findings ? data.findings.length : 0}</h5>
+                                <p class="card-text">Findings</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center h-100">
+                            <div class="card-body position-relative">
+                                <i class="fas fa-cube summary-icon"></i>
+                                <h5 class="card-title">${data.dependencies ? data.dependencies.length : 0}</h5>
+                                <p class="card-text">Dependencies</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card text-center h-100">
+                            <div class="card-body position-relative">
+                                <i class="fas fa-shield-alt summary-icon"></i>
+                                <h5 class="card-title">${data.vulnerabilities ? data.vulnerabilities.length : 0}</h5>
+                                <p class="card-text">Vulnerabilities</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             `;
+            
+            // Build findings section with cards
+            let findingsSection = '';
+            if (data.findings && data.findings.length > 0) {
+                const findingsCards = data.findings.slice(0, 10).map(finding => {
+                    const fileName = finding.file_path ? finding.file_path.split('/').pop() : 'Unknown';
+                    const severityClass = `severity-${finding.severity || 'low'}`;
+                    
+                    return `
+                        <div class="card findings-card ${severityClass} mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <span class="badge bg-${getSeverityColor(finding.severity)}">${finding.severity || 'info'}</span>
+                                        <span class="badge bg-secondary ms-1">${finding.type || finding.pattern_type || 'Unknown'}</span>
+                                    </div>
+                                    <small class="text-muted">
+                                        <i class="fas fa-file-code"></i> ${fileName}
+                                        ${finding.line_number ? ` : ${finding.line_number}` : ''}
+                                    </small>
+                                </div>
+                                <p class="mb-0">${escapeHtml(finding.message || finding.description || '')}</p>
+                                ${finding.suggestion ? `<small class="text-muted mt-1 d-block"><i class="fas fa-lightbulb"></i> ${escapeHtml(finding.suggestion)}</small>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                findingsSection = `
+                    <div class="mb-5">
+                        <div class="section-header">
+                            <h6><i class="fas fa-exclamation-triangle text-warning"></i> Code Analysis Findings</h6>
+                            <small class="text-muted">${data.findings.length > 10 ? `Showing 10 of ${data.findings.length} findings` : `${data.findings.length} findings total`}</small>
+                        </div>
+                        ${findingsCards}
+                    </div>
+                `;
+            } else {
+                findingsSection = `
+                    <div class="mb-5">
+                        <div class="section-header">
+                            <h6><i class="fas fa-exclamation-triangle text-warning"></i> Code Analysis Findings</h6>
+                        </div>
+                        <div class="empty-state">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <p>No issues found! Your code looks great.</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Build dependencies section
+            let dependenciesSection = '';
+            if (data.dependencies && data.dependencies.length > 0) {
+                const depCards = data.dependencies.slice(0, 12).map(dep => `
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title mb-1">${dep.name || 'Unknown'}</h6>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge bg-primary">${dep.version || 'N/A'}</span>
+                                    <span class="badge bg-secondary">${dep.license || 'Unknown'}</span>
+                                </div>
+                                <small class="text-muted">${escapeHtml(dep.description || 'No description available')}</small>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                dependenciesSection = `
+                    <div class="mb-5">
+                        <div class="section-header">
+                            <h6><i class="fas fa-cube text-primary"></i> Project Dependencies</h6>
+                            <small class="text-muted">${data.dependencies.length > 12 ? `Showing 12 of ${data.dependencies.length} dependencies` : `${data.dependencies.length} dependencies total`}</small>
+                        </div>
+                        <div class="row">
+                            ${depCards}
+                        </div>
+                    </div>
+                `;
+            } else {
+                dependenciesSection = `
+                    <div class="mb-5">
+                        <div class="section-header">
+                            <h6><i class="fas fa-cube text-primary"></i> Project Dependencies</h6>
+                        </div>
+                        <div class="empty-state">
+                            <i class="fas fa-cube"></i>
+                            <p>No dependencies found in this project.</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Build vulnerabilities section
+            let vulnerabilitiesSection = '';
+            if (data.vulnerabilities && data.vulnerabilities.length > 0) {
+                const vulnCards = data.vulnerabilities.map(vuln => `
+                    <div class="alert vulnerability-card alert-${getSeverityColor(vuln.severity)} mb-3">
+                        <div class="d-flex align-items-start">
+                            <i class="fas fa-shield-alt me-3 mt-1"></i>
+                            <div class="flex-grow-1">
+                                <h6 class="alert-heading mb-1">${vuln.title || vuln.advisory_id || 'Security Vulnerability'}</h6>
+                                <span class="badge bg-${getSeverityColor(vuln.severity)} mb-2">${vuln.severity || 'Unknown'} Severity</span>
+                                <p class="mb-0">${escapeHtml(vuln.description || 'No description available')}</p>
+                                ${vuln.source ? `<small class="text-muted mt-2 d-block">Source: ${vuln.source}</small>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                vulnerabilitiesSection = `
+                    <div class="mb-5">
+                        <div class="section-header">
+                            <h6><i class="fas fa-shield-alt text-danger"></i> Security Vulnerabilities</h6>
+                        </div>
+                        ${vulnCards}
+                    </div>
+                `;
+            }
+            
+            analysisResultDiv.innerHTML = `
+                <div class="analysis-results">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0"><i class="fas fa-check-circle text-success"></i> Analysis Complete</h6>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="toggleRawData()">
+                            <i class="fas fa-code"></i> View Raw Data
+                        </button>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <p class="mb-1"><strong>Directory:</strong> ${currentDirectory}</p>
+                        <p class="mb-0"><strong>Excluded Paths:</strong> ${excludedPaths.length > 0 ? excludedPaths.length + ' items' : 'None'}</p>
+                    </div>
+                    
+                    ${summaryCards}
+                    ${findingsSection}
+                    ${dependenciesSection}
+                    ${vulnerabilitiesSection}
+                    
+                    <div id="raw-data" class="mt-5" style="display: none;">
+                        <div class="section-header">
+                            <h6><i class="fas fa-code"></i> Raw Analysis Data</h6>
+                        </div>
+                        <pre class="p-3"><code>${JSON.stringify(data, null, 2)}</code></pre>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Helper function to escape HTML
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+        
+        // Helper function to get severity color
+        function getSeverityColor(severity) {
+            const severityMap = {
+                'critical': 'danger',
+                'high': 'danger',
+                'medium': 'warning',
+                'low': 'info',
+                'info': 'secondary'
+            };
+            return severityMap[severity?.toLowerCase()] || 'secondary';
+        }
+        
+        // Toggle raw data view
+        window.toggleRawData = function() {
+            const rawDataDiv = document.getElementById('raw-data');
+            rawDataDiv.style.display = rawDataDiv.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Show analysis history
+        async function showAnalysisHistory() {
+            try {
+                const response = await fetch('/api/analysis-history');
+                const data = await response.json();
+                
+                if (data.history.length === 0) {
+                    analysisResultDiv.innerHTML = `
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> No analysis history available yet.
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Build history table
+                const historyRows = data.history.map(entry => {
+                    const timestamp = new Date(entry.timestamp).toLocaleString();
+                    const directory = entry.directory || 'Unknown';
+                    const filesCount = entry.result.total_files || 0;
+                    const findingsCount = entry.result.findings ? entry.result.findings.length : 0;
+                    
+                    return `
+                        <tr id="history-row-${entry.id}">
+                            <td>${entry.id}</td>
+                            <td>${timestamp}</td>
+                            <td title="${directory}">${directory.length > 30 ? '...' + directory.slice(-27) : directory}</td>
+                            <td>${filesCount}</td>
+                            <td>${findingsCount}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="loadHistoricalAnalysis(${entry.id})" title="View this analysis">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteAnalysis(${entry.id})" title="Delete this analysis">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).reverse().join(''); // Show newest first
+                
+                analysisResultDiv.innerHTML = `
+                    <div class="analysis-history">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6><i class="fas fa-history"></i> Analysis History</h6>
+                            <div>
+                                <button class="btn btn-sm btn-outline-danger me-2" onclick="clearAllHistory()" ${data.history.length === 0 ? 'disabled' : ''}>
+                                    <i class="fas fa-trash-alt"></i> Clear All
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="window.location.reload()">
+                                    <i class="fas fa-times"></i> Close
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Timestamp</th>
+                                        <th>Directory</th>
+                                        <th>Files</th>
+                                        <th>Findings</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${historyRows}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                analysisResultDiv.innerHTML = `<div class="alert alert-danger">Error loading history: ${error.message}</div>`;
+            }
+        }
+        
+        // Load historical analysis
+        window.loadHistoricalAnalysis = async function(analysisId) {
+            try {
+                const response = await fetch(`/api/analysis-history/${analysisId}`);
+                const data = await response.json();
+                
+                // Display the historical result
+                displayAnalysisResult({
+                    success: true,
+                    analysis_data: data.result,
+                    message: `Historical analysis from ${new Date(data.timestamp).toLocaleString()}`
+                });
+                
+                // Update current directory if different
+                if (data.directory !== currentDirectory) {
+                    currentDirectory = data.directory;
+                    directoryInput.value = currentDirectory;
+                    currentPathDiv.textContent = currentDirectory;
+                }
+                
+                // Update excluded paths
+                excludedPaths = data.excluded_paths || [];
+                updateExclusionTags();
+                
+            } catch (error) {
+                alert(`Error loading analysis: ${error.message}`);
+            }
+        }
+        
+        // Delete analysis
+        window.deleteAnalysis = async function(analysisId) {
+            if (!confirm('Are you sure you want to delete this analysis?')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/analysis-history/${analysisId}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Remove the row from the table
+                    const row = document.getElementById(`history-row-${analysisId}`);
+                    if (row) {
+                        row.style.transition = 'opacity 0.3s';
+                        row.style.opacity = '0';
+                        setTimeout(() => row.remove(), 300);
+                    }
+                    
+                    // Check if table is empty
+                    setTimeout(() => {
+                        const tbody = document.querySelector('.analysis-history tbody');
+                        if (tbody && tbody.children.length === 0) {
+                            showAnalysisHistory(); // Refresh to show empty state
+                        }
+                    }, 350);
+                } else {
+                    alert('Failed to delete analysis');
+                }
+            } catch (error) {
+                alert(`Error deleting analysis: ${error.message}`);
+            }
+        }
+        
+        // Clear all history
+        window.clearAllHistory = async function() {
+            if (!confirm('Are you sure you want to clear all analysis history? This cannot be undone.')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/analysis-history', {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAnalysisHistory(); // Refresh to show empty state
+                } else {
+                    alert('Failed to clear history');
+                }
+            } catch (error) {
+                alert(`Error clearing history: ${error.message}`);
+            }
         }
 
         // Export analysis
@@ -404,6 +1190,19 @@
             statusBadge.className = `status-badge bg-${type}`;
         }
 
+        // Collect included paths from tree
+        function collectIncludedPaths(node) {
+            // If this node is not excluded, include it
+            if (!excludedPaths.includes(node.path)) {
+                includedPaths.push(node.path);
+            }
+            
+            // Process children recursively
+            if (node.children) {
+                node.children.forEach(child => collectIncludedPaths(child));
+            }
+        }
+        
         // Format file size
         function formatFileSize(bytes) {
             if (bytes === 0) return '0 Bytes';

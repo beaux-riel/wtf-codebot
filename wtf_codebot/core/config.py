@@ -103,7 +103,7 @@ class Config(BaseModel):
     
     # API Configuration
     anthropic_api_key: str = Field(..., description="Anthropic API key")
-    anthropic_model: str = Field(default="claude-3-sonnet-20240229", description="Anthropic model to use")
+    anthropic_model: str = Field(default="claude-sonnet-4-0", description="Anthropic model to use")
     
     # Analysis Configuration
     analysis: AnalysisConfig = Field(default_factory=AnalysisConfig)

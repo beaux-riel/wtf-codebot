@@ -72,9 +72,19 @@ class PythonAnalyzer(LinterBasedAnalyzer):
             List: Parsed findings
         """
         findings = []
+        
+        if not output or not output.strip():
+            return findings
 
         try:
             linter_json = json.loads(output)
+            
+            # Handle both list and dict formats
+            if isinstance(linter_json, dict) and 'issues' in linter_json:
+                linter_json = linter_json['issues']
+            elif not isinstance(linter_json, list):
+                logger.warning(f"Unexpected pylint output format for {file_path}")
+                return findings
 
             for issue in linter_json:
                 finding = self.create_finding(

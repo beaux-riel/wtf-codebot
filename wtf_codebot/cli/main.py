@@ -257,7 +257,7 @@ def init_config(ctx: click.Context, output: Path):
     # Create a sample configuration
     sample_config = {
         "anthropic_api_key": "your-api-key-here",
-        "anthropic_model": "claude-3-sonnet-20240229",
+        "anthropic_model": "claude-sonnet-4-0",
         "output_format": "console",
         "verbose": False,
         "dry_run": False,

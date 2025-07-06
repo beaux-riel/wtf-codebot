@@ -1,0 +1,33 @@
+{
+  "usage_summary": {
+    "total_requests": 0,
+    "total_cost": 0.0,
+    "total_tokens": 0,
+    "successful_requests": 0,
+    "failed_requests": 0,
+    "average_cost_per_request": 0.0,
+    "cost_by_model": {},
+    "usage_by_type": {}
+  },
+  "budget_status": {
+    "budget_enabled": true,
+    "daily": {
+      "limit": 2.0,
+      "used": 0,
+      "remaining": 2.0,
+      "percentage": 0.0
+    },
+    "monthly": {
+      "limit": 0.0,
+      "used": 0,
+      "remaining": 0,
+      "percentage": 0
+    },
+    "total": {
+      "limit": 0.0,
+      "used": 0,
+      "remaining": 0,
+      "percentage": 0
+    }
+  }
+}

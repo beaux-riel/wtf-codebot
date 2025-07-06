@@ -278,7 +278,14 @@ class LinterBasedAnalyzer(BaseAnalyzer):
         import subprocess
         
         try:
-            cmd = [self.linter_command, file_path]
+            cmd = [self.linter_command]
+            
+            # Add JSON output for pylint
+            if self.linter_command == "pylint":
+                cmd.extend(["--output-format=json"])
+            
+            cmd.append(file_path)
+            
             if self.linter_config:
                 cmd.extend(["--config", self.linter_config])
             
@@ -288,6 +295,10 @@ class LinterBasedAnalyzer(BaseAnalyzer):
                 text=True,
                 timeout=30
             )
+            
+            # For pylint, we expect JSON output in stdout
+            if self.linter_command == "pylint":
+                return result.stdout
             
             return result.stdout + result.stderr
             
