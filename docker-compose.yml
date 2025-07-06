@@ -1,0 +1,141 @@
+version: '3.8'
+
+services:
+  # Production service
+  wtf-codebot:
+    build:
+      context: .
+      target: production
+    image: wtfcodebot/wtf-codebot:latest
+    container_name: wtf-codebot
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - WTF_CODEBOT_VERBOSE=${WTF_CODEBOT_VERBOSE:-false}
+      - WTF_CODEBOT_CACHE_ENABLED=${WTF_CODEBOT_CACHE_ENABLED:-true}
+      - WTF_CODEBOT_PARALLEL_ENABLED=${WTF_CODEBOT_PARALLEL_ENABLED:-true}
+    volumes:
+      # Mount the code to analyze
+      - ${CODE_PATH:-./}:/workspace:ro
+      # Mount reports directory
+      - ${REPORTS_PATH:-./reports}:/app/reports
+      # Mount cache directory for persistence
+      - wtf-codebot-cache:/app/cache
+      # Optional: mount custom configuration
+      - ${CONFIG_PATH:-./wtf-codebot.yaml}:/app/config.yaml:ro
+    command: >
+      analyze /workspace
+      --config /app/config.yaml
+      --export-html /app/reports/analysis.html
+      --export-json /app/reports/results.json
+      --verbose
+    restart: unless-stopped
+    profiles:
+      - production
+
+  # Development service
+  wtf-codebot-dev:
+    build:
+      context: .
+      target: development
+    image: wtfcodebot/wtf-codebot:dev
+    container_name: wtf-codebot-dev
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - WTF_CODEBOT_VERBOSE=true
+      - WTF_CODEBOT_LOG_LEVEL=DEBUG
+    volumes:
+      # Mount source code for development
+      - ./wtf_codebot:/app/wtf_codebot
+      - ./tests:/app/tests
+      - ./templates:/app/templates
+      - ./custom_templates:/app/custom_templates
+      - ./pyproject.toml:/app/pyproject.toml
+      - ./poetry.lock:/app/poetry.lock
+      # Mount workspace
+      - ${CODE_PATH:-./}:/workspace
+      # Mount reports
+      - ./reports:/app/reports
+      # Mount cache
+      - wtf-codebot-dev-cache:/app/cache
+    working_dir: /app
+    command: bash
+    stdin_open: true
+    tty: true
+    profiles:
+      - development
+
+  # CI/CD service for automated analysis
+  wtf-codebot-ci:
+    build:
+      context: .
+      target: production
+    image: wtfcodebot/wtf-codebot:latest
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - JIRA_URL=${JIRA_URL}
+      - JIRA_USERNAME=${JIRA_USERNAME}
+      - JIRA_API_TOKEN=${JIRA_API_TOKEN}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}
+    volumes:
+      - ${CODE_PATH:-./}:/workspace:ro
+      - ./ci-reports:/app/reports
+    command: >
+      analyze /workspace
+      --export-sarif /app/reports/security.sarif
+      --export-json /app/reports/results.json
+      --export-csv /app/reports/findings.csv
+      --github-issues
+      --github-repo ${GITHUB_REPOSITORY}
+      --slack-webhook ${SLACK_WEBHOOK_URL}
+    profiles:
+      - ci
+
+  # Performance testing service
+  wtf-codebot-benchmark:
+    build:
+      context: .
+      target: production
+    image: wtfcodebot/wtf-codebot:latest
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - WTF_CODEBOT_CACHE_ENABLED=true
+      - WTF_CODEBOT_PARALLEL_ENABLED=true
+      - WTF_CODEBOT_WORKER_COUNT=8
+    volumes:
+      - ${BENCHMARK_CODE_PATH:-./}:/workspace:ro
+      - ./benchmark-reports:/app/reports
+      - wtf-codebot-benchmark-cache:/app/cache
+    command: >
+      python scripts/run_benchmarks.py
+      --workspace /workspace
+      --output /app/reports/benchmark-results.json
+    profiles:
+      - benchmark
+
+  # Report server for viewing HTML reports
+  report-server:
+    image: nginx:alpine
+    container_name: wtf-codebot-reports
+    ports:
+      - "${REPORT_PORT:-8080}:80"
+    volumes:
+      - ${REPORTS_PATH:-./reports}:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - wtf-codebot
+    profiles:
+      - production
+      - reports
+
+volumes:
+  wtf-codebot-cache:
+    driver: local
+  wtf-codebot-dev-cache:
+    driver: local
+  wtf-codebot-benchmark-cache:
+    driver: local
+
+networks:
+  default:
+    name: wtf-codebot-network
