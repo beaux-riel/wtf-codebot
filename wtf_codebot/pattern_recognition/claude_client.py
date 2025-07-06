@@ -25,7 +25,7 @@ except ImportError:
     # Fallback if config module is not available
     class MockConfig:
         anthropic_api_key = ""
-        anthropic_model = "claude-sonnet-4-0"
+        anthropic_model = "claude-sonnet-4-20250514"
     def get_config():
         return MockConfig()
 
