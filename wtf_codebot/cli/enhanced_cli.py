@@ -120,6 +120,16 @@ def validate_batch_size(batch_size: int) -> int:
     return batch_size
 
 
+def validate_analysis_depth(depth: str) -> str:
+    """Validate analysis depth choice."""
+    if depth not in ANALYSIS_DEPTHS:
+        raise typer.BadParameter(
+            f"Invalid analysis depth: {depth}. "
+            f"Valid options: {', '.join(ANALYSIS_DEPTHS)}"
+        )
+    return depth
+
+
 @app.command()
 def analyze(
     # Required arguments
@@ -171,7 +181,7 @@ def analyze(
         "standard",
         "--analysis-depth",
         help="Analysis depth level",
-        click_type=typer.Choice(ANALYSIS_DEPTHS, case_sensitive=False)
+        callback=validate_analysis_depth
     ),
     
     # Batch Processing
@@ -593,8 +603,7 @@ def dependencies(
     output_format: str = typer.Option(
         "table",
         "--format", "-f",
-        help="Output format",
-        click_type=typer.Choice(["table", "json", "summary"], case_sensitive=False)
+        help="Output format"
     ),
     
     output_file: Optional[str] = typer.Option(
@@ -624,8 +633,7 @@ def dependencies(
     report_format: Optional[str] = typer.Option(
         None,
         "--report", "-r",
-        help="Generate detailed report in specified format",
-        click_type=typer.Choice(["html", "markdown", "json", "csv"], case_sensitive=False)
+        help="Generate detailed report in specified format"
     ),
     
     verbose: bool = typer.Option(

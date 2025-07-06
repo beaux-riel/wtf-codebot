@@ -1,14 +1,12 @@
-[tool.poetry]
+[project]
 name = "wtf-codebot"
 version = "0.1.0"
 description = "AI-powered code analysis and review tool with advanced static analysis, pattern recognition, and AI-driven insights"
-authors = ["WTF CodeBot Team <team@wtfcodebot.com>"]
-maintainers = ["WTF CodeBot Team <team@wtfcodebot.com>"]
+authors = [{name = "WTF CodeBot Team", email = "team@wtfcodebot.com"}]
+maintainers = [{name = "WTF CodeBot Team", email = "team@wtfcodebot.com"}]
 readme = "README.md"
-license = "MIT"
-homepage = "https://github.com/your-org/wtf-codebot"
-repository = "https://github.com/your-org/wtf-codebot"
-documentation = "https://github.com/your-org/wtf-codebot/blob/main/README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8.1"
 keywords = ["code-analysis", "static-analysis", "ai", "claude", "code-review", "security", "quality", "patterns"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -26,6 +24,60 @@ classifiers = [
     "Topic :: Security",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
+dependencies = [
+    "click>=8.1.7",
+    "typer>=0.9.0",
+    "pydantic>=2.5.0",
+    "python-dotenv>=1.0.0",
+    "anthropic>=0.8.0",
+    "rich>=13.7.0",
+    "pyyaml>=6.0.1",
+    "structlog>=23.2.0",
+    "beautifulsoup4>=4.12.0",
+    "cssutils>=2.9.0",
+    "tree-sitter>=0.20.0",
+    "tree-sitter-python>=0.20.0",
+    "tree-sitter-javascript>=0.20.0",
+    "tree-sitter-typescript>=0.20.0",
+    "toml>=0.10.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/wtf-codebot"
+Repository = "https://github.com/your-org/wtf-codebot"
+Documentation = "https://github.com/your-org/wtf-codebot/blob/main/README.md"
+Changelog = "https://github.com/your-org/wtf-codebot/blob/main/CHANGELOG.md"
+
+[project.scripts]
+wtf-codebot = "wtf_codebot.cli.main:main"
+wtf-codebot-typer = "wtf_codebot.cli.enhanced_cli:main"
+wtf-codebot-argparse = "wtf_codebot.cli.argparse_cli:main"
+wtf-codebot-deps = "wtf_codebot.cli.dependency_cli:analyze_dependencies"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.3",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.1",
+    "pytest-mock>=3.12.0",
+    "black>=23.11.0",
+    "isort>=5.12.0",
+    "flake8>=6.1.0",
+    "mypy>=1.7.0",
+    "bandit>=1.7.5",
+    "safety>=2.3.5",
+    "pre-commit>=2.20.0,<3.0.0; python_version<'3.9'",
+    "pre-commit>=3.6.0; python_version>='3.9'",
+    "sphinx>=4.5.0,<7.0.0; python_version<'3.9'",
+    "sphinx>=7.2.6; python_version>='3.9'",
+    "sphinx-rtd-theme>=1.3.0",
+    "mkdocs>=1.5.3",
+    "mkdocs-material>=9.5.3",
+    "ruff>=0.1.8",
+    "responses>=0.24.1",
+]
+
+[tool.poetry]
 packages = [{include = "wtf_codebot"}]
 include = [
     "templates/**/*",
@@ -35,48 +87,6 @@ include = [
     "CHANGELOG.md",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.8.1"
-click = "^8.1.7"
-typer = "^0.9.0"
-pydantic = "^2.5.0"
-python-dotenv = "^1.0.0"
-anthropic = "^0.8.0"
-rich = "^13.7.0"
-pyyaml = "^6.0.1"
-structlog = "^23.2.0"
-beautifulsoup4 = "^4.12.0"
-cssutils = "^2.9.0"
-tree-sitter = "^0.20.0"
-tree-sitter-python = "^0.20.0"
-tree-sitter-javascript = "^0.20.0"
-tree-sitter-typescript = "^0.20.0"
-toml = "^0.10.2"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.4.3"
-pytest-cov = "^4.1.0"
-pytest-asyncio = "^0.21.1"
-pytest-mock = "^3.12.0"
-black = "^23.11.0"
-isort = "^5.12.0"
-flake8 = "^6.1.0"
-mypy = "^1.7.0"
-bandit = "^1.7.5"
-safety = "^2.3.5"
-pre-commit = "^3.6.0"
-sphinx = "^7.2.6"
-sphinx-rtd-theme = "^1.3.0"
-mkdocs = "^1.5.3"
-mkdocs-material = "^9.5.3"
-ruff = "^0.1.8"
-responses = "^0.24.1"
-
-[tool.poetry.scripts]
-wtf-codebot = "wtf_codebot.cli.main:main"
-wtf-codebot-typer = "wtf_codebot.cli.enhanced_cli:main"
-wtf-codebot-argparse = "wtf_codebot.cli.argparse_cli:main"
-wtf-codebot-deps = "wtf_codebot.cli.dependency_cli:analyze_dependencies"
 
 [build-system]
 requires = ["poetry-core"]
