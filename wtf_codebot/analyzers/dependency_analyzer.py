@@ -15,7 +15,7 @@ import urllib.error
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Any, Tuple
+from typing import Dict, List, Optional, Set, Any, Tuple, Callable
 from datetime import datetime
 import logging
 
@@ -24,6 +24,7 @@ import yaml
 
 from wtf_codebot.core.exceptions import AnalysisError
 from wtf_codebot.analyzers.base import BaseAnalyzer
+from wtf_codebot.utils.rate_limiter import RateLimiter
 
 
 @dataclass
@@ -105,6 +106,9 @@ class PackageManagerParser(ABC):
 class NPMParser(PackageManagerParser):
     """Parser for npm package.json files"""
     
+    def __init__(self, rate_limiter: Optional[RateLimiter] = None):
+        self.rate_limiter = rate_limiter
+    
     def parse_dependencies(self, file_path: str) -> Dict[str, DependencyInfo]:
         """Parse dependencies from package.json"""
         try:
@@ -151,6 +155,10 @@ class NPMParser(PackageManagerParser):
     def get_package_info(self, package_name: str, version: str) -> Optional[DependencyInfo]:
         """Get package info from npm registry"""
         try:
+            # Rate limit API calls
+            if self.rate_limiter:
+                self.rate_limiter.acquire()
+            
             # Clean version for npm registry lookup
             clean_version = re.sub(r'[^\d\.]', '', version)
             url = f"https://registry.npmjs.org/{package_name}/{clean_version}"
@@ -158,10 +166,19 @@ class NPMParser(PackageManagerParser):
             with urllib.request.urlopen(url, timeout=10) as response:
                 data = json.loads(response.read().decode('utf-8'))
                 
+                # Extract license - handle both string and object formats
+                license_data = data.get('license')
+                if isinstance(license_data, dict):
+                    license_str = license_data.get('type', 'unknown')
+                elif isinstance(license_data, str):
+                    license_str = license_data
+                else:
+                    license_str = None
+                
                 return DependencyInfo(
                     name=package_name,
                     version=clean_version,
-                    license=data.get('license'),
+                    license=license_str,
                     description=data.get('description'),
                     dependencies=list(data.get('dependencies', {}).keys())
                 )
@@ -171,6 +188,9 @@ class NPMParser(PackageManagerParser):
 
 class PythonParser(PackageManagerParser):
     """Parser for Python package files (requirements.txt, pyproject.toml, poetry.lock)"""
+    
+    def __init__(self, rate_limiter: Optional[RateLimiter] = None):
+        self.rate_limiter = rate_limiter
     
     def parse_dependencies(self, file_path: str) -> Dict[str, DependencyInfo]:
         """Parse dependencies from Python package files"""
@@ -322,6 +342,10 @@ class PythonParser(PackageManagerParser):
     def get_package_info(self, package_name: str, version: str) -> Optional[DependencyInfo]:
         """Get package info from PyPI"""
         try:
+            # Rate limit API calls
+            if self.rate_limiter:
+                self.rate_limiter.acquire()
+            
             url = f"https://pypi.org/pypi/{package_name}/json"
             
             with urllib.request.urlopen(url, timeout=10) as response:
@@ -342,8 +366,9 @@ class PythonParser(PackageManagerParser):
 class SecurityAdvisoryClient:
     """Client for fetching security advisories from various sources"""
     
-    def __init__(self):
+    def __init__(self, rate_limiter: Optional[RateLimiter] = None):
         self.logger = logging.getLogger(__name__)
+        self.rate_limiter = rate_limiter
     
     def get_vulnerabilities(self, package_name: str, version: str, ecosystem: str) -> List[VulnerabilityInfo]:
         """Get vulnerabilities for a package from multiple sources"""
@@ -368,6 +393,10 @@ class SecurityAdvisoryClient:
     def _get_osv_advisories(self, package_name: str, version: str, ecosystem: str) -> List[VulnerabilityInfo]:
         """Get vulnerabilities from OSV database"""
         try:
+            # Rate limit API calls
+            if self.rate_limiter:
+                self.rate_limiter.acquire()
+            
             # Map ecosystem to OSV format
             ecosystem_map = {
                 'python': 'PyPI',
@@ -435,32 +464,101 @@ class SecurityAdvisoryClient:
 class DependencyAnalyzer(BaseAnalyzer):
     """Main dependency analyzer class"""
     
-    def __init__(self, name: str = "dependency_analyzer"):
+    def __init__(self, name: str = "dependency_analyzer", progress_callback: Optional[Callable[[str, int, int], None]] = None):
         super().__init__(name)
         self.logger = logging.getLogger(__name__)
+        self.progress_callback = progress_callback
+        
+        # Create rate limiter - 2 requests per second with burst of 5
+        self.rate_limiter = RateLimiter(calls_per_second=2.0, burst_size=5)
+        
         self.parsers = {
-            'package.json': NPMParser(),
-            'requirements.txt': PythonParser(),
-            'pyproject.toml': PythonParser(),
-            'poetry.lock': PythonParser(),
-            'pipfile': PythonParser()
+            'package.json': NPMParser(rate_limiter=self.rate_limiter),
+            'requirements.txt': PythonParser(rate_limiter=self.rate_limiter),
+            'pyproject.toml': PythonParser(rate_limiter=self.rate_limiter),
+            'poetry.lock': PythonParser(rate_limiter=self.rate_limiter),
+            'pipfile': PythonParser(rate_limiter=self.rate_limiter)
         }
-        self.security_client = SecurityAdvisoryClient()
+        self.security_client = SecurityAdvisoryClient(rate_limiter=self.rate_limiter)
+        
+        # Directories to exclude from dependency analysis
+        self.exclude_dirs = {
+            'node_modules',
+            '.venv',
+            'venv',
+            'env',
+            '__pycache__',
+            '.git',
+            'dist',
+            'build',
+            'vendor',
+            'bower_components',
+            '.tox',
+            'site-packages',
+            'packages',
+            '.npm',
+            '.yarn'
+        }
+    
+    def _report_progress(self, message: str, current: int = 0, total: int = 0):
+        """Report progress to callback if available"""
+        if self.progress_callback:
+            self.progress_callback(message, current, total)
+    
+    def set_exclude_dirs(self, exclude_dirs: Set[str]):
+        """Set custom directories to exclude from analysis"""
+        self.exclude_dirs = exclude_dirs
+    
+    def add_exclude_dir(self, dir_name: str):
+        """Add a directory to the exclusion list"""
+        self.exclude_dirs.add(dir_name)
     
     def analyze_directory(self, directory: str) -> List[DependencyAnalysisResult]:
         """Analyze all package manager files in a directory"""
         results = []
         
-        for root, _, files in os.walk(directory):
+        # Find all dependency files
+        dependency_files = []
+        self.logger.info(f"Scanning {directory} for dependency files...")
+        self._report_progress(f"Scanning for dependency files...", 0, 0)
+        
+        for root, dirs, files in os.walk(directory):
+            # Skip excluded directories
+            dirs[:] = [d for d in dirs if d not in self.exclude_dirs]
+            
+            # Check if we're in an excluded directory
+            rel_root = os.path.relpath(root, directory)
+            if any(excluded in rel_root.split(os.sep) for excluded in self.exclude_dirs):
+                continue
+            
             for file in files:
                 if file.lower() in self.parsers:
                     file_path = os.path.join(root, file)
-                    try:
-                        result = self.analyze_dependency_file(file_path)
-                        results.append(result)
-                    except AnalysisError as e:
-                        self.logger.error(f"Failed to analyze {file_path}: {e}")
+                    # Only include root-level or near-root dependency files
+                    depth = len(rel_root.split(os.sep)) if rel_root != '.' else 0
+                    if depth <= 2:  # Only include files up to 2 directories deep
+                        dependency_files.append(file_path)
+                        self.logger.debug(f"Including dependency file: {os.path.relpath(file_path, directory)}")
         
+        total_files = len(dependency_files)
+        self.logger.info(f"Found {total_files} core dependency files to analyze (excluding node_modules, venv, etc.)")
+        self._report_progress(f"Found {total_files} core dependency files", 0, total_files)
+        
+        # Analyze each file
+        for idx, file_path in enumerate(dependency_files, 1):
+            rel_path = os.path.relpath(file_path, directory)
+            self.logger.info(f"Analyzing dependency file {idx}/{total_files}: {rel_path}")
+            self._report_progress(f"Analyzing {rel_path}", idx, total_files)
+            
+            try:
+                result = self.analyze_dependency_file(file_path)
+                results.append(result)
+                self.logger.info(f"  - Found {len(result.dependencies)} dependencies")
+            except AnalysisError as e:
+                self.logger.error(f"  - Failed to analyze {file_path}: {e}")
+        
+        self.logger.info(f"Dependency analysis complete: analyzed {len(results)} files")
+        self._report_progress(f"Dependency analysis complete", total_files, total_files)
         return results
     
     def analyze_dependency_file(self, file_path: str) -> DependencyAnalysisResult:
@@ -473,7 +571,9 @@ class DependencyAnalyzer(BaseAnalyzer):
         parser = self.parsers[file_name]
         
         # Parse dependencies
+        self.logger.debug(f"  - Parsing dependencies from {file_name}...")
         dependencies = parser.parse_dependencies(file_path)
+        self.logger.debug(f"  - Parsed {len(dependencies)} dependencies")
         
         # Determine package manager and ecosystem
         package_manager = self._get_package_manager(file_name)
@@ -487,15 +587,19 @@ class DependencyAnalyzer(BaseAnalyzer):
         )
         
         # Enhance with additional information
+        self.logger.debug(f"  - Enhancing dependency information...")
         self._enhance_dependencies(result, parser, ecosystem)
         
         # Check for vulnerabilities
+        self.logger.debug(f"  - Checking for vulnerabilities...")
         self._check_vulnerabilities(result, ecosystem)
         
         # Generate license summary
+        self.logger.debug(f"  - Generating license summary...")
         self._generate_license_summary(result)
         
         # Build dependency tree
+        self.logger.debug(f"  - Building dependency tree...")
         self._build_dependency_tree(result)
         
         return result
@@ -524,13 +628,30 @@ class DependencyAnalyzer(BaseAnalyzer):
     
     def _enhance_dependencies(self, result: DependencyAnalysisResult, parser: PackageManagerParser, ecosystem: str):
         """Enhance dependency information with additional details"""
-        for name, dep_info in result.dependencies.items():
+        total_deps = len(result.dependencies)
+        if total_deps == 0:
+            return
+            
+        self.logger.info(f"  - Fetching detailed info for {total_deps} dependencies...")
+        enhanced_count = 0
+        
+        for idx, (name, dep_info) in enumerate(result.dependencies.items(), 1):
+            if idx % 10 == 0 or idx == total_deps:
+                self.logger.debug(f"    - Progress: {idx}/{total_deps} dependencies processed")
+                self._report_progress(f"Fetching package info: {idx}/{total_deps}", idx, total_deps)
+            
             # Try to get additional package information
-            enhanced_info = parser.get_package_info(name, dep_info.version)
-            if enhanced_info:
-                dep_info.license = enhanced_info.license or dep_info.license
-                dep_info.description = enhanced_info.description or dep_info.description
-                dep_info.dependencies = enhanced_info.dependencies or dep_info.dependencies
+            try:
+                enhanced_info = parser.get_package_info(name, dep_info.version)
+                if enhanced_info:
+                    dep_info.license = enhanced_info.license or dep_info.license
+                    dep_info.description = enhanced_info.description or dep_info.description
+                    dep_info.dependencies = enhanced_info.dependencies or dep_info.dependencies
+                    enhanced_count += 1
+            except Exception as e:
+                self.logger.debug(f"    - Failed to enhance {name}: {e}")
+        
+        self.logger.info(f"  - Enhanced {enhanced_count}/{total_deps} dependencies")
     
     def _check_vulnerabilities(self, result: DependencyAnalysisResult, ecosystem: str):
         """Check for vulnerabilities in dependencies"""
@@ -539,18 +660,45 @@ class DependencyAnalyzer(BaseAnalyzer):
         
         # Skip vulnerability checking if disabled via environment variable
         if os.environ.get('WTF_CODEBOT_SKIP_VULNERABILITY_CHECK', '').lower() == 'true':
-            self.logger.info("Skipping vulnerability checks (disabled via environment)")
+            self.logger.info("  - Skipping vulnerability checks (disabled via environment)")
             return
         
-        for name, dep_info in result.dependencies.items():
-            vulns = self.security_client.get_vulnerabilities(name, dep_info.version, ecosystem)
-            result.vulnerabilities.extend(vulns)
+        total_deps = len(result.dependencies)
+        if total_deps == 0:
+            return
+            
+        self.logger.info(f"  - Checking {total_deps} dependencies for vulnerabilities...")
+        vuln_count = 0
+        
+        for idx, (name, dep_info) in enumerate(result.dependencies.items(), 1):
+            if idx % 10 == 0 or idx == total_deps:
+                self.logger.debug(f"    - Vulnerability check progress: {idx}/{total_deps}")
+                self._report_progress(f"Checking vulnerabilities: {idx}/{total_deps}", idx, total_deps)
+            
+            try:
+                vulns = self.security_client.get_vulnerabilities(name, dep_info.version, ecosystem)
+                if vulns:
+                    result.vulnerabilities.extend(vulns)
+                    vuln_count += len(vulns)
+                    self.logger.warning(f"    - Found {len(vulns)} vulnerabilities in {name}")
+            except Exception as e:
+                self.logger.debug(f"    - Failed to check vulnerabilities for {name}: {e}")
+        
+        self.logger.info(f"  - Found {vuln_count} total vulnerabilities")
     
     def _generate_license_summary(self, result: DependencyAnalysisResult):
         """Generate license summary"""
         for name, dep_info in result.dependencies.items():
             if dep_info.license:
-                license_key = dep_info.license.lower()
+                # Handle both string and dict license formats
+                if isinstance(dep_info.license, dict):
+                    # npm packages sometimes have license as {type: "MIT", url: "..."}
+                    license_key = dep_info.license.get('type', 'unknown').lower()
+                elif isinstance(dep_info.license, str):
+                    license_key = dep_info.license.lower()
+                else:
+                    continue
+                    
                 if license_key not in result.license_summary:
                     result.license_summary[license_key] = []
                 result.license_summary[license_key].append(name)
@@ -577,10 +725,8 @@ class DependencyAnalyzer(BaseAnalyzer):
     
     def supports_file(self, file_node) -> bool:
         """Check if this analyzer supports the given file"""
-        if hasattr(file_node, 'name'):
-            filename = file_node.name.lower()
-        elif hasattr(file_node, 'path'):
-            filename = os.path.basename(file_node.path).lower()
+        if hasattr(file_node, 'path'):
+            filename = os.path.basename(str(file_node.path)).lower()
         else:
             return False
         

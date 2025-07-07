@@ -25,8 +25,8 @@ class PatternRecognitionConfig:
     """Configuration for pattern recognition analysis."""
     
     # Batching configuration
-    max_tokens_per_batch: int = 100000
-    batch_overlap_tokens: int = 2000
+    max_tokens_per_batch: int = 8000  # Reduced for rate limits
+    batch_overlap_tokens: int = 500
     min_batch_size: int = 1000
     prioritize_files: List[str] = None
     exclude_patterns: List[str] = None
@@ -122,10 +122,26 @@ class PatternRecognitionOrchestrator:
             jitter=True
         )
         
+        # Get API rate limit from config if available
+        tokens_per_minute = 40000  # default
+        try:
+            from ..core.config import get_config
+            config = get_config()
+            tokens_per_minute = config.anthropic_tokens_per_minute
+            # Also update batch config if available
+            if hasattr(config, 'anthropic_max_tokens_per_batch'):
+                batch_config.max_tokens_per_batch = min(
+                    batch_config.max_tokens_per_batch,
+                    config.anthropic_max_tokens_per_batch
+                )
+        except Exception:
+            pass
+        
         self.analyzer = ClaudePatternAnalyzer(
             cost_tracker=self.cost_tracker,
             retry_config=retry_config,
-            enable_streaming=self.config.enable_streaming
+            enable_streaming=self.config.enable_streaming,
+            tokens_per_minute=tokens_per_minute
         )
     
     async def analyze_codebase(self, codebase: CodebaseGraph) -> PatternAnalysisResults:

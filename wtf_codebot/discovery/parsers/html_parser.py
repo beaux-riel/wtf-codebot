@@ -322,7 +322,7 @@ class HTMLParser(BaseParser):
             soup = BeautifulSoup(content, 'html.parser')
             return self._convert_bs4_to_ast(soup)
         except Exception as e:
-            self.log_parse_error("", f"HTML AST building error: {e}")
+            self.log_parse_error(content[:100] if len(content) > 100 else content, f"HTML AST building error: {e}")
             return None
     
     def _convert_bs4_to_ast(self, element) -> ASTNode:
@@ -340,9 +340,17 @@ class HTMLParser(BaseParser):
             node_type = element.name or "document"
             attributes = dict(element.attrs) if hasattr(element, 'attrs') else {}
             
+            # Remove 'name' from attributes if it exists to avoid conflict
+            attributes.pop('name', None)
+            
+            # Safely get id or class for name (only if element has .get method)
+            name = None
+            if hasattr(element, 'get'):
+                name = element.get('id') or element.get('class')
+            
             ast_node = self.build_ast_node(
                 node_type=node_type,
-                name=element.get('id') or element.get('class'),
+                name=name,
                 **attributes
             )
             

@@ -148,8 +148,9 @@ class CSSParser(BaseParser):
         variables = set()
         
         try:
-            # Disable cssutils logging
-            cssutils.log.setLevel('ERROR')
+            # Disable cssutils logging and validation warnings
+            cssutils.log.setLevel('CRITICAL')
+            cssutils.log.enabled = False
             
             sheet = cssutils.parseString(content)
             
@@ -226,8 +227,9 @@ class CSSParser(BaseParser):
             return None
         
         try:
-            # Disable cssutils logging
-            cssutils.log.setLevel('ERROR')
+            # Disable cssutils logging and validation warnings
+            cssutils.log.setLevel('CRITICAL')
+            cssutils.log.enabled = False
             
             sheet = cssutils.parseString(content)
             return self._convert_css_to_ast(sheet)

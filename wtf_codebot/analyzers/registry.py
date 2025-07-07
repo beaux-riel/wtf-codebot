@@ -2,7 +2,7 @@
 Analyzer registry for managing static analysis engines.
 """
 
-from typing import Dict, List, Optional, Type
+from typing import Dict, List, Optional, Type, Callable
 import logging
 
 from .base import BaseAnalyzer, AnalysisResult
@@ -117,7 +117,8 @@ class AnalyzerRegistry:
     def analyze_codebase(
         self, 
         codebase: CodebaseGraph, 
-        languages: Optional[List[str]] = None
+        languages: Optional[List[str]] = None,
+        progress_callback: Optional[Callable[[str, str, int, int], None]] = None
     ) -> Dict[str, AnalysisResult]:
         """
         Analyze entire codebase using appropriate analyzers.
@@ -125,6 +126,7 @@ class AnalyzerRegistry:
         Args:
             codebase: Codebase to analyze
             languages: Optional list of languages to analyze (all if None)
+            progress_callback: Optional callback function to report progress (language, file_path, current_index, total_count)
             
         Returns:
             Dict[str, AnalysisResult]: Analysis results by language
@@ -140,7 +142,13 @@ class AnalyzerRegistry:
             if analyzer:
                 try:
                     logger.info(f"Running {language} analysis...")
-                    result = analyzer.analyze_codebase(codebase)
+                    
+                    # Create a progress callback that includes the language name
+                    def language_progress_callback(file_path: str, current_index: int, total_count: int):
+                        if progress_callback:
+                            progress_callback(language, file_path, current_index, total_count)
+                    
+                    result = analyzer.analyze_codebase(codebase, language_progress_callback)
                     results[language] = result
                     logger.info(f"Completed {language} analysis: "
                               f"{len(result.findings)} findings, {len(result.metrics)} metrics")

@@ -153,11 +153,46 @@ class CodebaseScanner:
         Yields:
             Path: File paths to process
         """
+        import fnmatch
+        
         for dirpath, dirnames, filenames in os.walk(root_path):
             # Remove ignored directories from the walk
-            dirnames[:] = [d for d in dirnames if d not in self.ignore_dirs]
-            
             current_dir = Path(dirpath)
+            
+            # Filter directories based on patterns
+            filtered_dirnames = []
+            for dirname in dirnames:
+                should_ignore = False
+                
+                # Check if dirname matches any ignore pattern
+                for pattern in self.ignore_dirs:
+                    # Direct name match for common directories
+                    if dirname in ['.history', '.vscode', 'node_modules', '.git', '__pycache__', 'venv', 'build', 'dist']:
+                        if dirname in pattern:
+                            should_ignore = True
+                            logger.debug(f"Ignoring directory {dirname} due to pattern {pattern}")
+                            break
+                    
+                    # Direct name match (e.g., "node_modules" in pattern)
+                    if dirname in pattern or fnmatch.fnmatch(dirname, pattern):
+                        should_ignore = True
+                        logger.debug(f"Ignoring directory {dirname} due to pattern {pattern}")
+                        break
+                    
+                    # Check full path patterns
+                    try:
+                        rel_path = str(current_dir.relative_to(root_path) / dirname)
+                        if fnmatch.fnmatch(rel_path, pattern.strip('/')):
+                            should_ignore = True
+                            logger.debug(f"Ignoring directory {rel_path} due to pattern {pattern}")
+                            break
+                    except ValueError:
+                        pass
+                
+                if not should_ignore:
+                    filtered_dirnames.append(dirname)
+            
+            dirnames[:] = filtered_dirnames
             
             for filename in filenames:
                 if self._should_ignore_file(filename):

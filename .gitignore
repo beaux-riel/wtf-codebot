@@ -5,4 +5,5 @@
 .env
 venv/
 
-wtf-codebot.yaml
+/wtf-codebot.yaml
+

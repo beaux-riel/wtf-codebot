@@ -146,6 +146,28 @@
             flex: 1;
             overflow-y: auto;
         }
+        .progress {
+            height: 1.5rem;
+            background-color: #e9ecef;
+            border-radius: 0.375rem;
+            overflow: hidden;
+            display: none;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #007bff;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .progress-text {
+            position: relative;
+            z-index: 1;
+        }
         .loading {
             text-align: center;
             padding: 2rem;
@@ -292,6 +314,64 @@
             opacity: 0.3;
             margin-bottom: 1rem;
         }
+        .current-picker-path {
+            font-family: monospace;
+            font-size: 0.9rem;
+            background-color: #e9ecef;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            border: 1px solid #dee2e6;
+        }
+        .directory-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 0.375rem;
+            background-color: #fdfdfd;
+        }
+        .directory-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background-color 0.15s ease-in-out;
+        }
+        .directory-item:hover {
+            background-color: #f8f9fa;
+        }
+        .directory-item:last-child {
+            border-bottom: none;
+        }
+        .directory-item.selected {
+            background-color: #e7f3ff;
+            border-left: 4px solid #0d6efd;
+        }
+        .directory-item .fas {
+            margin-right: 0.75rem;
+            color: #6c757d;
+            width: 1.25rem;
+            text-align: center;
+        }
+        .directory-item.common {
+            background-color: #f8f9fa;
+            border-left: 4px solid #198754;
+        }
+        .directory-item.common .fas {
+            color: #198754;
+        }
+        .common-dir-btn {
+            background-color: #198754;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.15s ease-in-out;
+        }
+        .common-dir-btn:hover {
+            background-color: #157347;
+        }
     </style>
 </head>
 <body>
@@ -322,6 +402,9 @@
                                 <input type="text" class="form-control" id="directory-path" value="." placeholder="Enter directory path">
                                 <button class="btn btn-outline-secondary" type="button" id="browse-btn">
                                     <i class="fas fa-search"></i>
+                                </button>
+                                <button class="btn btn-outline-primary" type="button" id="directory-picker-btn" data-bs-toggle="modal" data-bs-target="#directoryPickerModal">
+                                    <i class="fas fa-folder-open"></i>
                                 </button>
                             </div>
                         </div>
@@ -412,6 +495,63 @@
         </div>
     </div>
 
+    <!-- Directory Picker Modal -->
+    <div class="modal fade" id="directoryPickerModal" tabindex="-1" aria-labelledby="directoryPickerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="directoryPickerModalLabel">
+                        <i class="fas fa-folder-open"></i> Select Directory
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="directory-picker-nav mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <button class="btn btn-outline-secondary btn-sm" id="picker-home-btn">
+                                <i class="fas fa-home"></i> Home
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" id="picker-root-btn">
+                                <i class="fas fa-hdd"></i> Root
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" id="picker-parent-btn">
+                                <i class="fas fa-level-up-alt"></i> Parent
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" id="picker-refresh-btn">
+                                <i class="fas fa-sync"></i> Refresh
+                            </button>
+                        </div>
+                        <div class="mt-2">
+                            <div class="current-picker-path" id="current-picker-path">/</div>
+                        </div>
+                    </div>
+                    
+                    <div class="directory-picker-content">
+                        <div id="common-directories" class="mb-3" style="display: none;">
+                            <h6 class="text-muted">Common Directories</h6>
+                            <div id="common-dirs-list" class="d-flex flex-wrap gap-2 mb-3">
+                                <!-- Common directories will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <div id="directory-list" class="directory-list">
+                            <div class="text-center p-3">
+                                <i class="fas fa-spinner fa-spin"></i> Loading directories...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="flex-grow-1">
+                        <small class="text-muted">Selected: <span id="selected-directory-display">None</span></small>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="select-directory-btn" disabled>Select Directory</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     
@@ -423,6 +563,11 @@
         let analysisResult = null;
         let fileTreeData = null;
         let expandedNodes = new Set();
+        
+        // Directory picker state
+        let pickerCurrentDirectory = '/';
+        let pickerSelectedDirectory = null;
+        let pickerData = null;
 
         // DOM elements
         const directoryInput = document.getElementById('directory-path');
@@ -442,6 +587,19 @@
         const clearExclusionsBtn = document.getElementById('clear-exclusions');
         const analysisResultDiv = document.getElementById('analysis-result');
         const historyBtn = document.getElementById('history-btn');
+        
+        // Directory picker elements
+        const directoryPickerBtn = document.getElementById('directory-picker-btn');
+        const pickerHomeBtn = document.getElementById('picker-home-btn');
+        const pickerRootBtn = document.getElementById('picker-root-btn');
+        const pickerParentBtn = document.getElementById('picker-parent-btn');
+        const pickerRefreshBtn = document.getElementById('picker-refresh-btn');
+        const currentPickerPathDiv = document.getElementById('current-picker-path');
+        const commonDirectoriesDiv = document.getElementById('common-directories');
+        const commonDirsList = document.getElementById('common-dirs-list');
+        const directoryList = document.getElementById('directory-list');
+        const selectedDirectoryDisplay = document.getElementById('selected-directory-display');
+        const selectDirectoryBtn = document.getElementById('select-directory-btn');
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -479,6 +637,47 @@
                     e.preventDefault();
                     exportAnalysis(e.target.dataset.format);
                 });
+            });
+
+            // Directory picker event listeners
+            directoryPickerBtn.addEventListener('click', () => {
+                // Initialize picker with current directory or home
+                pickerCurrentDirectory = currentDirectory === '.' ? getCurrentUserHome() : currentDirectory;
+                loadDirectoryPicker();
+            });
+
+            pickerHomeBtn.addEventListener('click', () => {
+                pickerCurrentDirectory = getCurrentUserHome();
+                loadDirectoryPicker();
+            });
+
+            pickerRootBtn.addEventListener('click', () => {
+                pickerCurrentDirectory = '/';
+                loadDirectoryPicker();
+            });
+
+            pickerParentBtn.addEventListener('click', () => {
+                if (pickerData && pickerData.parent_directory) {
+                    pickerCurrentDirectory = pickerData.parent_directory;
+                    loadDirectoryPicker();
+                }
+            });
+
+            pickerRefreshBtn.addEventListener('click', loadDirectoryPicker);
+
+            selectDirectoryBtn.addEventListener('click', () => {
+                if (pickerSelectedDirectory) {
+                    currentDirectory = pickerSelectedDirectory;
+                    directoryInput.value = currentDirectory;
+                    currentPathDiv.textContent = currentDirectory;
+                    
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('directoryPickerModal'));
+                    modal.hide();
+                    
+                    // Load the new directory
+                    loadFileTree();
+                }
             });
         });
 
@@ -652,14 +851,64 @@
             renderFileTree();
         }
 
+        // Helper function to find a node by path in the tree
+        function findNodeByPath(node, targetPath) {
+            if (node.path === targetPath) {
+                return node;
+            }
+            if (node.children) {
+                for (const child of node.children) {
+                    const found = findNodeByPath(child, targetPath);
+                    if (found) return found;
+                }
+            }
+            return null;
+        }
+
+        // Helper function to collect all descendant paths from a node
+        function collectDescendantPaths(node) {
+            const paths = [];
+            if (node.children) {
+                node.children.forEach(child => {
+                    paths.push(child.path);
+                    paths.push(...collectDescendantPaths(child));
+                });
+            }
+            return paths;
+        }
+
         // Toggle node exclusion
         function toggleNodeExclusion(path) {
-            const index = excludedPaths.indexOf(path);
-            if (index > -1) {
-                excludedPaths.splice(index, 1);
+            // Find the node in the tree
+            const node = findNodeByPath(fileTreeData.tree, path);
+            if (!node) return;
+
+            const isCurrentlyExcluded = excludedPaths.includes(path);
+            
+            if (isCurrentlyExcluded) {
+                // Remove this path from exclusions
+                excludedPaths = excludedPaths.filter(p => p !== path);
+                
+                // If it's a folder, also remove all descendant paths
+                if (!node.is_file) {
+                    const descendantPaths = collectDescendantPaths(node);
+                    excludedPaths = excludedPaths.filter(p => !descendantPaths.includes(p));
+                }
             } else {
+                // Add this path to exclusions
                 excludedPaths.push(path);
+                
+                // If it's a folder, also add all descendant paths
+                if (!node.is_file) {
+                    const descendantPaths = collectDescendantPaths(node);
+                    descendantPaths.forEach(p => {
+                        if (!excludedPaths.includes(p)) {
+                            excludedPaths.push(p);
+                        }
+                    });
+                }
             }
+            
             updateExclusionTags();
             renderFileTree(); // Re-render to show changes
         }
@@ -723,8 +972,11 @@
         // Run analysis
         async function runAnalysis() {
             try {
-                setStatus('Analyzing...', 'warning');
+                setStatus('Starting analysis...', 'warning');
                 analyzeBtn.disabled = true;
+                
+                // Start progress polling
+                const progressInterval = setInterval(updateProgress, 500);
                 
                 // Collect all checked (included) paths
                 includedPaths = [];
@@ -744,19 +996,107 @@
                 
                 const result = await response.json();
                 
+                // Stop progress polling
+                clearInterval(progressInterval);
+                
                 if (result.success) {
                     analysisResult = result.analysis_data;
                     displayAnalysisResult(result);
                     setStatus('Analysis Complete', 'success');
                     exportBtn.disabled = false;
+                    hideProgressBar();
                 } else {
                     throw new Error(result.message);
                 }
             } catch (error) {
                 analysisResultDiv.innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
                 setStatus('Error', 'danger');
+                hideProgressBar();
             } finally {
                 analyzeBtn.disabled = false;
+            }
+        }
+
+        // Update progress during analysis
+        async function updateProgress() {
+            try {
+                const response = await fetch('/api/progress');
+                const progress = await response.json();
+                
+                if (progress.status === 'analyzing') {
+                    const progressPercent = progress.progress || 0;
+                    const currentFile = progress.current_file || '';
+                    const currentLanguage = progress.current_language || '';
+                    const filesProcessed = progress.files_processed || 0;
+                    const totalFiles = progress.total_files || 0;
+                    
+                    // Update status with detailed progress
+                    let statusMessage = progress.message || 'Analyzing...';
+                    
+                    // Handle dependency analysis progress
+                    if (currentLanguage === 'dependency' && progress.dependency_progress) {
+                        const depProgress = progress.dependency_progress;
+                        statusMessage = depProgress.message || 'Analyzing dependencies...';
+                        if (depProgress.total > 0) {
+                            statusMessage += ` (${depProgress.current}/${depProgress.total})`;
+                        }
+                    } else if (currentFile) {
+                        const fileName = currentFile.split('/').pop();
+                        statusMessage = `${currentLanguage}: ${fileName} (${filesProcessed}/${totalFiles})`;
+                    }
+                    
+                    setStatus(statusMessage, 'warning');
+                    
+                    // Update progress bar if it exists
+                    updateProgressBar(progressPercent, filesProcessed, totalFiles);
+                }
+            } catch (error) {
+                console.error('Failed to fetch progress:', error);
+            }
+        }
+
+        // Update progress bar
+        function updateProgressBar(percent, processed, total) {
+            let progressBar = document.getElementById('analysis-progress');
+            if (!progressBar) {
+                // Create progress bar if it doesn't exist
+                const statusDiv = document.getElementById('status');
+                if (statusDiv && statusDiv.parentNode) {
+                    progressBar = document.createElement('div');
+                    progressBar.id = 'analysis-progress';
+                    progressBar.className = 'progress mt-2';
+                    progressBar.innerHTML = `
+                        <div class="progress-bar" role="progressbar" style="width: 0%">
+                            <span class="progress-text">0/0</span>
+                        </div>
+                    `;
+                    statusDiv.parentNode.insertBefore(progressBar, statusDiv.nextSibling);
+                }
+            }
+            
+            if (progressBar) {
+                const progressBarInner = progressBar.querySelector('.progress-bar');
+                const progressText = progressBar.querySelector('.progress-text');
+                
+                if (progressBarInner) {
+                    progressBarInner.style.width = `${percent}%`;
+                    progressBarInner.setAttribute('aria-valuenow', percent);
+                }
+                
+                if (progressText) {
+                    progressText.textContent = `${processed}/${total}`;
+                }
+                
+                // Show progress bar
+                progressBar.style.display = 'block';
+            }
+        }
+
+        // Hide progress bar
+        function hideProgressBar() {
+            const progressBar = document.getElementById('analysis-progress');
+            if (progressBar) {
+                progressBar.style.display = 'none';
             }
         }
 
@@ -1210,6 +1550,128 @@
             const sizes = ['Bytes', 'KB', 'MB', 'GB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Directory picker functions
+        function getCurrentUserHome() {
+            // Try to detect user home directory
+            if (typeof navigator !== 'undefined' && navigator.userAgent) {
+                if (navigator.userAgent.includes('Mac')) {
+                    return '/Users/' + (window.location.hostname || 'user');
+                } else if (navigator.userAgent.includes('Windows')) {
+                    return 'C:\\Users\\' + (window.location.hostname || 'user');
+                } else {
+                    return '/home/' + (window.location.hostname || 'user');
+                }
+            }
+            return '/';
+        }
+
+        // Load directory picker
+        async function loadDirectoryPicker() {
+            try {
+                directoryList.innerHTML = '<div class="text-center p-3"><i class="fas fa-spinner fa-spin"></i> Loading directories...</div>';
+                
+                const response = await fetch(`/api/browse-directories?path=${encodeURIComponent(pickerCurrentDirectory)}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    pickerData = data;
+                    currentPickerPathDiv.textContent = data.current_directory;
+                    
+                    // Update parent button
+                    pickerParentBtn.disabled = !data.parent_directory;
+                    
+                    renderDirectoryPicker();
+                } else {
+                    throw new Error(data.detail || 'Failed to load directories');
+                }
+            } catch (error) {
+                directoryList.innerHTML = `<div class="alert alert-danger m-3">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Render directory picker
+        function renderDirectoryPicker() {
+            if (!pickerData) return;
+            
+            // Render common directories
+            if (pickerData.common_directories && pickerData.common_directories.length > 0) {
+                commonDirectoriesDiv.style.display = 'block';
+                commonDirsList.innerHTML = '';
+                
+                pickerData.common_directories.forEach(dir => {
+                    const btn = document.createElement('button');
+                    btn.className = 'common-dir-btn';
+                    btn.innerHTML = `<i class="fas fa-folder"></i> ${dir.name}`;
+                    btn.addEventListener('click', () => navigateToPickerDirectory(dir.path));
+                    commonDirsList.appendChild(btn);
+                });
+            } else {
+                commonDirectoriesDiv.style.display = 'none';
+            }
+            
+            // Render directory list
+            directoryList.innerHTML = '';
+            
+            if (pickerData.directories.length === 0) {
+                directoryList.innerHTML = '<div class="empty-state p-3"><i class="fas fa-folder-open"></i><p>No accessible directories found</p></div>';
+                return;
+            }
+            
+            pickerData.directories.forEach(dir => {
+                const dirItem = document.createElement('div');
+                dirItem.className = 'directory-item';
+                dirItem.innerHTML = `
+                    <i class="fas fa-folder"></i>
+                    <span>${dir.name}</span>
+                `;
+                
+                dirItem.addEventListener('click', () => selectPickerDirectory(dir.path));
+                dirItem.addEventListener('dblclick', () => navigateToPickerDirectory(dir.path));
+                
+                directoryList.appendChild(dirItem);
+            });
+        }
+
+        // Navigate to directory in picker
+        function navigateToPickerDirectory(path) {
+            pickerCurrentDirectory = path;
+            pickerSelectedDirectory = null;
+            updatePickerSelection();
+            loadDirectoryPicker();
+        }
+
+        // Select directory in picker
+        function selectPickerDirectory(path) {
+            pickerSelectedDirectory = path;
+            updatePickerSelection();
+        }
+
+        // Update picker selection display
+        function updatePickerSelection() {
+            // Clear previous selections
+            document.querySelectorAll('.directory-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            if (pickerSelectedDirectory) {
+                // Highlight selected directory
+                const selectedItem = Array.from(document.querySelectorAll('.directory-item')).find(item => {
+                    const span = item.querySelector('span');
+                    return span && pickerSelectedDirectory.endsWith('/' + span.textContent);
+                });
+                
+                if (selectedItem) {
+                    selectedItem.classList.add('selected');
+                }
+                
+                selectedDirectoryDisplay.textContent = pickerSelectedDirectory;
+                selectDirectoryBtn.disabled = false;
+            } else {
+                selectedDirectoryDisplay.textContent = 'None';
+                selectDirectoryBtn.disabled = true;
+            }
         }
     </script>
 </body>

@@ -4,6 +4,8 @@
 # Anthropic API Configuration
 anthropic_api_key: ""
 anthropic_model: "claude-3-7-sonnet-20250219"
+anthropic_tokens_per_minute: 40000  # Rate limit for API calls
+anthropic_max_tokens_per_batch: 8000  # Maximum tokens per batch
 
 # Output Configuration
 output_format: "console" # Options: console, json, markdown
@@ -17,13 +19,15 @@ dry_run: false
 analysis:
   max_file_size: 1048576 # 1MB in bytes
   include_tests: true
-  analysis_depth: "standard" # Options: basic, standard, deep
+  analysis_depth: "deep" # Options: basic, standard, deep
 
   # Supported file extensions
   supported_extensions:
     - ".py"
     - ".js"
-    - ".ts"
+    - ".jsx"
+    - ".ts" 
+    - ".tsx"
     - ".java"
     - ".cpp"
     - ".c"
@@ -44,6 +48,8 @@ analysis:
     - "**/dist/**"
     - "**/*.min.js"
     - "**/*.min.css"
+    - "**/.history/**"
+    - "**/.vscode/**"
 
 # Logging Configuration
 logging:

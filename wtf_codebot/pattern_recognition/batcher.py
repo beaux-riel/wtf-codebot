@@ -20,8 +20,8 @@ except ImportError:
 @dataclass
 class BatchConfig:
     """Configuration for code batching."""
-    max_tokens_per_batch: int = 100000  # Maximum tokens per batch
-    overlap_tokens: int = 2000  # Token overlap between batches
+    max_tokens_per_batch: int = 8000  # Maximum tokens per batch (reduced for rate limits)
+    overlap_tokens: int = 500  # Token overlap between batches
     min_batch_size: int = 1000  # Minimum tokens to create a batch
     prioritize_files: List[str] = field(default_factory=list)  # File patterns to prioritize
     exclude_patterns: List[str] = field(default_factory=list)  # Patterns to exclude

@@ -3,7 +3,7 @@ Base analyzer classes for static analysis.
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, List, Set, Optional, Any
+from typing import Dict, List, Set, Optional, Any, Callable
 from dataclasses import dataclass, field
 from enum import Enum
 import logging
@@ -103,34 +103,48 @@ class BaseAnalyzer(ABC):
         """
         pass
     
-    def analyze_codebase(self, codebase: CodebaseGraph) -> AnalysisResult:
+    def analyze_codebase(self, codebase: CodebaseGraph, progress_callback: Optional[Callable[[str, int, int], None]] = None) -> AnalysisResult:
         """
         Analyze the entire codebase.
         
         Args:
             codebase: Codebase to analyze
+            progress_callback: Optional callback function to report progress (file_path, current_index, total_count)
             
         Returns:
             AnalysisResult: Combined analysis results
         """
         combined_result = AnalysisResult()
         
-        for file_path, file_node in codebase.files.items():
-            if self.supports_file(file_node):
-                try:
-                    result = self.analyze_file(file_node)
-                    combined_result.findings.extend(result.findings)
-                    combined_result.metrics.extend(result.metrics)
-                except Exception as e:
-                    logger.error(f"Error analyzing {file_path}: {str(e)}")
-                    finding = Finding(
-                        pattern_type=PatternType.CODE_SMELL,
-                        pattern_name="analysis_error",
-                        severity=Severity.ERROR,
-                        file_path=file_path,
-                        message=f"Analysis failed: {str(e)}"
-                    )
-                    combined_result.add_finding(finding)
+        # Get list of files that this analyzer supports
+        supported_files = [(file_path, file_node) for file_path, file_node in codebase.files.items() 
+                          if self.supports_file(file_node)]
+        
+        total_files = len(supported_files)
+        
+        for index, (file_path, file_node) in enumerate(supported_files):
+            # Report progress if callback provided
+            if progress_callback:
+                progress_callback(file_path, index + 1, total_files)
+            
+            try:
+                logger.debug(f"Analyzing file {index + 1}/{total_files}: {file_path}")
+                result = self.analyze_file(file_node)
+                combined_result.findings.extend(result.findings)
+                combined_result.metrics.extend(result.metrics)
+                logger.debug(f"File analysis complete: {file_path}")
+            except Exception as e:
+                logger.error(f"Error analyzing {file_path}: {str(e)}")
+                import traceback
+                logger.error(traceback.format_exc())
+                finding = Finding(
+                    pattern_type=PatternType.CODE_SMELL,
+                    pattern_name="analysis_error",
+                    severity=Severity.ERROR,
+                    file_path=file_path,
+                    message=f"Analysis failed: {str(e)}"
+                )
+                combined_result.add_finding(finding)
         
         return combined_result
     

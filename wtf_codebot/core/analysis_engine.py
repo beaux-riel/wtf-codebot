@@ -4,7 +4,7 @@ Main analysis engine that orchestrates codebase scanning, analysis, and reportin
 
 import json
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Callable
 import logging
 
 from ..discovery.scanner import CodebaseScanner
@@ -43,14 +43,15 @@ class AnalysisEngine:
             ignore_dirs=set(config.analysis.exclude_patterns)
         )
         self.analyzer_registry = get_registry()
-        self.dependency_analyzer = DependencyAnalyzer("DependencyAnalyzer")
+        self.dependency_analyzer = None  # Will be created per-analysis with callback
         
-    def analyze(self, path: Path) -> Dict[str, Any]:
+    def analyze(self, path: Path, progress_callback: Optional[Callable[[str, str, int, int], None]] = None) -> Dict[str, Any]:
         """
         Run complete analysis on the specified path.
         
         Args:
             path: Path to analyze (file or directory)
+            progress_callback: Optional callback function to report progress (language, file_path, current_index, total_count)
             
         Returns:
             Dict[str, Any]: Analysis results
@@ -71,7 +72,7 @@ class AnalysisEngine:
             
             # Step 2: Run static analysis
             logger.info("Running static analysis...")
-            static_results = self.analyzer_registry.analyze_codebase(codebase_graph)
+            static_results = self.analyzer_registry.analyze_codebase(codebase_graph, progress_callback=progress_callback)
             
             # Step 3: Run dependency analysis (skip for single files)
             dependency_results = {}
@@ -102,13 +103,14 @@ class AnalysisEngine:
             logger.error(f"Analysis failed: {str(e)}")
             raise WTFCodeBotError(f"Analysis failed: {str(e)}") from e
     
-    def analyze_selected_paths(self, base_path: Path, selected_paths: List[str]) -> Dict[str, Any]:
+    def analyze_selected_paths(self, base_path: Path, selected_paths: List[str], progress_callback: Optional[Callable[[str, str, int, int], None]] = None) -> Dict[str, Any]:
         """
         Analyze only selected files and directories.
         
         Args:
             base_path: Base directory path
             selected_paths: List of paths to analyze (relative to base_path)
+            progress_callback: Optional callback function to report progress (language, file_path, current_index, total_count)
             
         Returns:
             Dict[str, Any]: Analysis results
@@ -143,13 +145,20 @@ class AnalysisEngine:
             
             # Run static analysis
             logger.info("Running static analysis...")
-            static_results = self.analyzer_registry.analyze_codebase(codebase_graph)
+            static_results = self.analyzer_registry.analyze_codebase(codebase_graph, progress_callback=progress_callback)
             
             # Skip dependency analysis for single file analysis or when only one file is selected
             dependency_results = {}
             if codebase_graph.total_files > 1 or len(selected_paths) > 1:
                 logger.info("Running dependency analysis...")
-                dependency_results = self.dependency_analyzer.analyze_directory(str(base_path))
+                
+                # Create dependency analyzer with progress callback
+                def dep_progress_callback(message: str, current: int, total: int):
+                    if progress_callback:
+                        progress_callback("dependency", message, current, total)
+                
+                dependency_analyzer = DependencyAnalyzer("DependencyAnalyzer", progress_callback=dep_progress_callback)
+                dependency_results = dependency_analyzer.analyze_directory(str(base_path))
             else:
                 logger.info("Skipping dependency analysis for single file")
             

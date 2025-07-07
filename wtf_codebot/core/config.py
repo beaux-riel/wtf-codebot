@@ -18,7 +18,7 @@ class AnalysisConfig(BaseModel):
         description="Supported file extensions for analysis"
     )
     exclude_patterns: List[str] = Field(
-        default=["**/node_modules/**", "**/.git/**", "**/__pycache__/**", "**/venv/**", "**/.env"],
+        default=["**/node_modules/**", "**/.git/**", "**/__pycache__/**", "**/venv/**", "**/.env", "**/.history/**", "**/.vscode/**", "**/build/**", "**/dist/**"],
         description="Patterns to exclude from analysis"
     )
     include_tests: bool = Field(default=True, description="Include test files in analysis")
@@ -104,6 +104,8 @@ class Config(BaseModel):
     # API Configuration
     anthropic_api_key: str = Field(..., description="Anthropic API key")
     anthropic_model: str = Field(default="claude-3-7-sonnet-20250219", description="Anthropic model to use")
+    anthropic_tokens_per_minute: int = Field(default=40000, description="API rate limit in tokens per minute")
+    anthropic_max_tokens_per_batch: int = Field(default=8000, description="Maximum tokens per batch")
     
     # Analysis Configuration
     analysis: AnalysisConfig = Field(default_factory=AnalysisConfig)
@@ -239,6 +241,8 @@ class ConfigManager:
         env_mappings = {
             "ANTHROPIC_API_KEY": "anthropic_api_key",
             "ANTHROPIC_MODEL": "anthropic_model",
+            "ANTHROPIC_TOKENS_PER_MINUTE": "anthropic_tokens_per_minute",
+            "ANTHROPIC_MAX_TOKENS_PER_BATCH": "anthropic_max_tokens_per_batch",
             "WTF_CODEBOT_OUTPUT_FORMAT": "output_format",
             "WTF_CODEBOT_OUTPUT_FILE": "output_file",
             "WTF_CODEBOT_VERBOSE": "verbose",

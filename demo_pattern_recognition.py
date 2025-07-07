@@ -45,7 +45,7 @@ async def demo_pattern_recognition():
     
     # Configure pattern recognition
     config = PatternRecognitionConfig(
-        max_tokens_per_batch=50000,  # Smaller batches for demo
+        max_tokens_per_batch=8000,   # Rate-limited batch size
         concurrent_requests=2,       # Fewer concurrent requests
         enable_cost_tracking=True,
         daily_budget_limit=5.0,      # $5 daily limit
@@ -172,7 +172,7 @@ async def demo_simple_analysis():
     results = await analyze_codebase_patterns(
         codebase=codebase,
         output_dir=Path("simple_pattern_results"),
-        max_tokens_per_batch=30000,
+        max_tokens_per_batch=8000,  # Rate-limited batch size
         concurrent_requests=2,
         enable_cost_tracking=True,
         budget_limit=2.0  # $2 limit for simple demo

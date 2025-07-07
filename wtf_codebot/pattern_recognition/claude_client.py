@@ -19,6 +19,7 @@ from .patterns import (
     PatternAnalysisResults
 )
 from .cost_tracker import CostTracker
+from .rate_limiter import TokenRateLimiter, BatchSizeCalculator
 try:
     from ..core.config import get_config
 except ImportError:
@@ -167,24 +168,31 @@ Provide analysis in JSON format, one pattern per response.
     def __init__(self, 
                  cost_tracker: Optional[CostTracker] = None,
                  retry_config: Optional[RetryConfig] = None,
-                 enable_streaming: bool = False):
+                 enable_streaming: bool = False,
+                 tokens_per_minute: int = 40000):
         """Initialize Claude pattern analyzer.
         
         Args:
             cost_tracker: Cost tracking instance
             retry_config: Retry configuration
             enable_streaming: Enable streaming responses
+            tokens_per_minute: API rate limit in tokens per minute
         """
         self.config = get_config()
         self.cost_tracker = cost_tracker
         self.retry_config = retry_config or RetryConfig()
         self.enable_streaming = enable_streaming
         
+        # Initialize rate limiter
+        self.rate_limiter = TokenRateLimiter(tokens_per_minute=tokens_per_minute)
+        self.batch_calculator = BatchSizeCalculator(tokens_per_minute=tokens_per_minute)
+        
         # Initialize Claude client
         self.client = anthropic.Anthropic(api_key=self.config.anthropic_api_key)
         self.async_client = AsyncAnthropic(api_key=self.config.anthropic_api_key)
         
         logger.info(f"Claude pattern analyzer initialized with model {self.config.anthropic_model}")
+        logger.info(f"Rate limit: {tokens_per_minute} tokens/minute")
         # Store the original model for debugging
         self._original_model = self.config.anthropic_model
         if self.cost_tracker:
@@ -310,6 +318,12 @@ Provide analysis in JSON format, one pattern per response.
         
         # Prepare prompt
         prompt = self.PATTERN_ANALYSIS_PROMPT.format(code_content=content)
+        prompt_tokens = self._count_tokens(prompt)
+        
+        # Wait for rate limit if necessary
+        wait_time = await self.rate_limiter.acquire(prompt_tokens)
+        if wait_time > 0:
+            logger.info(f"Rate limiter delayed batch {batch.id} by {wait_time:.1f}s")
         
         try:
             # Make API call with retry logic
@@ -321,13 +335,15 @@ Provide analysis in JSON format, one pattern per response.
                 ) as record_completion:
                     
                     response = await self._make_api_call_with_retry(prompt)
-                    output_tokens = self._count_tokens(response.content[0].text)
+                    response_text = response.content[0].text if hasattr(response.content[0], 'text') else str(response.content[0])
+                    output_tokens = self._count_tokens(response_text)
                     record_completion(output_tokens)
             else:
                 response = await self._make_api_call_with_retry(prompt)
             
             # Parse response
-            patterns = self._parse_pattern_response(response.content[0].text, batch)
+            response_text = response.content[0].text if hasattr(response.content[0], 'text') else str(response.content[0])
+            patterns = self._parse_pattern_response(response_text, batch)
             
             analysis_time = time.time() - start_time
             
@@ -337,7 +353,7 @@ Provide analysis in JSON format, one pattern per response.
                 analysis_time=analysis_time,
                 token_usage={
                     "input_tokens": input_tokens,
-                    "output_tokens": self._count_tokens(response.content[0].text) if response else 0
+                    "output_tokens": self._count_tokens(response_text) if response else 0
                 },
                 success=True
             )

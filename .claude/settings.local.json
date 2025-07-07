@@ -16,7 +16,11 @@
       "Bash(echo:*)",
       "Bash(cat:*)",
       "Bash(ANTHROPIC_MODEL='claude-sonnet-4@20250514' python test_api.py)",
-      "Bash(unset:*)"
+      "Bash(unset:*)",
+      "Bash(eslint --version)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }

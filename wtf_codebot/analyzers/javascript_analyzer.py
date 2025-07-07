@@ -22,6 +22,8 @@ class JavaScriptAnalyzer(LinterBasedAnalyzer):
         super().__init__("JavaScriptAnalyzer", "eslint")
         self.supported_extensions = {'.js', '.jsx', '.ts', '.tsx'}
         self.language_name = "javascript"
+        self._eslint_config_checked = False
+        self._has_eslint_config = False
 
     def analyze_file(self, file_node: FileNode) -> AnalysisResult:
         """
@@ -33,22 +35,38 @@ class JavaScriptAnalyzer(LinterBasedAnalyzer):
         Returns:
             AnalysisResult: Analysis results
         """
+        logger.debug(f"Starting JavaScript analysis for: {file_node.path}")
         result = AnalysisResult()
         
-        # Run ESLint with JSON output
-        linter_output = self.run_linter_with_json(str(file_node.path))
-        
-        if linter_output is not None:
-            findings = self.parse_linter_output(linter_output, str(file_node.path))
-            result.findings.extend(findings)
+        # Check if we should run ESLint
+        if self._should_run_eslint(file_node):
+            # Run ESLint with JSON output
+            logger.debug(f"Running ESLint on: {file_node.path}")
+            try:
+                linter_output = self.run_linter_with_json(str(file_node.path))
+                
+                if linter_output is not None:
+                    logger.debug(f"ESLint output received for: {file_node.path}")
+                    findings = self.parse_linter_output(linter_output, str(file_node.path))
+                    result.findings.extend(findings)
+                else:
+                    logger.debug(f"No ESLint output for: {file_node.path}, using only custom pattern detection")
+            except Exception as e:
+                logger.error(f"ESLint analysis failed for {file_node.path}: {str(e)}, falling back to custom patterns only")
+        else:
+            logger.debug(f"Skipping ESLint for {file_node.path} - no ESLint config found")
 
         # Add custom pattern detection
+        logger.debug(f"Running custom pattern detection for: {file_node.path}")
         custom_findings = self._detect_custom_patterns(file_node)
         result.findings.extend(custom_findings)
         
         # Add metrics
+        logger.debug(f"Calculating metrics for: {file_node.path}")
         metrics = self._calculate_metrics(file_node)
         result.metrics.extend(metrics)
+        
+        logger.debug(f"Completed JavaScript analysis for: {file_node.path} - {len(result.findings)} findings, {len(result.metrics)} metrics")
 
         # Populate metadata using file_node attributes
         result.metadata.update({
@@ -61,6 +79,54 @@ class JavaScriptAnalyzer(LinterBasedAnalyzer):
 
         return result
 
+    def _should_run_eslint(self, file_node: FileNode) -> bool:
+        """
+        Check if ESLint should be run for this project.
+        
+        Args:
+            file_node: File node being analyzed
+            
+        Returns:
+            bool: True if ESLint should run, False otherwise
+        """
+        import os
+        
+        # Only check once per analyzer instance
+        if not self._eslint_config_checked:
+            self._eslint_config_checked = True
+            
+            # Get the project root (assuming it's the root of the file path)
+            project_root = file_node.path
+            while project_root.parent != project_root:
+                # Check for ESLint config files
+                config_files = [
+                    'eslint.config.js',
+                    'eslint.config.mjs',
+                    'eslint.config.cjs',
+                    '.eslintrc.js',
+                    '.eslintrc.cjs',
+                    '.eslintrc.yaml',
+                    '.eslintrc.yml',
+                    '.eslintrc.json',
+                    '.eslintrc'
+                ]
+                
+                for config_file in config_files:
+                    if (project_root / config_file).exists():
+                        logger.info(f"Found ESLint config: {project_root / config_file}")
+                        self._has_eslint_config = True
+                        return True
+                
+                # Check parent directory
+                if project_root.parent == project_root:
+                    break
+                project_root = project_root.parent
+            
+            if not self._has_eslint_config:
+                logger.info("No ESLint config found in project - will use custom pattern detection only")
+        
+        return self._has_eslint_config
+
     def run_linter_with_json(self, file_path: str) -> Optional[str]:
         """
         Run ESLint with JSON output format.
@@ -72,12 +138,20 @@ class JavaScriptAnalyzer(LinterBasedAnalyzer):
             Optional[str]: ESLint JSON output, or None if failed
         """
         import subprocess
+        import os
+        
+        # Check if file exists before running ESLint
+        if not os.path.exists(file_path):
+            logger.debug(f"File does not exist: {file_path}")
+            return None
         
         try:
+            # For ESLint v9+, we don't need config flags, just format
             cmd = ["eslint", "--format", "json", file_path]
             if self.linter_config:
                 cmd.extend(["--config", self.linter_config])
             
+            logger.debug(f"Running command: {' '.join(cmd)}")
             result = subprocess.run(
                 cmd,
                 capture_output=True,
@@ -85,16 +159,26 @@ class JavaScriptAnalyzer(LinterBasedAnalyzer):
                 timeout=30
             )
             
+            # ESLint returns non-zero exit code when it finds issues, which is normal
+            if result.returncode not in [0, 1]:
+                logger.debug(f"ESLint failed with exit code {result.returncode}")
+                if result.stderr:
+                    logger.debug(f"stderr: {result.stderr}")
+                return None
+            
+            if result.stderr and "Oops! Something went wrong" not in result.stderr:
+                logger.debug(f"ESLint stderr for {file_path}: {result.stderr}")
+            
             return result.stdout
             
         except subprocess.TimeoutExpired:
-            logger.warning(f"ESLint timeout for {file_path}")
+            logger.debug(f"ESLint timeout for {file_path} after 30 seconds")
             return None
         except FileNotFoundError:
-            logger.warning("ESLint not found, falling back to basic analysis")
+            logger.debug("ESLint not found in PATH, falling back to basic analysis")
             return None
         except Exception as e:
-            logger.error(f"Error running ESLint on {file_path}: {str(e)}")
+            logger.debug(f"Error running ESLint on {file_path}: {type(e).__name__}: {str(e)}")
             return None
 
     def parse_linter_output(self, output: str, file_path: str) -> List[Finding]:
@@ -111,9 +195,11 @@ class JavaScriptAnalyzer(LinterBasedAnalyzer):
         findings = []
 
         try:
+            logger.debug(f"Parsing ESLint output for {file_path}, output length: {len(output)}")
             eslint_results = json.loads(output)
             
             if not eslint_results:
+                logger.debug(f"Empty ESLint results for {file_path}")
                 return findings
             
             # ESLint returns an array of file results
@@ -133,6 +219,8 @@ class JavaScriptAnalyzer(LinterBasedAnalyzer):
                         findings.append(finding)
 
         except json.JSONDecodeError as e:
+            logger.error(f"Failed to parse ESLint JSON output for {file_path}: {str(e)}")
+            logger.error(f"Output preview: {output[:200]}..." if len(output) > 200 else f"Output: {output}")
             # If JSON parsing fails, try regex parsing
             findings = self._parse_text_output(output, file_path)
 
