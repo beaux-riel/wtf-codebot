@@ -53,6 +53,7 @@ class CostTracker:
     CLAUDE_PRICING = {
         "claude-3-opus-20240229": {"input": 15.0, "output": 75.0},
         "claude-3-sonnet-20240229": {"input": 3.0, "output": 15.0},
+        "claude-3-7-sonnet-20250219": {"input": 3.0, "output": 15.0},
         "claude-sonnet-4-20250514": {"input": 3.0, "output": 15.0},
         "claude-3-haiku-20240307": {"input": 0.25, "output": 1.25},
         "claude-3-5-sonnet-20240620": {"input": 3.0, "output": 15.0},
@@ -98,7 +99,7 @@ class CostTracker:
         """
         if model not in self.CLAUDE_PRICING:
             logger.warning(f"Unknown model {model}, using default Sonnet pricing")
-            model = "claude-sonnet-4-20250514"
+            model = "claude-3-7-sonnet-20250219"
         
         pricing = self.CLAUDE_PRICING[model]
         input_cost = (input_tokens / 1_000_000) * pricing["input"]
