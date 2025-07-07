@@ -1,0 +1,26 @@
+{
+  "usage_history": [
+    {
+      "timestamp": "2025-07-06T17:22:41.323680",
+      "model": "claude-sonnet-4@20250514",
+      "input_tokens": 28835,
+      "output_tokens": 0,
+      "cost": 0.086505,
+      "request_type": "pattern_analysis",
+      "duration": 3.0590999126434326,
+      "success": false,
+      "error_message": null
+    },
+    {
+      "timestamp": "2025-07-06T17:22:41.325910",
+      "model": "claude-sonnet-4@20250514",
+      "input_tokens": 3542,
+      "output_tokens": 0,
+      "cost": 0.010626,
+      "request_type": "pattern_analysis",
+      "duration": 3.084625244140625,
+      "success": false,
+      "error_message": null
+    }
+  ]
+}

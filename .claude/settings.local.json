@@ -9,7 +9,14 @@
       "Bash(kill:*)",
       "Bash(find:*)",
       "Bash(rg:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(env)",
+      "Bash(true)",
+      "Bash(mv:*)",
+      "Bash(echo:*)",
+      "Bash(cat:*)",
+      "Bash(ANTHROPIC_MODEL='claude-sonnet-4@20250514' python test_api.py)",
+      "Bash(unset:*)"
     ],
     "deny": []
   }

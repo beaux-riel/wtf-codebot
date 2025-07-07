@@ -185,6 +185,8 @@ Provide analysis in JSON format, one pattern per response.
         self.async_client = AsyncAnthropic(api_key=self.config.anthropic_api_key)
         
         logger.info(f"Claude pattern analyzer initialized with model {self.config.anthropic_model}")
+        # Store the original model for debugging
+        self._original_model = self.config.anthropic_model
         if self.cost_tracker:
             logger.info("Cost tracking enabled")
         if self.enable_streaming:
@@ -416,6 +418,11 @@ Provide analysis in JSON format, one pattern per response.
         
         for attempt in range(self.retry_config.max_retries + 1):
             try:
+                # Debug: check if model has changed
+                current_model = self.config.anthropic_model
+                if current_model != self._original_model:
+                    logger.warning(f"Model changed from {self._original_model} to {current_model}")
+                
                 response = await self.async_client.messages.create(
                     model=self.config.anthropic_model,
                     max_tokens=4000,

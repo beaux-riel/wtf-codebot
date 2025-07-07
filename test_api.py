@@ -21,7 +21,7 @@ def test_api():
     print(f"✓ API Key found: {api_key[:10]}...{api_key[-4:]}")
     
     # Get model name
-    model = os.environ.get('ANTHROPIC_MODEL', 'claude-sonnet-4-0')
+    model = os.environ.get('ANTHROPIC_MODEL', 'claude-3-7-sonnet-20250219')
     print(f"✓ Model: {model}")
     
     # Test API connection
@@ -49,7 +49,7 @@ def test_api():
         # Provide helpful error messages
         if "model_not_found" in str(e):
             print("\n💡 Hint: The model name might be incorrect. Valid models include:")
-            print("   - claude-sonnet-4-0")
+            print("   - claude-3-7-sonnet-20250219")
             print("   - claude-3-opus-20240229")
             print("   - claude-3-haiku-20240307")
             print("   - claude-3-haiku-20240307")

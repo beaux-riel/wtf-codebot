@@ -1,7 +1,7 @@
 {
   "total_batches": 113,
-  "total_snippets": 132,
-  "total_tokens": 5375231,
+  "total_snippets": 133,
+  "total_tokens": 5387426,
   "config": {
     "max_tokens_per_batch": 50000,
     "overlap_tokens": 2000,
@@ -3911,11 +3911,11 @@
     },
     {
       "id": "batch_113",
-      "total_tokens": 21054,
-      "snippet_count": 6,
+      "total_tokens": 33249,
+      "snippet_count": 7,
       "batch_metadata": {
         "creation_timestamp": "now",
-        "file_count": 6,
+        "file_count": 7,
         "languages": [
           "html",
           "unknown"
@@ -3933,6 +3933,19 @@
           "snippet_type": "chunk",
           "language": "html",
           "token_count": 1751,
+          "metadata": {
+            "chunk_id": 1,
+            "total_chunks": 1
+          },
+          "dependencies": []
+        },
+        {
+          "file_path": "demo_pattern_results/cost_tracking.json.backup",
+          "start_line": 1,
+          "end_line": 1005,
+          "snippet_type": "chunk",
+          "language": "unknown",
+          "token_count": 12195,
           "metadata": {
             "chunk_id": 1,
             "total_chunks": 1

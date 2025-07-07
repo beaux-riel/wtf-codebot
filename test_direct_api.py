@@ -18,7 +18,7 @@ async def test_direct():
     
     # Print environment
     api_key = os.environ.get('ANTHROPIC_API_KEY')
-    model = os.environ.get('ANTHROPIC_MODEL', 'claude-sonnet-4-0')
+    model = os.environ.get('ANTHROPIC_MODEL', 'claude-3-7-sonnet-20250219')
     
     print(f"API Key: {api_key[:10] if api_key else 'NOT FOUND'}...")
     print(f"Model: {model}")
