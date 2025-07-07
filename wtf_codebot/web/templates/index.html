@@ -1151,42 +1151,102 @@
                 </div>
             `;
             
-            // Build findings section with cards
+            // Build findings section with cards and filtering
             let findingsSection = '';
             if (data.findings && data.findings.length > 0) {
-                const findingsCards = data.findings.slice(0, 10).map(finding => {
-                    const fileName = finding.file_path ? finding.file_path.split('/').pop() : 'Unknown';
-                    const severityClass = `severity-${finding.severity || 'low'}`;
-                    
-                    return `
-                        <div class="card findings-card ${severityClass} mb-3">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <div>
-                                        <span class="badge bg-${getSeverityColor(finding.severity)}">${finding.severity || 'info'}</span>
-                                        <span class="badge bg-secondary ms-1">${finding.type || finding.pattern_type || 'Unknown'}</span>
-                                    </div>
-                                    <small class="text-muted">
-                                        <i class="fas fa-file-code"></i> ${fileName}
-                                        ${finding.line_number ? ` : ${finding.line_number}` : ''}
-                                    </small>
+                // Create filter controls
+                const findingsFilters = `
+                    <div class="findings-filters mb-3">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="severity-filter">Severity</label>
+                                    <select class="form-select form-select-sm" id="severity-filter">
+                                        <option value="all">All Severities</option>
+                                        <option value="critical">Critical</option>
+                                        <option value="error">Error</option>
+                                        <option value="warning">Warning</option>
+                                        <option value="info">Info</option>
+                                    </select>
                                 </div>
-                                <p class="mb-0">${escapeHtml(finding.message || finding.description || '')}</p>
-                                ${finding.suggestion ? `<small class="text-muted mt-1 d-block"><i class="fas fa-lightbulb"></i> ${escapeHtml(finding.suggestion)}</small>` : ''}
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="pattern-type-filter">Pattern Type</label>
+                                    <select class="form-select form-select-sm" id="pattern-type-filter">
+                                        <option value="all">All Types</option>
+                                        <option value="code_smell">Code Smell</option>
+                                        <option value="anti_pattern">Anti-Pattern</option>
+                                        <option value="design_pattern">Design Pattern</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="file-filter">File Path</label>
+                                    <input type="text" class="form-control form-control-sm" id="file-filter" placeholder="Filter by file path">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="findings-per-page">Per Page</label>
+                                    <select class="form-select form-select-sm" id="findings-per-page">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="all">All</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    `;
-                }).join('');
+                    </div>
+                `;
+                
+                // Create pagination controls
+                const paginationControls = `
+                    <div class="findings-pagination d-flex justify-content-between align-items-center mb-3">
+                        <div class="pagination-info">
+                            <span id="findings-showing">Showing 1-10 of ${data.findings.length} findings</span>
+                        </div>
+                        <div class="pagination-controls">
+                            <button class="btn btn-sm btn-outline-secondary" id="findings-prev-page" disabled>
+                                <i class="fas fa-chevron-left"></i> Previous
+                            </button>
+                            <span class="mx-2" id="findings-page-info">Page 1</span>
+                            <button class="btn btn-sm btn-outline-secondary" id="findings-next-page">
+                                Next <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Create findings cards container (will be populated by JavaScript)
+                const findingsCardsContainer = `
+                    <div id="findings-cards-container" class="findings-list">
+                        <!-- Findings cards will be dynamically inserted here -->
+                    </div>
+                `;
                 
                 findingsSection = `
                     <div class="mb-5">
                         <div class="section-header">
                             <h6><i class="fas fa-exclamation-triangle text-warning"></i> Code Analysis Findings</h6>
-                            <small class="text-muted">${data.findings.length > 10 ? `Showing 10 of ${data.findings.length} findings` : `${data.findings.length} findings total`}</small>
+                            <small class="text-muted">${data.findings.length} findings total</small>
                         </div>
-                        ${findingsCards}
+                        ${findingsFilters}
+                        ${paginationControls}
+                        ${findingsCardsContainer}
                     </div>
                 `;
+                
+                // Store findings data for client-side filtering and pagination
+                window.findingsData = data.findings;
+                
+                // Initialize findings display after rendering
+                setTimeout(() => {
+                    initializeFindingsDisplay();
+                }, 0);
             } else {
                 findingsSection = `
                     <div class="mb-5">
@@ -1201,35 +1261,99 @@
                 `;
             }
             
-            // Build dependencies section
+            // Build dependencies section with filtering
             let dependenciesSection = '';
             if (data.dependencies && data.dependencies.length > 0) {
-                const depCards = data.dependencies.slice(0, 12).map(dep => `
-                    <div class="col-md-4 mb-3">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h6 class="card-title mb-1">${dep.name || 'Unknown'}</h6>
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="badge bg-primary">${dep.version || 'N/A'}</span>
-                                    <span class="badge bg-secondary">${dep.license || 'Unknown'}</span>
+                // Create filter controls for dependencies
+                const depFilters = `
+                    <div class="dependencies-filters mb-3">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="dep-name-filter">Name</label>
+                                    <input type="text" class="form-control form-control-sm" id="dep-name-filter" placeholder="Filter by name">
                                 </div>
-                                <small class="text-muted">${escapeHtml(dep.description || 'No description available')}</small>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="dep-license-filter">License</label>
+                                    <select class="form-select form-select-sm" id="dep-license-filter">
+                                        <option value="all">All Licenses</option>
+                                        <!-- Will be populated dynamically -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="dep-sort">Sort By</label>
+                                    <select class="form-select form-select-sm" id="dep-sort">
+                                        <option value="name">Name</option>
+                                        <option value="version">Version</option>
+                                        <option value="license">License</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="deps-per-page">Per Page</label>
+                                    <select class="form-select form-select-sm" id="deps-per-page">
+                                        <option value="12">12</option>
+                                        <option value="24">24</option>
+                                        <option value="48">48</option>
+                                        <option value="all">All</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                `).join('');
+                `;
+                
+                // Create pagination controls for dependencies
+                const depPaginationControls = `
+                    <div class="deps-pagination d-flex justify-content-between align-items-center mb-3">
+                        <div class="pagination-info">
+                            <span id="deps-showing">Showing 1-12 of ${data.dependencies.length} dependencies</span>
+                        </div>
+                        <div class="pagination-controls">
+                            <button class="btn btn-sm btn-outline-secondary" id="deps-prev-page" disabled>
+                                <i class="fas fa-chevron-left"></i> Previous
+                            </button>
+                            <span class="mx-2" id="deps-page-info">Page 1</span>
+                            <button class="btn btn-sm btn-outline-secondary" id="deps-next-page">
+                                Next <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Create dependencies container (will be populated by JavaScript)
+                const depsContainer = `
+                    <div id="dependencies-container">
+                        <div class="row" id="dependencies-cards-container">
+                            <!-- Dependency cards will be dynamically inserted here -->
+                        </div>
+                    </div>
+                `;
                 
                 dependenciesSection = `
                     <div class="mb-5">
                         <div class="section-header">
                             <h6><i class="fas fa-cube text-primary"></i> Project Dependencies</h6>
-                            <small class="text-muted">${data.dependencies.length > 12 ? `Showing 12 of ${data.dependencies.length} dependencies` : `${data.dependencies.length} dependencies total`}</small>
+                            <small class="text-muted">${data.dependencies.length} dependencies total</small>
                         </div>
-                        <div class="row">
-                            ${depCards}
-                        </div>
+                        ${depFilters}
+                        ${depPaginationControls}
+                        ${depsContainer}
                     </div>
                 `;
+                
+                // Store dependencies data for client-side filtering and pagination
+                window.dependenciesData = data.dependencies;
+                
+                // Initialize dependencies display after rendering
+                setTimeout(() => {
+                    initializeDependenciesDisplay();
+                }, 0);
             } else {
                 dependenciesSection = `
                     <div class="mb-5">
@@ -1328,6 +1452,333 @@
         window.toggleRawData = function() {
             const rawDataDiv = document.getElementById('raw-data');
             rawDataDiv.style.display = rawDataDiv.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Initialize findings display with filtering and pagination
+        function initializeFindingsDisplay() {
+            if (!window.findingsData) return;
+            
+            const findings = window.findingsData;
+            const container = document.getElementById('findings-cards-container');
+            const severityFilter = document.getElementById('severity-filter');
+            const patternTypeFilter = document.getElementById('pattern-type-filter');
+            const fileFilter = document.getElementById('file-filter');
+            const perPageSelect = document.getElementById('findings-per-page');
+            const prevPageBtn = document.getElementById('findings-prev-page');
+            const nextPageBtn = document.getElementById('findings-next-page');
+            const pageInfo = document.getElementById('findings-page-info');
+            const showingInfo = document.getElementById('findings-showing');
+            
+            let currentPage = 1;
+            let itemsPerPage = parseInt(perPageSelect.value);
+            
+            // Populate unique pattern types in the filter
+            const patternTypes = [...new Set(findings.map(f => f.type || f.pattern_type || 'Unknown'))];
+            patternTypes.forEach(type => {
+                if (!['code_smell', 'anti_pattern', 'design_pattern'].includes(type.toLowerCase())) {
+                    const option = document.createElement('option');
+                    option.value = type;
+                    option.textContent = type;
+                    patternTypeFilter.appendChild(option);
+                }
+            });
+            
+            // Function to filter findings
+            function filterFindings() {
+                const severity = severityFilter.value;
+                const patternType = patternTypeFilter.value;
+                const filePath = fileFilter.value.toLowerCase();
+                
+                return findings.filter(finding => {
+                    // Filter by severity
+                    if (severity !== 'all' && finding.severity !== severity) {
+                        return false;
+                    }
+                    
+                    // Filter by pattern type
+                    const findingType = (finding.type || finding.pattern_type || '').toLowerCase();
+                    if (patternType !== 'all' && findingType !== patternType.toLowerCase()) {
+                        return false;
+                    }
+                    
+                    // Filter by file path
+                    if (filePath && !(finding.file_path || '').toLowerCase().includes(filePath)) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+            }
+            
+            // Function to render findings
+            function renderFindings() {
+                const filteredFindings = filterFindings();
+                const totalItems = filteredFindings.length;
+                const totalPages = itemsPerPage === 'all' ? 1 : Math.ceil(totalItems / itemsPerPage);
+                
+                // Adjust current page if needed
+                if (currentPage > totalPages) {
+                    currentPage = totalPages || 1;
+                }
+                
+                // Calculate start and end indices
+                const startIndex = itemsPerPage === 'all' ? 0 : (currentPage - 1) * itemsPerPage;
+                const endIndex = itemsPerPage === 'all' ? totalItems : Math.min(startIndex + itemsPerPage, totalItems);
+                
+                // Update pagination info
+                pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+                showingInfo.textContent = `Showing ${startIndex + 1}-${endIndex} of ${totalItems} findings`;
+                
+                // Update pagination buttons
+                prevPageBtn.disabled = currentPage === 1;
+                nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
+                
+                // Clear container
+                container.innerHTML = '';
+                
+                // Render findings
+                const displayedFindings = filteredFindings.slice(startIndex, endIndex);
+                
+                if (displayedFindings.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-filter text-muted"></i>
+                            <p>No findings match your filters.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                displayedFindings.forEach(finding => {
+                    const fileName = finding.file_path ? finding.file_path.split('/').pop() : 'Unknown';
+                    const severityClass = `severity-${finding.severity || 'low'}`;
+                    
+                    const card = document.createElement('div');
+                    card.className = `card findings-card ${severityClass} mb-3`;
+                    card.innerHTML = `
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <span class="badge bg-${getSeverityColor(finding.severity)}">${finding.severity || 'info'}</span>
+                                    <span class="badge bg-secondary ms-1">${finding.type || finding.pattern_type || 'Unknown'}</span>
+                                </div>
+                                <small class="text-muted">
+                                    <i class="fas fa-file-code"></i> ${fileName}
+                                    ${finding.line_number ? ` : ${finding.line_number}` : ''}
+                                </small>
+                            </div>
+                            <p class="mb-0">${escapeHtml(finding.message || finding.description || '')}</p>
+                            ${finding.suggestion ? `<small class="text-muted mt-1 d-block"><i class="fas fa-lightbulb"></i> ${escapeHtml(finding.suggestion)}</small>` : ''}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+            
+            // Event listeners
+            severityFilter.addEventListener('change', () => {
+                currentPage = 1;
+                renderFindings();
+            });
+            
+            patternTypeFilter.addEventListener('change', () => {
+                currentPage = 1;
+                renderFindings();
+            });
+            
+            fileFilter.addEventListener('input', () => {
+                currentPage = 1;
+                renderFindings();
+            });
+            
+            perPageSelect.addEventListener('change', () => {
+                itemsPerPage = perPageSelect.value === 'all' ? 'all' : parseInt(perPageSelect.value);
+                currentPage = 1;
+                renderFindings();
+            });
+            
+            prevPageBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderFindings();
+                }
+            });
+            
+            nextPageBtn.addEventListener('click', () => {
+                const filteredFindings = filterFindings();
+                const totalPages = itemsPerPage === 'all' ? 1 : Math.ceil(filteredFindings.length / itemsPerPage);
+                
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderFindings();
+                }
+            });
+            
+            // Initial render
+            renderFindings();
+        }
+        
+        // Initialize dependencies display with filtering and pagination
+        function initializeDependenciesDisplay() {
+            if (!window.dependenciesData) return;
+            
+            const dependencies = window.dependenciesData;
+            const container = document.getElementById('dependencies-cards-container');
+            const nameFilter = document.getElementById('dep-name-filter');
+            const licenseFilter = document.getElementById('dep-license-filter');
+            const sortSelect = document.getElementById('dep-sort');
+            const perPageSelect = document.getElementById('deps-per-page');
+            const prevPageBtn = document.getElementById('deps-prev-page');
+            const nextPageBtn = document.getElementById('deps-next-page');
+            const pageInfo = document.getElementById('deps-page-info');
+            const showingInfo = document.getElementById('deps-showing');
+            
+            let currentPage = 1;
+            let itemsPerPage = parseInt(perPageSelect.value);
+            
+            // Populate unique licenses in the filter
+            const licenses = [...new Set(dependencies.map(d => d.license || 'Unknown'))];
+            licenses.sort().forEach(license => {
+                const option = document.createElement('option');
+                option.value = license;
+                option.textContent = license;
+                licenseFilter.appendChild(option);
+            });
+            
+            // Function to filter dependencies
+            function filterDependencies() {
+                const name = nameFilter.value.toLowerCase();
+                const license = licenseFilter.value;
+                
+                return dependencies.filter(dep => {
+                    // Filter by name
+                    if (name && !(dep.name || '').toLowerCase().includes(name)) {
+                        return false;
+                    }
+                    
+                    // Filter by license
+                    if (license !== 'all' && dep.license !== license) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+            }
+            
+            // Function to sort dependencies
+            function sortDependencies(deps) {
+                const sortBy = sortSelect.value;
+                
+                return [...deps].sort((a, b) => {
+                    const aValue = a[sortBy] || '';
+                    const bValue = b[sortBy] || '';
+                    
+                    return aValue.localeCompare(bValue);
+                });
+            }
+            
+            // Function to render dependencies
+            function renderDependencies() {
+                let filteredDeps = filterDependencies();
+                filteredDeps = sortDependencies(filteredDeps);
+                
+                const totalItems = filteredDeps.length;
+                const totalPages = itemsPerPage === 'all' ? 1 : Math.ceil(totalItems / itemsPerPage);
+                
+                // Adjust current page if needed
+                if (currentPage > totalPages) {
+                    currentPage = totalPages || 1;
+                }
+                
+                // Calculate start and end indices
+                const startIndex = itemsPerPage === 'all' ? 0 : (currentPage - 1) * itemsPerPage;
+                const endIndex = itemsPerPage === 'all' ? totalItems : Math.min(startIndex + itemsPerPage, totalItems);
+                
+                // Update pagination info
+                pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+                showingInfo.textContent = `Showing ${startIndex + 1}-${endIndex} of ${totalItems} dependencies`;
+                
+                // Update pagination buttons
+                prevPageBtn.disabled = currentPage === 1;
+                nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
+                
+                // Clear container
+                container.innerHTML = '';
+                
+                // Render dependencies
+                const displayedDeps = filteredDeps.slice(startIndex, endIndex);
+                
+                if (displayedDeps.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-12">
+                            <div class="empty-state">
+                                <i class="fas fa-filter text-muted"></i>
+                                <p>No dependencies match your filters.</p>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                displayedDeps.forEach(dep => {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-4 mb-3';
+                    col.innerHTML = `
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-title mb-1">${dep.name || 'Unknown'}</h6>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="badge bg-primary">${dep.version || 'N/A'}</span>
+                                    <span class="badge bg-secondary">${dep.license || 'Unknown'}</span>
+                                </div>
+                                <small class="text-muted">${escapeHtml(dep.description || 'No description available')}</small>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(col);
+                });
+            }
+            
+            // Event listeners
+            nameFilter.addEventListener('input', () => {
+                currentPage = 1;
+                renderDependencies();
+            });
+            
+            licenseFilter.addEventListener('change', () => {
+                currentPage = 1;
+                renderDependencies();
+            });
+            
+            sortSelect.addEventListener('change', () => {
+                renderDependencies();
+            });
+            
+            perPageSelect.addEventListener('change', () => {
+                itemsPerPage = perPageSelect.value === 'all' ? 'all' : parseInt(perPageSelect.value);
+                currentPage = 1;
+                renderDependencies();
+            });
+            
+            prevPageBtn.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderDependencies();
+                }
+            });
+            
+            nextPageBtn.addEventListener('click', () => {
+                const filteredDeps = filterDependencies();
+                const totalPages = itemsPerPage === 'all' ? 1 : Math.ceil(filteredDeps.length / itemsPerPage);
+                
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderDependencies();
+                }
+            });
+            
+            // Initial render
+            renderDependencies();
         }
         
         // Show analysis history

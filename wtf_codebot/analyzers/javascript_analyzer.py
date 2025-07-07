@@ -112,9 +112,12 @@ class JavaScriptAnalyzer(LinterBasedAnalyzer):
                 ]
                 
                 for config_file in config_files:
-                    if (project_root / config_file).exists():
-                        logger.info(f"Found ESLint config: {project_root / config_file}")
+                    config_path = project_root / config_file
+                    if config_path.exists():
+                        logger.info(f"Found ESLint config: {config_path}")
                         self._has_eslint_config = True
+                        # Store the config path to use it when running ESLint
+                        self.linter_config = str(config_path)
                         return True
                 
                 # Check parent directory
@@ -146,10 +149,16 @@ class JavaScriptAnalyzer(LinterBasedAnalyzer):
             return None
         
         try:
-            # For ESLint v9+, we don't need config flags, just format
-            cmd = ["eslint", "--format", "json", file_path]
+            # Build ESLint command
+            cmd = ["eslint", "--format", "json"]
+            
+            # Use project's ESLint config if found
             if self.linter_config:
                 cmd.extend(["--config", self.linter_config])
+                logger.debug(f"Using ESLint config: {self.linter_config}")
+            
+            # Add file path
+            cmd.append(file_path)
             
             logger.debug(f"Running command: {' '.join(cmd)}")
             result = subprocess.run(
