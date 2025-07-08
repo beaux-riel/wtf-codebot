@@ -24,6 +24,18 @@ class JavaScriptAnalyzer(LinterBasedAnalyzer):
         self.language_name = "javascript"
         self._eslint_config_checked = False
         self._has_eslint_config = False
+        self._project_root = None
+        self._config_logged = False
+        self._codebase_root = None
+
+    def analyze_codebase(self, codebase, progress_callback=None):
+        """Override to capture codebase root path."""
+        # Store the codebase root path for ESLint config detection
+        self._codebase_root = codebase.root_path
+        logger.debug(f"JavaScript analyzer: codebase root set to {self._codebase_root}")
+        
+        # Call parent implementation
+        return super().analyze_codebase(codebase, progress_callback)
 
     def analyze_file(self, file_node: FileNode) -> AnalysisResult:
         """
@@ -91,33 +103,75 @@ class JavaScriptAnalyzer(LinterBasedAnalyzer):
         """
         import os
         
-        # Only check once per analyzer instance
+        # Only check once per analyzer instance (not per file)
         if not self._eslint_config_checked:
             self._eslint_config_checked = True
+            logger.debug(f"First file triggering ESLint config check: {file_node.path}")
             
-            # Get the project root (assuming it's the root of the file path)
-            project_root = file_node.path
-            while project_root.parent != project_root:
-                # Check for ESLint config files
-                config_files = [
-                    'eslint.config.js',
-                    'eslint.config.mjs',
-                    'eslint.config.cjs',
-                    '.eslintrc.js',
-                    '.eslintrc.cjs',
-                    '.eslintrc.yaml',
-                    '.eslintrc.yml',
-                    '.eslintrc.json',
-                    '.eslintrc'
-                ]
+            # Ensure we have an absolute path
+            file_path = file_node.path
+            logger.debug(f"Original file path: {file_path}, is_absolute: {file_path.is_absolute()}")
+            
+            if not file_path.is_absolute():
+                file_path = file_path.resolve()
+                logger.debug(f"Resolved to absolute path: {file_path}")
+            
+            logger.debug(f"Checking for ESLint config starting from: {file_path.parent}")
+            
+            # Check for ESLint config files
+            config_files = [
+                'eslint.config.js',
+                'eslint.config.mjs',
+                'eslint.config.cjs',
+                '.eslintrc.js',
+                '.eslintrc.cjs',
+                '.eslintrc.yaml',
+                '.eslintrc.yml',
+                '.eslintrc.json',
+                '.eslintrc'
+            ]
+            
+            # First, check the codebase root if available
+            if self._codebase_root:
+                logger.debug(f"Checking codebase root for ESLint config: {self._codebase_root}")
+                for config_file in config_files:
+                    config_path = self._codebase_root / config_file
+                    if config_path.exists():
+                        if not self._config_logged:
+                            logger.info(f"Found ESLint config: {config_path}")
+                            self._config_logged = True
+                        self._has_eslint_config = True
+                        # Store the config path and project root
+                        self.linter_config = str(config_path)
+                        self._project_root = str(self._codebase_root)
+                        return True
+            
+            # If not found at codebase root, search upward from file
+            project_root = file_path.parent
+            
+            # Handle edge case where parent is empty or current directory
+            if str(project_root) == '.' or not str(project_root):
+                from pathlib import Path as PathLib
+                project_root = PathLib.cwd()
+                logger.debug(f"Parent was relative, using cwd: {project_root}")
+            
+            search_count = 0
+            max_search_depth = 10  # Prevent infinite loops
+            
+            while project_root.parent != project_root and search_count < max_search_depth:
+                search_count += 1
+                logger.debug(f"Searching for ESLint config in: {project_root}")
                 
                 for config_file in config_files:
                     config_path = project_root / config_file
                     if config_path.exists():
-                        logger.info(f"Found ESLint config: {config_path}")
+                        if not self._config_logged:
+                            logger.info(f"Found ESLint config: {config_path}")
+                            self._config_logged = True
                         self._has_eslint_config = True
-                        # Store the config path to use it when running ESLint
+                        # Store the config path and project root
                         self.linter_config = str(config_path)
+                        self._project_root = str(project_root)
                         return True
                 
                 # Check parent directory
@@ -125,8 +179,9 @@ class JavaScriptAnalyzer(LinterBasedAnalyzer):
                     break
                 project_root = project_root.parent
             
-            if not self._has_eslint_config:
-                logger.info("No ESLint config found in project - will use custom pattern detection only")
+            if not self._has_eslint_config and not self._config_logged:
+                logger.info(f"No ESLint config found when searching from {file_path.parent} - will use custom pattern detection only")
+                self._config_logged = True
         
         return self._has_eslint_config
 
@@ -152,20 +207,34 @@ class JavaScriptAnalyzer(LinterBasedAnalyzer):
             # Build ESLint command
             cmd = ["eslint", "--format", "json"]
             
-            # Use project's ESLint config if found
+            # For flat config files (eslint.config.*), don't use --config flag
+            # ESLint 9+ will automatically find and use these files
             if self.linter_config:
-                cmd.extend(["--config", self.linter_config])
-                logger.debug(f"Using ESLint config: {self.linter_config}")
+                config_name = os.path.basename(self.linter_config)
+                if config_name.startswith('eslint.config.'):
+                    # Flat config file - ESLint will find it automatically
+                    logger.debug(f"Using flat ESLint config: {self.linter_config} (no --config flag needed)")
+                else:
+                    # Legacy config file - use --config flag
+                    cmd.extend(["--config", self.linter_config])
+                    logger.debug(f"Using legacy ESLint config: {self.linter_config}")
             
             # Add file path
             cmd.append(file_path)
             
             logger.debug(f"Running command: {' '.join(cmd)}")
+            
+            # Run from project root if available (for flat config to work properly)
+            cwd = self._project_root if self._project_root else None
+            if cwd:
+                logger.debug(f"Running ESLint from directory: {cwd}")
+            
             result = subprocess.run(
                 cmd,
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=30,
+                cwd=cwd
             )
             
             # ESLint returns non-zero exit code when it finds issues, which is normal

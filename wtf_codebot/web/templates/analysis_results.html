@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results - WTF CodeBot</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+            --light-bg: #f8f9fa;
+            --dark-bg: #343a40;
+            --border-color: #dee2e6;
+        }
+        
+        body {
+            background-color: var(--light-bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .summary-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,.15);
+        }
+        
+        .summary-icon {
+            font-size: 2.5rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        .findings-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+        
+        .findings-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 8px rgba(0,0,0,.15);
+        }
+        
+        .findings-card.severity-critical {
+            border-left-color: var(--danger-color);
+        }
+        
+        .findings-card.severity-error {
+            border-left-color: #fd7e14;
+        }
+        
+        .findings-card.severity-warning {
+            border-left-color: var(--warning-color);
+        }
+        
+        .findings-card.severity-info {
+            border-left-color: var(--info-color);
+        }
+        
+        .finding-detail-modal .modal-dialog {
+            max-width: 800px;
+        }
+        
+        .code-snippet {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        .line-number {
+            color: #999;
+            margin-right: 10px;
+            user-select: none;
+        }
+        
+        .highlight-line {
+            background-color: #fffbdd;
+            display: block;
+            margin: 0 -15px;
+            padding: 0 15px;
+        }
+        
+        .filter-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        .section-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .badge-severity {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+        
+        .file-path {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .loading-spinner.active {
+            display: block;
+        }
+        
+        .back-button {
+            margin-bottom: 20px;
+        }
+        
+        /* Comparison view styles */
+        .comparison-container {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .comparison-column {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        
+        .comparison-header {
+            font-size: 1rem;
+            font-weight: 600;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .diff-added {
+            background-color: #e6ffec;
+            border-left: 4px solid #2da44e;
+        }
+        
+        .diff-removed {
+            background-color: #ffebe9;
+            border-left: 4px solid #cf222e;
+        }
+        
+        .diff-changed {
+            background-color: #fff8c5;
+            border-left: 4px solid #bf8700;
+        }
+        
+        .history-browser {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .analysis-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .compare-btn {
+            margin-left: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 10px;
+            }
+            
+            .summary-card {
+                padding: 15px;
+            }
+            
+            .findings-card {
+                padding: 10px;
+            }
+            
+            .comparison-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-code"></i> WTF CodeBot - Analysis Results
+            </a>
+            <div class="ms-auto">
+                <button class="btn btn-outline-light btn-sm" onclick="exportResults('json')">
+                    <i class="fas fa-download"></i> Export JSON
+                </button>
+                <button class="btn btn-outline-light btn-sm ms-2" onclick="exportResults('markdown')">
+                    <i class="fas fa-file-alt"></i> Export Markdown
+                </button>
+                <button class="btn btn-outline-light btn-sm ms-2" id="history-browser-btn">
+                    <i class="fas fa-history"></i> Browse History
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Back Button -->
+        <div class="back-button">
+            <a href="/" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Analysis
+            </a>
+        </div>
+        
+        <!-- History Browser (Initially Hidden) -->
+        <div id="history-browser" class="history-browser" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0"><i class="fas fa-history"></i> Analysis History</h5>
+                <button class="btn btn-sm btn-outline-secondary" id="close-history-btn">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+            
+            <div class="mb-3">
+                <p>Select analyses to view or compare:</p>
+                <div class="analysis-selector" id="analysis-selector">
+                    <!-- Analysis items will be dynamically inserted here -->
+                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-primary btn-sm compare-btn" id="compare-analyses-btn" disabled>
+                    <i class="fas fa-exchange-alt"></i> Compare Selected
+                </button>
+            </div>
+            
+            <div class="mt-3" id="pagination-controls">
+                <!-- Pagination controls will be inserted here -->
+            </div>
+        </div>
+        
+        <!-- Analysis Info -->
+        <div class="alert alert-info mb-4" id="analysis-info">
+            <i class="fas fa-info-circle"></i>
+            <span id="analysis-path">Loading analysis results...</span>
+        </div>
+        
+        <!-- Comparison View (Initially Hidden) -->
+        <div id="comparison-view" style="display: none;">
+            <div class="alert alert-secondary mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Comparing analyses</span>
+                    </div>
+                    <button class="btn btn-sm btn-outline-secondary" id="exit-comparison-btn">
+                        <i class="fas fa-times"></i> Exit Comparison
+                    </button>
+                </div>
+            </div>
+            
+            <div class="comparison-container mb-4">
+                <div class="comparison-column">
+                    <div class="comparison-header" id="comparison-left-header">
+                        Analysis A
+                    </div>
+                    <div id="summary-cards-left">
+                        <!-- Summary cards for left comparison -->
+                    </div>
+                </div>
+                <div class="comparison-column">
+                    <div class="comparison-header" id="comparison-right-header">
+                        Analysis B
+                    </div>
+                    <div id="summary-cards-right">
+                        <!-- Summary cards for right comparison -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="filter-section">
+                <h5 class="mb-3">Filter Comparison</h5>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="comparison-filter" class="form-label">Show</label>
+                        <select class="form-select" id="comparison-filter">
+                            <option value="all">All Findings</option>
+                            <option value="added">Added Findings</option>
+                            <option value="removed">Removed Findings</option>
+                            <option value="changed">Changed Findings</option>
+                            <option value="unchanged">Unchanged Findings</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="comparison-severity-filter" class="form-label">Severity</label>
+                        <select class="form-select" id="comparison-severity-filter">
+                            <option value="all">All Severities</option>
+                            <option value="critical">Critical</option>
+                            <option value="error">Error</option>
+                            <option value="warning">Warning</option>
+                            <option value="info">Info</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="comparison-file-filter" class="form-label">File Path</label>
+                        <input type="text" class="form-control" id="comparison-file-filter" placeholder="Filter by file path...">
+                    </div>
+                </div>
+            </div>
+            
+            <div id="comparison-findings-container">
+                <!-- Comparison findings will be inserted here -->
+            </div>
+        </div>
+        
+        <!-- Single Analysis View -->
+        <div id="single-analysis-view">
+            <!-- Summary Cards -->
+            <div class="row mb-4" id="summary-cards">
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="summary-card text-center">
+                        <i class="fas fa-file-code summary-icon text-primary"></i>
+                        <h3 id="total-files">-</h3>
+                        <p class="text-muted mb-0">Files Analyzed</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="summary-card text-center">
+                        <i class="fas fa-exclamation-circle summary-icon text-warning"></i>
+                        <h3 id="total-findings">-</h3>
+                        <p class="text-muted mb-0">Total Findings</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="summary-card text-center">
+                        <i class="fas fa-cube summary-icon text-info"></i>
+                        <h3 id="total-dependencies">-</h3>
+                        <p class="text-muted mb-0">Dependencies</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="summary-card text-center">
+                        <i class="fas fa-shield-alt summary-icon text-danger"></i>
+                        <h3 id="total-vulnerabilities">-</h3>
+                        <p class="text-muted mb-0">Vulnerabilities</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filters Section -->
+            <div class="filter-section">
+                <h5 class="mb-3">Filter Findings</h5>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="severity-filter" class="form-label">Severity</label>
+                        <select class="form-select" id="severity-filter">
+                            <option value="all">All Severities</option>
+                            <option value="critical">Critical</option>
+                            <option value="error">Error</option>
+                            <option value="warning">Warning</option>
+                            <option value="info">Info</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="type-filter" class="form-label">Type</label>
+                        <select class="form-select" id="type-filter">
+                            <option value="all">All Types</option>
+                            <option value="code_smell">Code Smell</option>
+                            <option value="anti_pattern">Anti-Pattern</option>
+                            <option value="design_pattern">Design Pattern</option>
+                            <option value="vulnerability">Vulnerability</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="file-filter" class="form-label">File Path</label>
+                        <input type="text" class="form-control" id="file-filter" placeholder="Filter by file path...">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="sort-by" class="form-label">Sort By</label>
+                        <select class="form-select" id="sort-by">
+                            <option value="severity">Severity</option>
+                            <option value="type">Type</option>
+                            <option value="file">File Path</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Findings Section -->
+            <div class="section-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-exclamation-triangle text-warning"></i> Code Analysis Findings
+                </h5>
+                <span class="text-muted" id="findings-count">0 findings</span>
+            </div>
+            
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="loading-spinner">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3">Loading findings...</p>
+            </div>
+            
+            <!-- Findings Container -->
+            <div id="findings-container">
+                <!-- Findings will be dynamically inserted here -->
+            </div>
+            
+            <!-- Empty State -->
+            <div class="empty-state" id="empty-state" style="display: none;">
+                <i class="fas fa-check-circle text-success"></i>
+                <h5>No findings match your filters</h5>
+                <p>Try adjusting your filter criteria</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Finding Detail Modal -->
+    <div class="modal fade" id="findingDetailModal" tabindex="-1" aria-labelledby="findingDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="findingDetailModalLabel">Finding Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="finding-detail-content">
+                    <!-- Content will be dynamically inserted -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="openFileInEditor()" id="open-file-btn">
+                        <i class="fas fa-external-link-alt"></i> Open in Editor
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        let analysisData = null;
+        let currentFinding = null;
+        let filteredFindings = [];
+        let currentPage = 1;
+        let itemsPerPage = 20;
+        
+        // Analysis history state
+        let analysisHistory = [];
+        let historyPage = 1;
+        let historyItemsPerPage = 10;
+        let historyTotalItems = 0;
+        let selectedAnalyses = [];
+        let comparisonData = null;
+        
+        // Load analysis results on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadAnalysisResults();
+            setupEventListeners();
+        });
+        
+        async function loadAnalysisResults() {
+            const analysisId = new URLSearchParams(window.location.search).get('id');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            loadingSpinner.classList.add('active');
+            
+            try {
+                let response;
+                if (analysisId) {
+                    // Load specific analysis from history
+                    response = await fetch(`/api/analysis-history/${analysisId}`);
+                    const historyData = await response.json();
+                    analysisData = historyData.result;
+                    document.getElementById('analysis-path').textContent = 
+                        `Analysis from ${new Date(historyData.timestamp).toLocaleString()} - ${historyData.directory}`;
+                } else {
+                    // Load current analysis result
+                    response = await fetch('/api/analysis-result');
+                    const result = await response.json();
+                    
+                    // Handle different data formats
+                    if (typeof result.analysis_data === 'string') {
+                        try {
+                            analysisData = JSON.parse(result.analysis_data);
+                        } catch (e) {
+                            console.error('Failed to parse analysis data:', e);
+                            analysisData = {};
+                        }
+                    } else {
+                        analysisData = result.analysis_data;
+                    }
+                    
+                    document.getElementById('analysis-path').textContent = 
+                        `Current analysis - ${result.directory || 'Unknown directory'}`;
+                }
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load analysis results');
+                }
+                
+                // Debug: Log the data structure
+                console.log('Analysis data received:', analysisData);
+                console.log('Total findings:', analysisData.findings?.length || 0);
+                
+                // Use setTimeout to prevent UI blocking
+                displaySummary();
+                
+                // Display findings after a short delay to let the UI update
+                setTimeout(() => {
+                    displayFindings();
+                }, 100);
+                
+            } catch (error) {
+                console.error('Error loading analysis results:', error);
+                document.getElementById('analysis-info').innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i> Error loading analysis results: ${error.message}
+                `;
+                document.getElementById('analysis-info').classList.remove('alert-info');
+                document.getElementById('analysis-info').classList.add('alert-danger');
+            } finally {
+                loadingSpinner.classList.remove('active');
+            }
+        }
+        
+        function displaySummary() {
+            document.getElementById('total-files').textContent = analysisData.total_files || 0;
+            document.getElementById('total-findings').textContent = analysisData.findings?.length || 0;
+            document.getElementById('total-dependencies').textContent = analysisData.dependencies?.length || 0;
+            document.getElementById('total-vulnerabilities').textContent = analysisData.vulnerabilities?.length || 0;
+        }
+        
+        function displayFindings() {
+            try {
+                const findings = analysisData.findings || [];
+                filteredFindings = filterFindings(findings);
+                sortFindings(filteredFindings);
+                
+                const container = document.getElementById('findings-container');
+                const emptyState = document.getElementById('empty-state');
+                const findingsCount = document.getElementById('findings-count');
+            
+            // Calculate pagination
+            const totalItems = filteredFindings.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            // Ensure current page is valid
+            if (currentPage > totalPages) {
+                currentPage = Math.max(1, totalPages);
+            }
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+            const pageFindings = filteredFindings.slice(startIndex, endIndex);
+            
+            findingsCount.textContent = `${filteredFindings.length} findings`;
+            
+            if (filteredFindings.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
+                hidePaginationControls();
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            // Display only current page findings
+            container.innerHTML = pageFindings.map((finding, index) => 
+                createFindingCard(finding, startIndex + index)
+            ).join('');
+            
+            // Update pagination controls
+            updatePaginationControls(currentPage, totalPages, totalItems, startIndex + 1, endIndex);
+            } catch (error) {
+                console.error('Error displaying findings:', error);
+                const container = document.getElementById('findings-container');
+                container.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i> Error displaying findings: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        function updatePaginationControls(page, totalPages, totalItems, start, end) {
+            // Create or update pagination container
+            let paginationContainer = document.getElementById('pagination-container');
+            if (!paginationContainer) {
+                paginationContainer = document.createElement('div');
+                paginationContainer.id = 'pagination-container';
+                paginationContainer.className = 'mt-4 d-flex justify-content-between align-items-center';
+                const findingsContainer = document.getElementById('findings-container');
+                findingsContainer.parentNode.insertBefore(paginationContainer, findingsContainer.nextSibling);
+            }
+            
+            paginationContainer.innerHTML = `
+                <div class="text-muted">
+                    Showing ${start}-${end} of ${totalItems} findings
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary me-2" 
+                            onclick="changePage(-1)" 
+                            ${page === 1 ? 'disabled' : ''}>
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <span class="mx-2">Page ${page} of ${totalPages}</span>
+                    <button class="btn btn-sm btn-outline-secondary ms-2" 
+                            onclick="changePage(1)" 
+                            ${page === totalPages ? 'disabled' : ''}>
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div>
+                    <label class="me-2">Items per page:</label>
+                    <select class="form-select form-select-sm d-inline-block" style="width: auto;" 
+                            onchange="changeItemsPerPage(this.value)">
+                        <option value="10" ${itemsPerPage === 10 ? 'selected' : ''}>10</option>
+                        <option value="20" ${itemsPerPage === 20 ? 'selected' : ''}>20</option>
+                        <option value="50" ${itemsPerPage === 50 ? 'selected' : ''}>50</option>
+                        <option value="100" ${itemsPerPage === 100 ? 'selected' : ''}>100</option>
+                    </select>
+                </div>
+            `;
+        }
+        
+        function hidePaginationControls() {
+            const paginationContainer = document.getElementById('pagination-container');
+            if (paginationContainer) {
+                paginationContainer.style.display = 'none';
+            }
+        }
+        
+        function changePage(direction) {
+            currentPage += direction;
+            displayFindings();
+            // Scroll to top of findings
+            document.getElementById('findings-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        function changeItemsPerPage(value) {
+            itemsPerPage = parseInt(value);
+            currentPage = 1; // Reset to first page
+            displayFindings();
+        }
+        
+        function filterFindings(findings) {
+            const severityFilter = document.getElementById('severity-filter').value;
+            const typeFilter = document.getElementById('type-filter').value;
+            const fileFilter = document.getElementById('file-filter').value.toLowerCase();
+            
+            return findings.filter(finding => {
+                if (severityFilter !== 'all' && finding.severity !== severityFilter) {
+                    return false;
+                }
+                
+                if (typeFilter !== 'all' && finding.type !== typeFilter) {
+                    return false;
+                }
+                
+                if (fileFilter && !finding.file_path.toLowerCase().includes(fileFilter)) {
+                    return false;
+                }
+                
+                return true;
+            });
+        }
+        
+        function sortFindings(findings) {
+            const sortBy = document.getElementById('sort-by').value;
+            
+            findings.sort((a, b) => {
+                switch (sortBy) {
+                    case 'severity':
+                        const severityOrder = { critical: 0, error: 1, warning: 2, info: 3 };
+                        return (severityOrder[a.severity] || 4) - (severityOrder[b.severity] || 4);
+                    case 'type':
+                        return (a.type || '').localeCompare(b.type || '');
+                    case 'file':
+                        return (a.file_path || '').localeCompare(b.file_path || '');
+                    default:
+                        return 0;
+                }
+            });
+        }
+        
+        function createFindingCard(finding, index) {
+            const severityClass = `severity-${finding.severity || 'info'}`;
+            const severityColor = getSeverityColor(finding.severity);
+            const fileName = finding.file_path ? finding.file_path.split('/').pop() : 'Unknown';
+            
+            // Truncate long descriptions for performance
+            const description = finding.description || finding.message || '';
+            const truncatedDesc = description.length > 200 ? description.substring(0, 200) + '...' : description;
+            
+            return `
+                <div class="findings-card ${severityClass}" onclick="showFindingDetail(${index})">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <span class="badge bg-${severityColor} badge-severity">${finding.severity || 'info'}</span>
+                            <span class="badge bg-secondary badge-severity ms-1">${finding.type || 'Unknown'}</span>
+                            <span class="badge bg-info badge-severity ms-1">${finding.tool || finding.source || 'Unknown'}</span>
+                        </div>
+                        <small class="text-muted">
+                            <i class="fas fa-file-code"></i> ${escapeHtml(fileName)}
+                            ${finding.line_number ? `:${finding.line_number}` : ''}
+                        </small>
+                    </div>
+                    <h6 class="mb-1">${escapeHtml(finding.title || finding.message || 'No title')}</h6>
+                    <p class="mb-0 text-muted">${escapeHtml(truncatedDesc)}</p>
+                    ${finding.file_path ? `<div class="file-path mt-2">${escapeHtml(finding.file_path)}</div>` : ''}
+                </div>
+            `;
+        }
+        
+        function showFindingDetail(index) {
+            currentFinding = filteredFindings[index];
+            const modal = new bootstrap.Modal(document.getElementById('findingDetailModal'));
+            
+            const content = document.getElementById('finding-detail-content');
+            content.innerHTML = `
+                <div class="mb-3">
+                    <h6>Overview</h6>
+                    <div class="mb-2">
+                        <span class="badge bg-${getSeverityColor(currentFinding.severity)} me-2">${currentFinding.severity || 'info'}</span>
+                        <span class="badge bg-secondary me-2">${currentFinding.type || 'Unknown'}</span>
+                        <span class="badge bg-info">${currentFinding.tool || currentFinding.source || 'Unknown'}</span>
+                    </div>
+                    <h5 class="mt-3">${escapeHtml(currentFinding.title || currentFinding.message || 'No title')}</h5>
+                    <p>${escapeHtml(currentFinding.description || currentFinding.message || 'No description available')}</p>
+                </div>
+                
+                ${currentFinding.file_path ? `
+                <div class="mb-3">
+                    <h6>Location</h6>
+                    <div class="file-path">
+                        <i class="fas fa-file-code"></i> ${escapeHtml(currentFinding.file_path)}
+                        ${currentFinding.line_number ? ` : Line ${currentFinding.line_number}` : ''}
+                        ${currentFinding.column_number ? `, Column ${currentFinding.column_number}` : ''}
+                    </div>
+                </div>
+                ` : ''}
+                
+                ${currentFinding.suggestion ? `
+                <div class="mb-3">
+                    <h6>Suggestion</h6>
+                    <div class="alert alert-info">
+                        <i class="fas fa-lightbulb"></i> ${escapeHtml(currentFinding.suggestion)}
+                    </div>
+                </div>
+                ` : ''}
+                
+                ${currentFinding.metadata && Object.keys(currentFinding.metadata).length > 0 ? `
+                <div class="mb-3">
+                    <h6>Additional Details</h6>
+                    <div class="code-snippet">
+                        ${formatMetadata(currentFinding.metadata)}
+                    </div>
+                </div>
+                ` : ''}
+                
+                <div class="mb-3">
+                    <h6>Analysis Source</h6>
+                    <p>
+                        <strong>Tool:</strong> ${currentFinding.tool || currentFinding.source || 'Unknown'}<br>
+                        <strong>Finding ID:</strong> ${currentFinding.id || 'N/A'}
+                    </p>
+                </div>
+            `;
+            
+            // Update modal title
+            document.getElementById('findingDetailModalLabel').textContent = 
+                currentFinding.title || currentFinding.message || 'Finding Details';
+            
+            // Show/hide open file button based on whether we have a file path
+            document.getElementById('open-file-btn').style.display = 
+                currentFinding.file_path ? 'inline-block' : 'none';
+            
+            modal.show();
+        }
+        
+        function formatMetadata(metadata) {
+            if (typeof metadata === 'string') {
+                return escapeHtml(metadata);
+            }
+            
+            return Object.entries(metadata)
+                .filter(([key, value]) => value !== null && value !== undefined && key !== 'id')
+                .map(([key, value]) => {
+                    const formattedKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    const formattedValue = typeof value === 'object' ? JSON.stringify(value, null, 2) : value;
+                    return `<strong>${escapeHtml(formattedKey)}:</strong> ${escapeHtml(formattedValue)}`;
+                })
+                .join('<br>');
+        }
+        
+        function openFileInEditor() {
+            if (currentFinding && currentFinding.file_path) {
+                // This could be enhanced to open the file in VS Code or another editor
+                // For now, we'll just copy the file path to clipboard
+                navigator.clipboard.writeText(currentFinding.file_path).then(() => {
+                    alert('File path copied to clipboard: ' + currentFinding.file_path);
+                }).catch(err => {
+                    console.error('Failed to copy file path:', err);
+                });
+            }
+        }
+        
+        async function exportResults(format) {
+            try {
+                const response = await fetch('/api/export-analysis', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `format=${format}`
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(`Analysis exported to: ${result.file_path}`);
+                } else {
+                    alert(`Export failed: ${result.message}`);
+                }
+            } catch (error) {
+                alert(`Export failed: ${error.message}`);
+            }
+        }
+        
+        function getSeverityColor(severity) {
+            const colors = {
+                critical: 'danger',
+                error: 'warning',
+                warning: 'warning',
+                info: 'info'
+            };
+            return colors[severity] || 'secondary';
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text || '';
+            return div.innerHTML;
+        }
+        
+        function setupEventListeners() {
+            // Filter change listeners - reset to page 1 when filters change
+            document.getElementById('severity-filter').addEventListener('change', () => {
+                currentPage = 1;
+                displayFindings();
+            });
+            document.getElementById('type-filter').addEventListener('change', () => {
+                currentPage = 1;
+                displayFindings();
+            });
+            document.getElementById('file-filter').addEventListener('input', () => {
+                currentPage = 1;
+                displayFindings();
+            });
+            document.getElementById('sort-by').addEventListener('change', () => {
+                currentPage = 1;
+                displayFindings();
+            });
+            
+            // History browser button
+            document.getElementById('history-browser-btn').addEventListener('click', toggleHistoryBrowser);
+            document.getElementById('close-history-btn').addEventListener('click', toggleHistoryBrowser);
+            
+            // Comparison controls
+            document.getElementById('compare-analyses-btn').addEventListener('click', compareSelectedAnalyses);
+            document.getElementById('exit-comparison-btn').addEventListener('click', exitComparisonView);
+            
+            // Comparison filters
+            document.getElementById('comparison-filter').addEventListener('change', displayComparisonFindings);
+            document.getElementById('comparison-severity-filter').addEventListener('change', displayComparisonFindings);
+            document.getElementById('comparison-file-filter').addEventListener('input', displayComparisonFindings);
+        }
+        
+        // History browser functionality
+        async function toggleHistoryBrowser() {
+            const historyBrowser = document.getElementById('history-browser');
+            
+            if (historyBrowser.style.display === 'none') {
+                historyBrowser.style.display = 'block';
+                // Load history data if we haven't already
+                if (analysisHistory.length === 0) {
+                    await loadAnalysisHistory();
+                }
+            } else {
+                historyBrowser.style.display = 'none';
+            }
+        }
+        
+        async function loadAnalysisHistory(page = 1, limit = 10) {
+            const analysisSelector = document.getElementById('analysis-selector');
+            analysisSelector.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+            
+            try {
+                const response = await fetch(`/api/analysis-history?limit=${limit}&offset=${(page - 1) * limit}`);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load analysis history');
+                }
+                
+                analysisHistory = data.history;
+                historyTotalItems = data.total;
+                historyPage = page;
+                historyItemsPerPage = limit;
+                
+                displayAnalysisHistory();
+                updateHistoryPagination();
+                
+            } catch (error) {
+                console.error('Error loading analysis history:', error);
+                analysisSelector.innerHTML = `
+                    <div class="alert alert-danger py-2">
+                        <i class="fas fa-exclamation-triangle"></i> Error loading history: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        function displayAnalysisHistory() {
+            const analysisSelector = document.getElementById('analysis-selector');
+            analysisSelector.innerHTML = '';
+            
+            if (analysisHistory.length === 0) {
+                analysisSelector.innerHTML = `
+                    <div class="alert alert-info py-2">
+                        <i class="fas fa-info-circle"></i> No analysis history available yet.
+                    </div>
+                `;
+                return;
+            }
+            
+            analysisHistory.forEach(analysis => {
+                const timestamp = new Date(analysis.timestamp).toLocaleString();
+                const isSelected = selectedAnalyses.includes(analysis.id);
+                
+                const analysisItem = document.createElement('div');
+                analysisItem.className = `card mb-2 ${isSelected ? 'border-primary' : ''}`;
+                analysisItem.style.width = '220px';
+                
+                analysisItem.innerHTML = `
+                    <div class="card-body p-2">
+                        <h6 class="card-title mb-1">${timestamp}</h6>
+                        <p class="card-text mb-1 text-truncate" title="${analysis.directory}">${analysis.directory}</p>
+                        <p class="card-text mb-0">
+                            <small class="text-muted">
+                                Files: ${analysis.result.total_files || 0} | 
+                                Findings: ${analysis.result.findings?.length || 0}
+                            </small>
+                        </p>
+                        <div class="d-flex justify-content-between mt-2">
+                            <button class="btn btn-sm btn-outline-primary view-btn" data-id="${analysis.id}">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-secondary'} select-btn" data-id="${analysis.id}">
+                                ${isSelected ? '<i class="fas fa-check"></i> Selected' : '<i class="fas fa-plus"></i> Select'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listeners
+                const viewBtn = analysisItem.querySelector('.view-btn');
+                const selectBtn = analysisItem.querySelector('.select-btn');
+                
+                viewBtn.addEventListener('click', () => {
+                    window.location.href = `/analysis-results?id=${analysis.id}`;
+                });
+                
+                selectBtn.addEventListener('click', () => {
+                    toggleAnalysisSelection(analysis.id);
+                });
+                
+                analysisSelector.appendChild(analysisItem);
+            });
+            
+            // Update compare button state
+            updateCompareButtonState();
+        }
+        
+        function updateHistoryPagination() {
+            const paginationControls = document.getElementById('pagination-controls');
+            const totalPages = Math.ceil(historyTotalItems / historyItemsPerPage);
+            
+            if (totalPages <= 1) {
+                paginationControls.innerHTML = '';
+                return;
+            }
+            
+            paginationControls.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-muted">
+                        Showing ${(historyPage - 1) * historyItemsPerPage + 1}-${Math.min(historyPage * historyItemsPerPage, historyTotalItems)} of ${historyTotalItems} analyses
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-secondary me-2" 
+                                onclick="changeHistoryPage(-1)" 
+                                ${historyPage === 1 ? 'disabled' : ''}>
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                        <span class="mx-2">Page ${historyPage} of ${totalPages}</span>
+                        <button class="btn btn-sm btn-outline-secondary ms-2" 
+                                onclick="changeHistoryPage(1)" 
+                                ${historyPage === totalPages ? 'disabled' : ''}>
+                            Next <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        async function changeHistoryPage(direction) {
+            const newPage = historyPage + direction;
+            await loadAnalysisHistory(newPage, historyItemsPerPage);
+        }
+        
+        function toggleAnalysisSelection(analysisId) {
+            const index = selectedAnalyses.indexOf(analysisId);
+            
+            if (index === -1) {
+                // Add to selection (max 2)
+                if (selectedAnalyses.length < 2) {
+                    selectedAnalyses.push(analysisId);
+                } else {
+                    alert('You can only select up to 2 analyses for comparison');
+                    return;
+                }
+            } else {
+                // Remove from selection
+                selectedAnalyses.splice(index, 1);
+            }
+            
+            // Update display
+            displayAnalysisHistory();
+        }
+        
+        function updateCompareButtonState() {
+            const compareBtn = document.getElementById('compare-analyses-btn');
+            compareBtn.disabled = selectedAnalyses.length !== 2;
+        }
+        
+        // Comparison functionality
+        async function compareSelectedAnalyses() {
+            if (selectedAnalyses.length !== 2) {
+                alert('Please select exactly 2 analyses to compare');
+                return;
+            }
+            
+            try {
+                // Load both analyses
+                const [analysis1Id, analysis2Id] = selectedAnalyses;
+                
+                const [response1, response2] = await Promise.all([
+                    fetch(`/api/analysis-history/${analysis1Id}`),
+                    fetch(`/api/analysis-history/${analysis2Id}`)
+                ]);
+                
+                const analysis1 = await response1.json();
+                const analysis2 = await response2.json();
+                
+                // Store comparison data
+                comparisonData = {
+                    left: analysis1,
+                    right: analysis2
+                };
+                
+                // Switch to comparison view
+                showComparisonView();
+                
+            } catch (error) {
+                console.error('Error loading analyses for comparison:', error);
+                alert(`Failed to load analyses for comparison: ${error.message}`);
+            }
+        }
+        
+        function showComparisonView() {
+            // Hide single analysis view
+            document.getElementById('single-analysis-view').style.display = 'none';
+            document.getElementById('history-browser').style.display = 'none';
+            
+            // Show comparison view
+            document.getElementById('comparison-view').style.display = 'block';
+            
+            // Set headers
+            const leftDate = new Date(comparisonData.left.timestamp).toLocaleString();
+            const rightDate = new Date(comparisonData.right.timestamp).toLocaleString();
+            
+            document.getElementById('comparison-left-header').innerHTML = `
+                Analysis #${comparisonData.left.id}<br>
+                <small class="text-muted">${leftDate}</small>
+            `;
+            
+            document.getElementById('comparison-right-header').innerHTML = `
+                Analysis #${comparisonData.right.id}<br>
+                <small class="text-muted">${rightDate}</small>
+            `;
+            
+            // Display summary cards
+            displayComparisonSummary();
+            
+            // Display comparison findings
+            displayComparisonFindings();
+        }
+        
+        function displayComparisonSummary() {
+            // Left summary
+            const leftData = comparisonData.left.result;
+            document.getElementById('summary-cards-left').innerHTML = `
+                <div class="row">
+                    <div class="col-6 mb-2">
+                        <div class="card text-center">
+                            <div class="card-body py-2">
+                                <h3>${leftData.total_files || 0}</h3>
+                                <p class="mb-0 text-muted">Files</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <div class="card text-center">
+                            <div class="card-body py-2">
+                                <h3>${leftData.findings?.length || 0}</h3>
+                                <p class="mb-0 text-muted">Findings</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Right summary
+            const rightData = comparisonData.right.result;
+            document.getElementById('summary-cards-right').innerHTML = `
+                <div class="row">
+                    <div class="col-6 mb-2">
+                        <div class="card text-center">
+                            <div class="card-body py-2">
+                                <h3>${rightData.total_files || 0}</h3>
+                                <p class="mb-0 text-muted">Files</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-2">
+                        <div class="card text-center">
+                            <div class="card-body py-2">
+                                <h3>${rightData.findings?.length || 0}</h3>
+                                <p class="mb-0 text-muted">Findings</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function displayComparisonFindings() {
+            const container = document.getElementById('comparison-findings-container');
+            const leftFindings = comparisonData.left.result.findings || [];
+            const rightFindings = comparisonData.right.result.findings || [];
+            
+            // Get comparison filter values
+            const comparisonFilter = document.getElementById('comparison-filter').value;
+            const severityFilter = document.getElementById('comparison-severity-filter').value;
+            const fileFilter = document.getElementById('comparison-file-filter').value.toLowerCase();
+            
+            // Create mapping for easier comparison
+            const leftMap = new Map();
+            leftFindings.forEach(finding => {
+                const key = getFindingKey(finding);
+                leftMap.set(key, finding);
+            });
+            
+            const rightMap = new Map();
+            rightFindings.forEach(finding => {
+                const key = getFindingKey(finding);
+                rightMap.set(key, finding);
+            });
+            
+            // Identify added, removed, and changed findings
+            const added = [];
+            const removed = [];
+            const unchanged = [];
+            
+            // Check for added and unchanged
+            rightFindings.forEach(finding => {
+                const key = getFindingKey(finding);
+                if (!leftMap.has(key)) {
+                    added.push(finding);
+                } else {
+                    unchanged.push({
+                        left: leftMap.get(key),
+                        right: finding
+                    });
+                }
+            });
+            
+            // Check for removed
+            leftFindings.forEach(finding => {
+                const key = getFindingKey(finding);
+                if (!rightMap.has(key)) {
+                    removed.push(finding);
+                }
+            });
+            
+            // Apply filters
+            let displayFindings = [];
+            
+            if (comparisonFilter === 'all' || comparisonFilter === 'added') {
+                displayFindings = displayFindings.concat(
+                    added
+                        .filter(finding => filterByComparisonCriteria(finding, severityFilter, fileFilter))
+                        .map(finding => ({ type: 'added', finding }))
+                );
+            }
+            
+            if (comparisonFilter === 'all' || comparisonFilter === 'removed') {
+                displayFindings = displayFindings.concat(
+                    removed
+                        .filter(finding => filterByComparisonCriteria(finding, severityFilter, fileFilter))
+                        .map(finding => ({ type: 'removed', finding }))
+                );
+            }
+            
+            if (comparisonFilter === 'all' || comparisonFilter === 'unchanged') {
+                displayFindings = displayFindings.concat(
+                    unchanged
+                        .filter(item => filterByComparisonCriteria(item.right, severityFilter, fileFilter))
+                        .map(item => ({ type: 'unchanged', finding: item.right, original: item.left }))
+                );
+            }
+            
+            // Display findings
+            if (displayFindings.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-filter"></i>
+                        <h5>No findings match your filters</h5>
+                        <p>Try adjusting your filter criteria</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Create UI
+            container.innerHTML = `
+                <div class="section-header">
+                    <h5 class="mb-0">Comparison Results</h5>
+                    <span class="text-muted">${displayFindings.length} findings</span>
+                </div>
+                <div class="comparison-findings-list">
+                    ${displayFindings.map(item => createComparisonFindingCard(item)).join('')}
+                </div>
+            `;
+        }
+        
+        function getFindingKey(finding) {
+            // Create a unique key for a finding based on its identifying properties
+            return `${finding.file_path || ''}:${finding.line_number || 0}:${finding.message || ''}`;
+        }
+        
+        function filterByComparisonCriteria(finding, severityFilter, fileFilter) {
+            // Apply severity filter
+            if (severityFilter !== 'all' && finding.severity !== severityFilter) {
+                return false;
+            }
+            
+            // Apply file filter
+            if (fileFilter && !(finding.file_path || '').toLowerCase().includes(fileFilter)) {
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function createComparisonFindingCard(item) {
+            const { type, finding, original } = item;
+            const severityClass = `severity-${finding.severity || 'info'}`;
+            const severityColor = getSeverityColor(finding.severity);
+            const fileName = finding.file_path ? finding.file_path.split('/').pop() : 'Unknown';
+            
+            // Determine card class based on comparison type
+            let cardClass = '';
+            let statusText = '';
+            let statusIcon = '';
+            
+            if (type === 'added') {
+                cardClass = 'diff-added';
+                statusText = 'Added';
+                statusIcon = '<i class="fas fa-plus-circle"></i>';
+            } else if (type === 'removed') {
+                cardClass = 'diff-removed';
+                statusText = 'Removed';
+                statusIcon = '<i class="fas fa-minus-circle"></i>';
+            } else if (type === 'changed') {
+                cardClass = 'diff-changed';
+                statusText = 'Changed';
+                statusIcon = '<i class="fas fa-exchange-alt"></i>';
+            } else {
+                statusText = 'Unchanged';
+                statusIcon = '<i class="fas fa-equals"></i>';
+            }
+            
+            // Truncate long descriptions for performance
+            const description = finding.description || finding.message || '';
+            const truncatedDesc = description.length > 200 ? description.substring(0, 200) + '...' : description;
+            
+            return `
+                <div class="findings-card ${severityClass} ${cardClass}">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <span class="badge bg-${severityColor} badge-severity">${finding.severity || 'info'}</span>
+                            <span class="badge bg-secondary badge-severity ms-1">${finding.type || 'Unknown'}</span>
+                            <span class="badge bg-info badge-severity ms-1">${statusText}</span>
+                        </div>
+                        <small class="text-muted">
+                            <i class="fas fa-file-code"></i> ${escapeHtml(fileName)}
+                            ${finding.line_number ? `:${finding.line_number}` : ''}
+                        </small>
+                    </div>
+                    <h6 class="mb-1">
+                        ${statusIcon} ${escapeHtml(finding.title || finding.message || 'No title')}
+                    </h6>
+                    <p class="mb-0 text-muted">${escapeHtml(truncatedDesc)}</p>
+                    ${finding.file_path ? `<div class="file-path mt-2">${escapeHtml(finding.file_path)}</div>` : ''}
+                </div>
+            `;
+        }
+        
+        function exitComparisonView() {
+            // Hide comparison view
+            document.getElementById('comparison-view').style.display = 'none';
+            
+            // Show single analysis view
+            document.getElementById('single-analysis-view').style.display = 'block';
+            
+            // Clear selection
+            selectedAnalyses = [];
+            comparisonData = null;
+            displayAnalysisHistory();
+        }
+        
+        // Make functions available globally for onclick handlers
+        window.changePage = changePage;
+        window.changeItemsPerPage = changeItemsPerPage;
+        window.showFindingDetail = showFindingDetail;
+        window.openFileInEditor = openFileInEditor;
+        window.exportResults = exportResults;
+        window.toggleHistoryBrowser = toggleHistoryBrowser;
+        window.changeHistoryPage = changeHistoryPage;
+    </script>
+</body>
+</html>

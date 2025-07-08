@@ -1109,6 +1109,15 @@
             
             const data = result.analysis_data;
             
+            // Add view detailed results button
+            const viewResultsButton = `
+                <div class="text-center mb-4">
+                    <a href="/analysis-results" class="btn btn-primary">
+                        <i class="fas fa-chart-line"></i> View Detailed Results
+                    </a>
+                </div>
+            `;
+            
             // Build summary cards with icons
             const summaryCards = `
                 <div class="row mb-4">
@@ -1409,6 +1418,7 @@
                         <p class="mb-0"><strong>Excluded Paths:</strong> ${excludedPaths.length > 0 ? excludedPaths.length + ' items' : 'None'}</p>
                     </div>
                     
+                    ${viewResultsButton}
                     ${summaryCards}
                     ${findingsSection}
                     ${dependenciesSection}
@@ -1815,6 +1825,9 @@
                                     <button class="btn btn-sm btn-outline-primary" onclick="loadHistoricalAnalysis(${entry.id})" title="View this analysis">
                                         <i class="fas fa-eye"></i>
                                     </button>
+                                    <a href="/analysis-results?id=${entry.id}" class="btn btn-sm btn-outline-info" title="View detailed results">
+                                        <i class="fas fa-chart-line"></i>
+                                    </a>
                                     <button class="btn btn-sm btn-outline-danger" onclick="deleteAnalysis(${entry.id})" title="Delete this analysis">
                                         <i class="fas fa-trash"></i>
                                     </button>

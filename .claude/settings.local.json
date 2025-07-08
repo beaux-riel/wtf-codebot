@@ -20,7 +20,9 @@
       "Bash(eslint --version)",
       "Bash(mkdir:*)",
       "Bash(touch:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(ls:*)",
+      "Bash(pip install:*)"
     ],
     "deny": []
   }

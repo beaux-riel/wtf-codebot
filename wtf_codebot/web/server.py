@@ -20,6 +20,7 @@ from pydantic import BaseModel
 
 from wtf_codebot.core.analysis_engine import AnalysisEngine
 from wtf_codebot.core.config import Config
+from wtf_codebot.web.storage import AnalysisStorage
 
 
 # Pydantic models for request/response
@@ -87,7 +88,12 @@ progress_state = {
 
 # Store for analysis history
 from datetime import datetime
+
+# In-memory cache of recent analyses
 analysis_history = []  # List of completed analyses with timestamps
+
+# Initialize persistent storage
+storage = AnalysisStorage()
 
 
 def progress_callback(language: str, file_path: str, current_index: int, total_count: int):
@@ -127,6 +133,12 @@ def progress_callback(language: str, file_path: str, current_index: int, total_c
 async def index(request: Request):
     """Serve the main web interface."""
     return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.get("/analysis-results")
+async def analysis_results_page(request: Request):
+    """Render the analysis results page."""
+    return templates.TemplateResponse("analysis_results.html", {"request": request})
 
 
 @app.get("/api/progress")
@@ -270,9 +282,6 @@ async def analyze_codebase(request: AnalysisRequest):
             "total_files": progress_state.get("total_files", 0)
         })
         
-        # Store result
-        current_analysis_state["analysis_result"] = analysis_result
-        
         # Format the analysis result for display
         formatted_result = {
             "summary": analysis_result.get("summary", {}),
@@ -283,9 +292,20 @@ async def analyze_codebase(request: AnalysisRequest):
             "vulnerabilities": analysis_result.get("vulnerabilities", []),
         }
         
-        # Store in history
+        # Store formatted result instead of raw result
+        current_analysis_state["analysis_result"] = formatted_result
+        
+        # Save to persistent storage
+        analysis_id = storage.save_analysis(
+            directory=str(directory_path),
+            result=formatted_result,
+            excluded_paths=request.excluded_paths,
+            included_paths=request.included_paths
+        )
+        
+        # Also store in memory for quick access
         history_entry = {
-            "id": len(analysis_history) + 1,
+            "id": analysis_id,
             "timestamp": datetime.now().isoformat(),
             "directory": str(directory_path),
             "excluded_paths": request.excluded_paths,
@@ -318,9 +338,26 @@ async def get_analysis_result():
         raise HTTPException(status_code=404, detail="No analysis result available")
     
     result = current_analysis_state["analysis_result"]
+    
+    # Format the result properly
+    if isinstance(result, dict):
+        formatted_result = result
+    elif hasattr(result, 'to_dict'):
+        formatted_result = result.to_dict()
+    else:
+        # Fallback: create formatted result from raw data
+        formatted_result = {
+            "summary": result.get("summary", {}) if hasattr(result, 'get') else {},
+            "total_files": result.get("total_files", 0) if hasattr(result, 'get') else 0,
+            "findings": result.get("findings", []) if hasattr(result, 'get') else [],
+            "metrics": result.get("metrics", {}) if hasattr(result, 'get') else {},
+            "dependencies": result.get("dependencies", []) if hasattr(result, 'get') else [],
+            "vulnerabilities": result.get("vulnerabilities", []) if hasattr(result, 'get') else [],
+        }
+    
     return JSONResponse(content={
         "success": True,
-        "analysis_data": result.to_dict() if hasattr(result, 'to_dict') else str(result),
+        "analysis_data": formatted_result,
         "directory": current_analysis_state["directory"],
         "excluded_paths": current_analysis_state["excluded_paths"]
     })
@@ -386,17 +423,29 @@ async def get_current_state():
 
 
 @app.get("/api/analysis-history")
-async def get_analysis_history():
-    """Get the analysis history."""
+async def get_analysis_history(limit: int = 20, offset: int = 0):
+    """Get the analysis history from persistent storage."""
+    # Fetch from persistent storage
+    stored_analyses = storage.get_all_analyses(limit=limit, offset=offset)
+    total_count = storage.count_analyses()
+    
     return JSONResponse(content={
-        "history": analysis_history,
-        "total": len(analysis_history)
+        "history": stored_analyses,
+        "total": total_count,
+        "limit": limit,
+        "offset": offset
     })
 
 
 @app.get("/api/analysis-history/{analysis_id}")
 async def get_analysis_by_id(analysis_id: int):
-    """Get a specific analysis by ID."""
+    """Get a specific analysis by ID from persistent storage."""
+    # Try to get from persistent storage
+    analysis = storage.get_analysis(analysis_id)
+    if analysis:
+        return JSONResponse(content=analysis)
+    
+    # If not found in persistent storage, check in-memory history as fallback
     for entry in analysis_history:
         if entry["id"] == analysis_id:
             return JSONResponse(content=entry)
@@ -406,32 +455,48 @@ async def get_analysis_by_id(analysis_id: int):
 
 @app.delete("/api/analysis-history/{analysis_id}")
 async def delete_analysis(analysis_id: int):
-    """Delete a specific analysis by ID."""
+    """Delete a specific analysis by ID from persistent storage."""
     global analysis_history
     
+    # Delete from persistent storage
+    deleted = storage.delete_analysis(analysis_id)
+    
+    # Also delete from in-memory cache if it exists there
     for i, entry in enumerate(analysis_history):
         if entry["id"] == analysis_id:
             deleted_entry = analysis_history.pop(i)
-            return JSONResponse(content={
-                "success": True,
-                "message": f"Deleted analysis {analysis_id}",
-                "deleted": deleted_entry
-            })
+            break
+    else:
+        deleted_entry = None
+    
+    if deleted or deleted_entry:
+        return JSONResponse(content={
+            "success": True,
+            "message": f"Deleted analysis {analysis_id}",
+            "deleted_from_storage": deleted,
+            "deleted_from_memory": deleted_entry is not None
+        })
     
     raise HTTPException(status_code=404, detail="Analysis not found")
 
 
 @app.delete("/api/analysis-history")
 async def clear_analysis_history():
-    """Clear all analysis history."""
+    """Clear all analysis history from persistent storage."""
     global analysis_history
-    count = len(analysis_history)
+    
+    # Clear in-memory history
+    memory_count = len(analysis_history)
     analysis_history = []
+    
+    # Clear persistent storage
+    storage_count = storage.delete_all_analyses()
     
     return JSONResponse(content={
         "success": True,
-        "message": f"Cleared {count} analysis entries",
-        "cleared": count
+        "message": f"Cleared {storage_count} analysis entries from storage and {memory_count} from memory",
+        "cleared_from_storage": storage_count,
+        "cleared_from_memory": memory_count
     })
 
 
